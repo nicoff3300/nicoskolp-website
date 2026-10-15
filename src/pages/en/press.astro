@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import pressData from '../../data/press.json';
+import type { PressArticle } from '../../types';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('en');
+const articles = pressData as PressArticle[];
+const featuredArticles = articles.filter((a) => a.featured);
+const regularArticles = articles.filter((a) => !a.featured);
+---
+
+<BaseLayout
+  title="Press & Media - Nico Skolp | Urban Art & Contemporary Muralism Press Coverage"
+  description="Press coverage, articles and interviews featuring Nico Skolp in international art and design publications: Collater.al, Art Vibes, Finestre sull'Arte, Street Art NYC, and Italian newspapers."
+  lang="en"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 space-y-16 sm:space-y-24">
+    <!-- Section Header -->
+    <header class="text-center max-w-3xl mx-auto">
+      <h1 class="font-druk font-bold text-3xl sm:text-4xl md:text-5xl uppercase tracking-wider text-black">
+        {t('press.title')}
+      </h1>
+      <p class="font-sans text-base sm:text-lg text-neutral-600 mt-4 leading-relaxed">
+        {t('press.subtitle')}
+      </p>
+    </header>
+
+    <!-- Featured Coverage Section -->
+    {featuredArticles.length > 0 && (
+      <section aria-labelledby="featured-press-heading" class="space-y-8">
+        <div class="border-b border-[#e2e2e2] pb-3">
+          <h2 id="featured-press-heading" class="font-druk font-bold text-lg sm:text-xl uppercase tracking-wider text-black">
+            {t('press.featuredTitle')}
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {featuredArticles.map((article) => (
+            <article class="bg-[#fcfcfc] border border-[#e2e2e2] p-6 sm:p-8 flex flex-col justify-between hover:border-black transition-colors duration-200 group">
+              <div class="space-y-4">
+                <div class="flex items-center justify-between text-xs font-sans text-neutral-500 uppercase tracking-wider">
+                  <span class="inline-block px-2.5 py-1 bg-black text-white font-druk text-[10px] tracking-wider uppercase">
+                    {article.type}
+                  </span>
+                  <span>{article.date || article.year}</span>
+                </div>
+
+                <div class="font-druk font-bold text-sm tracking-wider uppercase text-neutral-500">
+                  {article.outlet}
+                </div>
+
+                <h3 class="font-druk font-bold text-base sm:text-lg uppercase tracking-wide text-black group-hover:text-neutral-700 transition-colors">
+                  {article.titleEn || article.title}
+                </h3>
+
+                <blockquote class="font-sans text-sm sm:text-base text-neutral-600 italic border-l-2 border-black pl-3.5 leading-relaxed">
+                  "{article.quoteEn || article.quote}"
+                </blockquote>
+              </div>
+
+              <div class="pt-6 mt-6 border-t border-[#e2e2e2] flex items-center justify-between">
+                {article.city && (
+                  <span class="font-sans text-xs text-neutral-500 uppercase tracking-wider">
+                    {article.city}
+                  </span>
+                )}
+                <a
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="no-underline inline-flex items-center gap-1.5 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 ml-auto focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
+                  aria-label={`Read article on ${article.outlet}: ${article.titleEn || article.title} (opens in a new tab)`}
+                >
+                  <span>{t('press.readArticle')}</span>
+                  <span aria-hidden="true" class="text-sm transition-transform duration-150 group-hover:translate-x-0.5">&nearr;</span>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- All Press Articles Grid -->
+    <section aria-labelledby="all-press-heading" class="space-y-8">
+      <div class="border-b border-[#e2e2e2] pb-3">
+        <h2 id="all-press-heading" class="font-druk font-bold text-lg sm:text-xl uppercase tracking-wider text-black">
+          {t('press.allArticlesTitle')}
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {regularArticles.map((article) => (
+          <article class="bg-white border border-[#e2e2e2] p-6 flex flex-col justify-between hover:border-black transition-colors duration-200 group">
+            <div class="space-y-3.5">
+              <div class="flex items-center justify-between text-xs font-sans text-neutral-500 uppercase tracking-wider">
+                <span class="inline-block px-2 py-0.5 border border-[#e2e2e2] font-druk text-[10px] text-black">
+                  {article.type}
+                </span>
+                <span>{article.date || article.year}</span>
+              </div>
+
+              <div class="font-druk font-bold text-xs tracking-wider uppercase text-neutral-500">
+                {article.outlet}
+              </div>
+
+              <h3 class="font-druk font-bold text-sm sm:text-base uppercase tracking-wide text-black group-hover:text-neutral-700 transition-colors">
+                {article.titleEn || article.title}
+              </h3>
+
+              <p class="font-sans text-xs sm:text-sm text-neutral-600 leading-relaxed">
+                "{article.quoteEn || article.quote}"
+              </p>
+            </div>
+
+            <div class="pt-4 mt-5 border-t border-[#e2e2e2]/70 flex items-center justify-between">
+              {article.project && (
+                <span class="font-sans text-[11px] text-neutral-400 uppercase tracking-wider truncate max-w-[55%]">
+                  {article.project}
+                </span>
+              )}
+              <a
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="no-underline inline-flex items-center gap-1 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 ml-auto focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
+                aria-label={`Read on ${article.outlet}: ${article.titleEn || article.title} (opens in a new tab)`}
+              >
+                <span>{t('press.readArticle')}</span>
+                <span aria-hidden="true">&nearr;</span>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Press Kit & Media Inquiries Box -->
+    <section class="bg-[#fcfcfc] border border-black p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-5" aria-labelledby="press-kit-heading">
+      <h2 id="press-kit-heading" class="font-druk font-bold text-xl sm:text-2xl uppercase tracking-wider text-black">
+        {t('press.pressKitTitle')}
+      </h2>
+      <p class="font-sans text-sm sm:text-base text-neutral-600 leading-relaxed max-w-2xl mx-auto">
+        {t('press.pressKitDesc')}
+      </p>
+      <div class="pt-2">
+        <a
+          href="/en#contact"
+          class="no-underline inline-flex items-center justify-center px-8 py-3.5 bg-black text-white font-druk font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+        >
+          {t('press.pressKitCta')}
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

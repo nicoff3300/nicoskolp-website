@@ -6,6 +6,7 @@ const currentLang = getLangFromUrl(Astro.url);
 const t = useTranslations(currentLang);
 const currentYear = new Date().getFullYear();
 const archiveHref = currentLang === 'en' ? '/en/skolp-archive' : '/skolp-archive';
+const pressHref = currentLang === 'en' ? '/en/press' : '/press';
 ---
 
 <footer class="w-full bg-white border-t border-brand-gray-light text-black transition-colors" role="contentinfo">
@@ -38,8 +39,15 @@ const archiveHref = currentLang === 'en' ? '/en/skolp-archive' : '/skolp-archive
         </a>
       </div>
 
-      <!-- Archive Link -->
-      <div>
+      <!-- Links: Press & Archive -->
+      <div class="flex flex-wrap items-center gap-6">
+        <a
+          href={pressHref}
+          class="font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black hover:underline underline-offset-4 transition-colors"
+        >
+          {t('nav.press')}
+        </a>
+        <span class="text-brand-gray-text hidden sm:inline" aria-hidden="true">•</span>
         <a
           href={archiveHref}
           class="inline-flex items-center gap-2 font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black hover:underline underline-offset-4 transition-transform group"

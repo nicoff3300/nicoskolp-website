@@ -12,6 +12,7 @@ export const ui = {
     // Navigazione
     'nav.publicArt': 'Public Art',
     'nav.about': 'About me',
+    'nav.press': 'Press',
     'nav.graffiti': 'Graffiti',
     'nav.archive': 'Archivio',
     'nav.linktree': 'Linktree',
@@ -76,6 +77,16 @@ export const ui = {
     'archive.title': 'Archive',
     'archive.subtitle': 'Vent\'anni di graffiti, evoluzione delle lettere e studio calligrafico (1999 - 2019).',
 
+    // Press & Media
+    'press.title': 'Press & Media',
+    'press.subtitle': 'Articoli, interviste e pubblicazioni su riviste d\'arte contemporanea, design e quotidiani nazionali e internazionali.',
+    'press.featuredTitle': 'In Evidenza',
+    'press.allArticlesTitle': 'Tutti gli Articoli & Pubblicazioni',
+    'press.readArticle': 'Leggi articolo',
+    'press.pressKitTitle': 'Cartella Stampa & Richieste Media',
+    'press.pressKitDesc': 'Sei un giornalista, curatore o redattore? Contattami per richiedere la cartella stampa ufficiale, immagini in alta definizione per la stampa o interviste.',
+    'press.pressKitCta': 'Richiedi Press Kit',
+
     // Footer
     'footer.follow': 'seguimi su:',
     'footer.archiveCta': 'Guarda qui il mio ARCHIVIO',
@@ -90,6 +101,7 @@ export const ui = {
     // Navigation
     'nav.publicArt': 'Public Art',
     'nav.about': 'About me',
+    'nav.press': 'Press',
     'nav.graffiti': 'Graffiti',
     'nav.archive': 'Archive',
     'nav.linktree': 'Linktree',
@@ -153,6 +165,16 @@ export const ui = {
     // Archive
     'archive.title': 'Archive',
     'archive.subtitle': 'Twenty years of graffiti, lettering evolution and calligraphic exploration (1999 - 2019).',
+
+    // Press & Media
+    'press.title': 'Press & Media',
+    'press.subtitle': 'Articles, interviews and features across contemporary art magazines, design publications and newspapers worldwide.',
+    'press.featuredTitle': 'Featured Coverage',
+    'press.allArticlesTitle': 'All Articles & Press Clips',
+    'press.readArticle': 'Read article',
+    'press.pressKitTitle': 'Press Kit & Media Inquiries',
+    'press.pressKitDesc': 'Are you a journalist, curator or editor? Get in touch for high-resolution press assets, artist bio or interview requests.',
+    'press.pressKitCta': 'Request Press Kit',
 
     // Footer
     'footer.follow': 'follow me on:',

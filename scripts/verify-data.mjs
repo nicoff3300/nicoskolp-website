@@ -94,4 +94,17 @@ for (const h of hero) {
 }
 console.log(`✓ hero.json valid (13 items, all images exist)`);
 
+// 6. Press
+console.log('Verifying press.json...');
+const press = JSON.parse(fs.readFileSync(path.join(rootDir, 'src/data/press.json'), 'utf8'));
+if (!Array.isArray(press) || press.length === 0) {
+  throw new Error(`Expected valid press articles array, got ${press.length}`);
+}
+for (const p of press) {
+  if (!p.id || !p.title || !p.outlet || !p.quote || !p.url) {
+    throw new Error(`Invalid press item: ${JSON.stringify(p)}`);
+  }
+}
+console.log(`✓ press.json valid (${press.length} articles verified)`);
+
 console.log('\nSUCCESS: All data files and referenced images are verified and valid!');

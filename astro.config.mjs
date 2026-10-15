@@ -19,6 +19,7 @@ export default defineConfig({
   },
   redirects: {
     '/archive': '/skolp-archive',
+    '/rassegna-stampa': '/press',
     '/teatro-aquilone': '/public-art/teatro-aquilone',
     '/sanpaolo': '/public-art/sanpaolo',
     '/trust-taranto': '/public-art/trust-taranto',

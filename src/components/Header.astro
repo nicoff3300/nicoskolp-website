@@ -11,11 +11,13 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 const homeHref = currentLang === 'en' ? '/en' : '/';
 const publicArtHref = currentLang === 'en' ? '/en/public-art' : '/public-art';
 const aboutHref = currentLang === 'en' ? '/en/about-me' : '/about-me';
+const pressHref = currentLang === 'en' ? '/en/press' : '/press';
 const graffitiHref = currentLang === 'en' ? '/en/graffiti' : '/graffiti';
 const archiveHref = currentLang === 'en' ? '/en/skolp-archive' : '/skolp-archive';
 
 const isActivePublicArt = currentPath === publicArtHref || currentPath.startsWith(`${publicArtHref}/`);
 const isActiveAbout = currentPath === aboutHref;
+const isActivePress = currentPath === pressHref;
 const isActiveGraffiti = currentPath === graffitiHref || currentPath.startsWith(`${graffitiHref}/`);
 const isActiveArchive = currentPath === archiveHref;
 ---
@@ -66,6 +68,18 @@ const isActiveArchive = currentPath === archiveHref;
         ]}
       >
         {t('nav.about')}
+      </a>
+      <a
+        href={pressHref}
+        aria-current={isActivePress ? "page" : undefined}
+        class:list={[
+          "font-druk text-xs lg:text-sm tracking-wider uppercase transition-colors duration-150",
+          isActivePress
+            ? "font-bold text-black underline underline-offset-4 decoration-2"
+            : "font-medium text-black hover:underline underline-offset-4 decoration-2"
+        ]}
+      >
+        {t('nav.press')}
       </a>
       <a
         href={graffitiHref}
@@ -197,6 +211,16 @@ const isActiveArchive = currentPath === archiveHref;
         ]}
       >
         {t('nav.about')}
+      </a>
+      <a
+        href={pressHref}
+        aria-current={isActivePress ? "page" : undefined}
+        class:list={[
+          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-brand-gray-light/50 transition-colors",
+          isActivePress ? "font-bold text-black underline underline-offset-4 decoration-2" : "font-medium text-black hover:underline"
+        ]}
+      >
+        {t('nav.press')}
       </a>
       <a
         href={graffitiHref}

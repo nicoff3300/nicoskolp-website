@@ -62,6 +62,12 @@ const routes = [
     ],
   },
   {
+    itPath: '/press',
+    enPath: '/en/press',
+    changefreq: 'monthly',
+    priority: '0.8',
+  },
+  {
     itPath: '/graffiti',
     enPath: '/en/graffiti',
     changefreq: 'monthly',

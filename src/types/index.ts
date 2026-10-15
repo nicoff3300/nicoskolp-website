@@ -66,3 +66,19 @@ export interface HeroArtwork {
   year?: string;
   description?: string;
 }
+
+export interface PressArticle {
+  id: string;
+  title: string;
+  titleEn?: string;
+  outlet: string;
+  date?: string;
+  year: string;
+  type: 'Magazine' | 'Daily' | 'Webzine' | 'Art Review' | 'Interview';
+  project?: string;
+  city?: string;
+  quote: string;
+  quoteEn?: string;
+  url: string;
+  featured?: boolean;
+}

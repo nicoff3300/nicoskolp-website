@@ -76,8 +76,10 @@ const expectedPages = [
   'public-art/index.html',
   'graffiti/index.html',
   'about-me/index.html',
+  'press/index.html',
   'skolp-archive/index.html',
   'archive/index.html', // Legacy redirect page
+  'rassegna-stampa/index.html', // Legacy redirect page
   'contact.php',
   '.htaccess',
   'robots.txt',
@@ -87,6 +89,7 @@ const expectedPages = [
   'en/public-art/index.html',
   'en/graffiti/index.html',
   'en/about-me/index.html',
+  'en/press/index.html',
   'en/skolp-archive/index.html',
 ];
 
