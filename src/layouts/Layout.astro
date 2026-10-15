@@ -37,11 +37,11 @@ const socialImageURL = new URL(image, siteURL);
     <meta property="og:image" content={socialImageURL.href} />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL.href} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={socialImageURL.href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL.href} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL.href} />
 
     <!-- Favicon & Fonts -->
     <link rel="icon" type="image/png" href="/images/brand/monogram.png" />

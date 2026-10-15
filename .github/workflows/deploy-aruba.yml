@@ -18,7 +18,7 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
@@ -38,9 +38,11 @@ jobs:
         run: npm run build
 
       - name: 🧹 Rimuovi file default Aruba (index.php di cortesia)
+        env:
+          TARGET_DIR: ${{ secrets.FTP_SERVER_DIR || 'www.nicoskolp.com/' }}
         run: |
-          curl --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/www.nicoskolp.com/" -Q "-DELE index.php" || true
-          curl --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/www.nicoskolp.com/" -Q "-DELE default.html" || true
+          curl --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/${TARGET_DIR}" -Q "-DELE index.php" || true
+          curl --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/${TARGET_DIR}" -Q "-DELE default.html" || true
 
       - name: 📤 Deploy FTPS su Aruba
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
