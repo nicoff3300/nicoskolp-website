@@ -5,11 +5,11 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 const isActivePublicArt = currentPath === '/public-art' || currentPath.startsWith('/public-art/');
 const isActiveAbout = currentPath === '/about-me';
-const isActiveGraffiti = currentPath === '/graffiti';
+const isActiveGraffiti = currentPath === '/graffiti' || currentPath.startsWith('/graffiti/');
 const isActiveArchive = currentPath === '/skolp-archive';
 ---
 
-<header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-[#e2e2e2]">
+<header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-brand-gray-light">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
     <!-- Brand / Logo Nico Skolp (link to /) -->
     <a
@@ -34,6 +34,7 @@ const isActiveArchive = currentPath === '/skolp-archive';
     <nav class="hidden md:flex items-center space-x-7 lg:space-x-9" aria-label="Navigazione principale">
       <a
         href="/public-art"
+        aria-current={isActivePublicArt ? "page" : undefined}
         class:list={[
           "font-druk text-xs lg:text-sm tracking-wider uppercase transition-colors duration-150",
           isActivePublicArt
@@ -45,6 +46,7 @@ const isActiveArchive = currentPath === '/skolp-archive';
       </a>
       <a
         href="/about-me"
+        aria-current={isActiveAbout ? "page" : undefined}
         class:list={[
           "font-druk text-xs lg:text-sm tracking-wider uppercase transition-colors duration-150",
           isActiveAbout
@@ -56,6 +58,7 @@ const isActiveArchive = currentPath === '/skolp-archive';
       </a>
       <a
         href="/graffiti"
+        aria-current={isActiveGraffiti ? "page" : undefined}
         class:list={[
           "font-druk text-xs lg:text-sm tracking-wider uppercase transition-colors duration-150",
           isActiveGraffiti
@@ -114,21 +117,23 @@ const isActiveArchive = currentPath === '/skolp-archive';
 <!-- Mobile Drawer Backdrop -->
 <div
   id="drawer-backdrop"
-  class="fixed inset-0 bg-black/40 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300 z-50"
+  class="md:hidden fixed inset-0 bg-black/40 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300 z-50"
   aria-hidden="true"
 ></div>
 
 <!-- Mobile Drawer Aside -->
 <aside
   id="mobile-drawer"
-  class="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[85vw] bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between p-6 sm:p-8"
+  class="md:hidden fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[85vw] bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between p-6 sm:p-8"
   aria-label="Menu di navigazione mobile"
   aria-modal="true"
   role="dialog"
+  aria-hidden="true"
+  inert
 >
   <div>
     <!-- Drawer Header -->
-    <div class="flex items-center justify-between pb-6 border-b border-[#e2e2e2]">
+    <div class="flex items-center justify-between pb-6 border-b border-brand-gray-light">
       <a href="/" class="no-underline flex items-center gap-2 drawer-link" aria-label="Nico Skolp - Home">
         <img src="/images/brand/Skolp_logo.png" alt="Nico Skolp Logo" class="h-6 w-auto object-contain" width="100" height="30" />
         <span class="font-druk font-bold text-sm tracking-wider uppercase text-black">Nico Skolp</span>
@@ -149,8 +154,9 @@ const isActiveArchive = currentPath === '/skolp-archive';
     <nav class="flex flex-col mt-8 space-y-4" aria-label="Navigazione mobile drawer">
       <a
         href="/public-art"
+        aria-current={isActivePublicArt ? "page" : undefined}
         class:list={[
-          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-[#e2e2e2]/50 transition-colors",
+          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-brand-gray-light/50 transition-colors",
           isActivePublicArt ? "font-bold text-black underline underline-offset-4 decoration-2" : "font-medium text-black hover:underline"
         ]}
       >
@@ -158,8 +164,9 @@ const isActiveArchive = currentPath === '/skolp-archive';
       </a>
       <a
         href="/about-me"
+        aria-current={isActiveAbout ? "page" : undefined}
         class:list={[
-          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-[#e2e2e2]/50 transition-colors",
+          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-brand-gray-light/50 transition-colors",
           isActiveAbout ? "font-bold text-black underline underline-offset-4 decoration-2" : "font-medium text-black hover:underline"
         ]}
       >
@@ -167,8 +174,9 @@ const isActiveArchive = currentPath === '/skolp-archive';
       </a>
       <a
         href="/graffiti"
+        aria-current={isActiveGraffiti ? "page" : undefined}
         class:list={[
-          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-[#e2e2e2]/50 transition-colors",
+          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-brand-gray-light/50 transition-colors",
           isActiveGraffiti ? "font-bold text-black underline underline-offset-4 decoration-2" : "font-medium text-black hover:underline"
         ]}
       >
@@ -176,8 +184,9 @@ const isActiveArchive = currentPath === '/skolp-archive';
       </a>
       <a
         href="/skolp-archive"
+        aria-current={isActiveArchive ? "page" : undefined}
         class:list={[
-          "drawer-link font-druk text-sm uppercase tracking-wider py-2 border-b border-[#e2e2e2]/50 text-[#8f8f8f] transition-colors",
+          "drawer-link font-druk text-sm uppercase tracking-wider py-2 border-b border-brand-gray-light/50 text-brand-gray-text transition-colors",
           isActiveArchive ? "font-bold text-black underline underline-offset-4 decoration-2" : "hover:text-black hover:underline"
         ]}
       >
@@ -187,8 +196,8 @@ const isActiveArchive = currentPath === '/skolp-archive';
   </div>
 
   <!-- Drawer Bottom: Social Links -->
-  <div class="pt-6 border-t border-[#e2e2e2] space-y-4">
-    <div class="text-xs uppercase tracking-wider text-[#8f8f8f] font-sans">
+  <div class="pt-6 border-t border-brand-gray-light space-y-4">
+    <div class="text-xs uppercase tracking-wider text-brand-gray-text font-sans">
       Seguimi su
     </div>
     <div class="flex items-center space-x-6">
@@ -231,9 +240,11 @@ const isActiveArchive = currentPath === '/skolp-archive';
     const drawerLinks = document.querySelectorAll('.drawer-link');
 
     if (!toggleBtn || !drawer || !backdrop) return;
+    if (toggleBtn.hasAttribute('data-drawer-ready')) return;
+    toggleBtn.setAttribute('data-drawer-ready', 'true');
 
     const elBtn = toggleBtn;
-    const elDrawer = drawer;
+    const elDrawer = drawer as HTMLElement;
     const elBackdrop = backdrop;
 
     let isOpen = false;
@@ -242,18 +253,24 @@ const isActiveArchive = currentPath === '/skolp-archive';
       isOpen = true;
       elBtn.setAttribute('aria-expanded', 'true');
       elDrawer.classList.remove('translate-x-full');
+      (elDrawer as any).inert = false;
+      elDrawer.setAttribute('aria-hidden', 'false');
       elBackdrop.classList.remove('opacity-0', 'pointer-events-none');
       elBackdrop.classList.add('opacity-100');
       document.body.style.overflow = 'hidden';
+      (closeBtn as HTMLElement)?.focus();
     }
 
     function closeDrawer() {
       isOpen = false;
       elBtn.setAttribute('aria-expanded', 'false');
       elDrawer.classList.add('translate-x-full');
+      (elDrawer as any).inert = true;
+      elDrawer.setAttribute('aria-hidden', 'true');
       elBackdrop.classList.add('opacity-0', 'pointer-events-none');
       elBackdrop.classList.remove('opacity-100');
       document.body.style.overflow = '';
+      (elBtn as HTMLElement)?.focus();
     }
 
     toggleBtn.addEventListener('click', () => {

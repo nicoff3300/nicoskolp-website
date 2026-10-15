@@ -51,13 +51,21 @@ const socialImageURL = new URL(image, siteURL);
 
     <!-- Favicon & Web Fonts -->
     <link rel="icon" type="image/png" href="/images/brand/monogram.png" />
+    <link rel="preload" href="/fonts/druk/DrukTextWide-Bold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/opensans/OpenSans-Regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/fonts/fonts.css" />
 
     <title>{title}</title>
   </head>
   <body class="min-h-screen flex flex-col bg-white text-black antialiased selection:bg-black selection:text-white">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-black focus:text-white focus:font-druk focus:text-xs focus:uppercase focus:outline-none"
+    >
+      Salta al contenuto principale
+    </a>
     <Header />
-    <main class="min-h-screen flex-1">
+    <main id="main-content" class="flex-1">
       <slot />
     </main>
     <Footer />

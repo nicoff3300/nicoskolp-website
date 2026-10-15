@@ -4,13 +4,13 @@ import siteData from '../data/site.json';
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="w-full bg-white border-t border-[#e2e2e2] text-black transition-colors" role="contentinfo">
+<footer class="w-full bg-white border-t border-brand-gray-light text-black transition-colors" role="contentinfo">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-8">
     <!-- Top Row: Social & Archive CTA -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-[#e2e2e2]">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-brand-gray-light">
       <!-- Social section -->
       <div class="flex flex-wrap items-center gap-3">
-        <span class="text-xs uppercase tracking-wider text-[#8f8f8f] font-sans">
+        <span class="text-xs uppercase tracking-wider text-brand-gray-text font-sans">
           seguimi su:
         </span>
         <a
@@ -22,7 +22,7 @@ const currentYear = new Date().getFullYear();
         >
           Instagram
         </a>
-        <span class="text-[#8f8f8f]" aria-hidden="true">•</span>
+        <span class="text-brand-gray-text" aria-hidden="true">•</span>
         <a
           href={siteData.social.behance}
           target="_blank"
@@ -47,7 +47,7 @@ const currentYear = new Date().getFullYear();
     </div>
 
     <!-- Bottom Row: Credits & Dynamic Copyright -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#8f8f8f] font-sans">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-brand-gray-text font-sans">
       <!-- Credits -->
       <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
         <span>
@@ -70,7 +70,7 @@ const currentYear = new Date().getFullYear();
       </div>
 
       <!-- Copyright -->
-      <div class="text-[#8f8f8f]">
+      <div class="text-brand-gray-text">
         &copy; {currentYear} Nico Skolp
       </div>
     </div>
