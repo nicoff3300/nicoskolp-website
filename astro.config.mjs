@@ -11,6 +11,7 @@ export default defineConfig({
     assets: 'assets'
   },
   redirects: {
+    '/archive': '/skolp-archive',
     '/teatro-aquilone': '/public-art/teatro-aquilone',
     '/sanpaolo': '/public-art/sanpaolo',
     '/trust-taranto': '/public-art/trust-taranto',

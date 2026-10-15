@@ -19,6 +19,15 @@ export interface GraffitiPiece {
   description?: string;
 }
 
+export interface LightboxItem {
+  id?: string;
+  title: string;
+  year?: string;
+  city?: string;
+  image: string;
+  description?: string;
+}
+
 export interface ArchiveItem {
   id: string;
   year: string;

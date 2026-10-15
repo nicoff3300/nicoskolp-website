@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Lightbox from '../components/Lightbox.astro';
+import archiveData from '../data/archive.json';
+import type { ArchiveItem, LightboxItem } from '../types';
+
+const archiveItems = archiveData as ArchiveItem[];
+
+const lightboxItems: LightboxItem[] = archiveItems.map((item) => ({
+  id: item.id,
+  title: item.title,
+  year: item.year,
+  city: item.city,
+  image: item.image,
+  description: item.description,
+}));
+---
+
+<BaseLayout
+  title="Archive 1999-2019 - Nico Skolp"
+  description="Archivio storico di graffiti, sketch e pareti di Nico Skolp dal 1999 al 2019."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+    <!-- Header Sezione -->
+    <header class="text-center mb-12 sm:mb-16 md:mb-20">
+      <h1 class="font-druk font-bold text-3xl sm:text-4xl md:text-5xl uppercase tracking-wider text-black">
+        Archive
+      </h1>
+      <p class="font-sans text-base sm:text-lg text-neutral-600 mt-4 max-w-2xl mx-auto">
+        Twenty years of graffiti, lettering and evolution (1999 - 2019).
+      </p>
+    </header>
+
+    <!-- Griglia Cronologica Pezzi Storici (21 pezzi da archive.json) -->
+    <section aria-label="Galleria Archivio Storico 1999-2019">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+        {archiveItems.map((piece, index) => {
+          const isLCP = index < 4;
+          const metaParts = [piece.city, piece.year].filter(Boolean);
+          const metaText = metaParts.join(' • ');
+
+          return (
+            <button
+              type="button"
+              data-lightbox-trigger
+              data-lightbox-index={index}
+              aria-haspopup="dialog"
+              aria-label={`Visualizza ${piece.title}${metaText ? `, ${metaText}` : ''} nel visualizzatore`}
+              class="group text-left w-full bg-white border border-[#e2e2e2] overflow-hidden flex flex-col transition-all duration-300 hover:border-black hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-pointer"
+            >
+              <span class="relative w-full aspect-[4/3] bg-[#fcfcfc] overflow-hidden block">
+                <!-- Badge Anno in evidenza -->
+                <span class="absolute top-3 left-3 bg-black text-white font-druk font-bold text-xs uppercase tracking-wider px-2.5 py-1 z-10 shadow-xs">
+                  {piece.year}
+                </span>
+
+                <img
+                  src={piece.image}
+                  alt={`Archivio ${piece.title}${piece.city ? ` a ${piece.city}` : ''} (${piece.year})`}
+                  loading={isLCP ? 'eager' : 'lazy'}
+                  fetchpriority={isLCP ? 'high' : 'auto'}
+                  decoding="async"
+                  class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                />
+
+                <!-- Hover overlay per feedback visivo elegante -->
+                <span class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none block" />
+              </span>
+
+              <!-- Didascalia inferiore: titolo opera in font Druk e metadati in font sans -->
+              <span class="p-4 sm:p-5 bg-white border-t border-[#e2e2e2] flex flex-col justify-between flex-1 gap-1.5 w-full block">
+                <span class="font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black truncate block">
+                  {piece.title}
+                </span>
+                <span class="font-sans text-xs text-[#8f8f8f] uppercase tracking-wider truncate block">
+                  {metaText}
+                </span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- Navigazione correlata ad altre sezioni -->
+    <nav class="mt-16 sm:mt-24 pt-12 border-t border-[#e2e2e2] flex flex-col sm:flex-row items-center justify-between gap-6" aria-label="Navigazione collezioni correlate">
+      <div class="text-center sm:text-left">
+        <span class="font-druk font-bold text-xs uppercase tracking-wider text-black block">
+          Esplora la produzione contemporanea
+        </span>
+        <span class="font-sans text-xs text-neutral-500 mt-1 block">
+          Grandi facciate urbane e selezione Hall of Fame recente
+        </span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a
+          href="/public-art"
+          class="no-underline inline-flex items-center gap-2 font-druk font-bold text-xs uppercase tracking-wider px-5 py-3 border border-black hover:bg-black hover:text-white transition-colors"
+        >
+          <span>Public Art</span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a
+          href="/graffiti"
+          class="no-underline inline-flex items-center gap-2 font-druk font-bold text-xs uppercase tracking-wider px-5 py-3 border border-black hover:bg-black hover:text-white transition-colors"
+        >
+          <span>Graffiti</span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Componente Modale Lightbox accessibile con navigazione sui 21 pezzi -->
+  <Lightbox items={lightboxItems} />
+</BaseLayout>

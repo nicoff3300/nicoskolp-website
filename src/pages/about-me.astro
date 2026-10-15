@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteConfig from '../data/site.json';
+
+const bioParagraphs = siteConfig.bio.slice(0, 4);
+const collaborationMotto = siteConfig.bio[4] || 'Collaboration welcomed';
+---
+
+<BaseLayout
+  title="About me - Nico Skolp"
+  description="Biografia e percorso artistico di Nico Skolp, muralismo, arte urbana e FF3300."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+    <!-- Header Sezione -->
+    <header class="mb-12 sm:mb-16 md:mb-20">
+      <h1 class="font-druk font-bold text-3xl sm:text-4xl md:text-5xl uppercase tracking-wider text-black">
+        About me
+      </h1>
+      <p class="font-sans text-base sm:text-lg text-neutral-600 mt-4 max-w-2xl">
+        Urban artist, muralist and co-founder of FF3300.
+      </p>
+    </header>
+
+    <!-- Layout a due colonne (1 colonna mobile, 2 colonne desktop) -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start mb-20 sm:mb-24" aria-label="Biografia e percorso artistico">
+      <!-- Colonna Visual (5 colonne) -->
+      <div class="lg:col-span-5 lg:sticky lg:top-28">
+        <div class="bg-[#fcfcfc] border border-[#e2e2e2] p-8 sm:p-10 flex flex-col items-center justify-center text-center space-y-8">
+          <!-- Monogramma e origine -->
+          <div class="flex items-center gap-2.5 text-xs font-sans uppercase tracking-widest text-[#8f8f8f]">
+            <img
+              src="/images/brand/monogram.png"
+              alt="Nico Skolp Monogram"
+              class="w-5 h-5 object-contain"
+              width="20"
+              height="20"
+            />
+            <span>Est. 1997 • Bari, Italy</span>
+          </div>
+
+          <!-- Visual artistico principale: Skolp_graphic.png -->
+          <div class="w-full flex items-center justify-center py-4">
+            <img
+              src="/images/brand/Skolp_graphic.png"
+              alt="Nico Skolp Graphic Artwork"
+              class="w-full max-w-[340px] h-auto object-contain transition-transform duration-300 hover:scale-105"
+              width="673"
+              height="162"
+              loading="eager"
+            />
+          </div>
+
+          <!-- Banner animato secondario: skolp_gif.gif -->
+          <div class="w-full pt-6 border-t border-[#e2e2e2] flex flex-col items-center gap-3">
+            <img
+              src="/images/brand/skolp_gif.gif"
+              alt="Skolp animated ticker"
+              class="h-6 w-auto object-contain opacity-85"
+              width="400"
+              height="32"
+            />
+            <span class="font-druk font-bold text-[11px] uppercase tracking-widest text-black/70">
+              Muralism & Geometric Abstraction
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonna Testo (7 colonne) -->
+      <div class="lg:col-span-7 flex flex-col justify-between">
+        <!-- Paragrafi storici completi da site.json -->
+        <div class="space-y-6 text-neutral-700 font-sans text-base sm:text-lg leading-relaxed">
+          {bioParagraphs.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
+
+        <!-- Box in evidenza Motto & CTA -->
+        <div class="mt-10 sm:mt-12 bg-[#fcfcfc] border border-black p-6 sm:p-8">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div>
+              <h2 class="font-druk font-bold text-lg sm:text-xl uppercase tracking-wider text-black">
+                {collaborationMotto}
+              </h2>
+              <p class="font-sans text-xs sm:text-sm text-neutral-600 mt-1">
+                Available for public murals, art residencies, and creative commissions.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 shrink-0">
+              <a
+                href="/#contatti"
+                class="no-underline inline-flex items-center justify-center font-druk font-bold text-xs uppercase tracking-wider px-5 py-3 bg-black text-white hover:bg-neutral-800 transition-colors"
+              >
+                Contattami
+              </a>
+              <a
+                href="mailto:nicoskolp@gmail.com"
+                class="no-underline inline-flex items-center justify-center font-druk font-bold text-xs uppercase tracking-wider px-5 py-3 border border-black text-black hover:bg-black hover:text-white transition-colors"
+              >
+                Email
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sezione Studio, Collettivo & Network -->
+    <section class="pt-12 sm:pt-16 border-t border-[#e2e2e2]" aria-label="Studio, Collettivo e Network">
+      <div class="mb-8 sm:mb-12">
+        <h2 class="font-druk font-bold text-2xl sm:text-3xl uppercase tracking-wider text-black">
+          Studio, Collettivo & Network
+        </h2>
+        <p class="font-sans text-sm sm:text-base text-neutral-600 mt-2">
+          I progetti, gli studi e i collettivi indipendenti di cui Nico Skolp fa parte.
+        </p>
+      </div>
+
+      <!-- Cards Grid: FF3300 & Wallness -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-10">
+        <!-- Card FF3300 -->
+        <article class="bg-white border border-[#e2e2e2] p-6 sm:p-8 flex flex-col justify-between hover:border-black hover:shadow-md transition-all duration-300">
+          <div>
+            <div class="h-16 flex items-center justify-start mb-6">
+              <img
+                src="/images/brand/FF_logo.png"
+                alt="Studio FF3300 Logo"
+                class="h-10 w-auto object-contain max-w-[200px]"
+                width="1417"
+                height="333"
+              />
+            </div>
+            <h3 class="font-druk font-bold text-base sm:text-lg uppercase tracking-wider text-black">
+              {siteConfig.credits.studioName}
+            </h3>
+            <p class="font-sans text-sm text-neutral-600 mt-3 leading-relaxed">
+              Visual arts and design studio co-founded in 2006 by Nico Skolp in Bari, Italy. Focused on brand identity, graphic design, art direction, and digital experiences.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-[#e2e2e2]">
+            <a
+              href={siteConfig.credits.studioUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline group"
+              aria-label="Visita il sito ufficiale dello studio FF3300 (si apre in una nuova scheda)"
+            >
+              <span>Visita ff3300.com</span>
+              <span class="inline-block transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card Wallness -->
+        <article class="bg-white border border-[#e2e2e2] p-6 sm:p-8 flex flex-col justify-between hover:border-black hover:shadow-md transition-all duration-300">
+          <div>
+            <div class="h-16 flex items-center justify-start mb-6">
+              <img
+                src="/images/brand/Wallness_logo.png"
+                alt="Wallness Club Logo"
+                class="h-12 w-auto object-contain max-w-[200px]"
+                width="400"
+                height="263"
+              />
+            </div>
+            <h3 class="font-druk font-bold text-base sm:text-lg uppercase tracking-wider text-black">
+              {siteConfig.credits.collectiveName}
+            </h3>
+            <p class="font-sans text-sm text-neutral-600 mt-3 leading-relaxed">
+              Urban art collective and independent platform promoting muralism, wall culture, and contemporary artistic dialogue across public spaces.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-[#e2e2e2]">
+            <a
+              href={siteConfig.credits.collectiveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline group"
+              aria-label="Visita il profilo Instagram di Wallness Club (si apre in una nuova scheda)"
+            >
+              <span>Segui @wallness.club</span>
+              <span class="inline-block transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+      </div>
+
+      <!-- Social Links Diretti -->
+      <div class="bg-[#fcfcfc] border border-[#e2e2e2] p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div>
+          <span class="font-druk font-bold text-xs uppercase tracking-wider text-black block">
+            Canali Ufficiali & Profili
+          </span>
+          <span class="font-sans text-xs text-neutral-500 mt-1 block">
+            Segui gli aggiornamenti in tempo reale e i nuovi progetti
+          </span>
+        </div>
+        <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+          <a
+            href={siteConfig.social.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="no-underline flex items-center gap-2 font-druk font-medium text-xs uppercase tracking-wider text-black hover:opacity-60 transition-opacity"
+            aria-label="Instagram Nico Skolp (si apre in una nuova scheda)"
+          >
+            <svg class="w-4 h-4 fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"></circle>
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <span class="text-[#e2e2e2]" aria-hidden="true">•</span>
+          <a
+            href={siteConfig.social.behance}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="no-underline flex items-center gap-2 font-druk font-medium text-xs uppercase tracking-wider text-black hover:opacity-60 transition-opacity"
+            aria-label="Behance Nico Skolp (si apre in una nuova scheda)"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7.74 10.96c.71-.24 1.22-.81 1.22-1.74 0-1.57-1.12-2.22-2.73-2.22H1v10h5.45c1.88 0 3.05-.88 3.05-2.61 0-1.25-.71-1.99-1.76-2.19v-.06c.01 0 0 0 0 0zm-4.32-2.3h2.38c.68 0 1.09.28 1.09.89 0 .63-.42.92-1.13.92H3.42V8.66zm2.64 6.64H3.42v-2.09h2.67c.8 0 1.25.32 1.25 1.03 0 .72-.45 1.06-1.28 1.06zM17.47 9c-2.82 0-4.47 1.94-4.47 4.54 0 2.67 1.63 4.46 4.46 4.46 1.87 0 3.19-.74 3.79-2.22h-1.92c-.37.49-.96.75-1.77.75-1.28 0-2.08-.8-2.14-2.17h5.88c.03-.22.05-.49.05-.75 0-2.48-1.42-4.61-3.88-4.61zm-2.04 3.59c.12-.99.78-1.8 1.99-1.8 1.13 0 1.76.77 1.87 1.8h-3.86zM14.61 7h5.56v1.27h-5.56V7z"/>
+            </svg>
+            <span>Behance</span>
+          </a>
+          {siteConfig.social.linktree && (
+            <>
+              <span class="text-[#e2e2e2]" aria-hidden="true">•</span>
+              <a
+                href={siteConfig.social.linktree}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="no-underline flex items-center gap-1.5 font-druk font-medium text-xs uppercase tracking-wider text-black hover:opacity-60 transition-opacity"
+                aria-label="Linktree Nico Skolp (si apre in una nuova scheda)"
+              >
+                <span>Linktree</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
