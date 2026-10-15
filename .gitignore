@@ -1,8 +1,30 @@
+# Dipendenze
 node_modules/
+.pnp
+.pnp.js
+
+# Build output
 dist/
+build/
+
+# Cache di Astro e Vite
 .astro/
-.DS_Store
+.cache/
+
+# Variabili d'ambiente private
 .env
 .env.*
 !.env.example
+
+# File di sistema macOS & Volumi esterni SSD
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+Icon
+Thumbs.db
+
+# Strumenti di sviluppo interni
 .superpowers/
