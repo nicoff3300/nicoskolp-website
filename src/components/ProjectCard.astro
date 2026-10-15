@@ -1,0 +1,46 @@
+---
+import type { Project } from '../types';
+
+interface Props {
+  project: Project;
+  eager?: boolean;
+}
+
+const { project, eager = false } = Astro.props;
+
+const metaParts = [project.city, project.year].filter(Boolean);
+const metaText = metaParts.join(' • ');
+---
+
+<article class="group relative bg-white border border-[#e2e2e2] overflow-hidden flex flex-col transition-all duration-300 hover:border-black hover:shadow-lg">
+  <a
+    href={`/public-art/${project.slug}`}
+    class="no-underline flex flex-col h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+    aria-label={`Vedi opera ${project.title}`}
+  >
+    <div class="relative w-full aspect-[4/3] bg-[#fcfcfc] overflow-hidden">
+      <img
+        src={project.coverImage}
+        alt={`Opera murale ${project.title}${project.city ? ` a ${project.city}` : ''}`}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        decoding="async"
+        class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+      />
+      <!-- Hover overlay per feedback visivo elegante -->
+      <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+    </div>
+
+    <!-- Didascalia inferiore con titolo e metadati -->
+    <div class="p-4 sm:p-5 bg-white border-t border-[#e2e2e2] flex flex-col justify-between flex-1 gap-1.5">
+      <h2 class="font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black truncate">
+        {project.title}
+      </h2>
+      {metaText && (
+        <p class="font-sans text-xs text-[#8f8f8f] uppercase tracking-wider truncate">
+          {metaText}
+        </p>
+      )}
+    </div>
+  </a>
+</article>

@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import publicArtData from '../../data/public-art.json';
+import type { Project } from '../../types';
+
+const projects = publicArtData as Project[];
+---
+
+<BaseLayout
+  title="Public Art - Nico Skolp"
+  description="Urban Art Portfolio, murales e interventi pubblici di Nico Skolp"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+    <!-- Header Sezione Public Art -->
+    <header class="text-center mb-12 sm:mb-16 md:mb-20">
+      <h1 class="font-druk font-bold text-3xl sm:text-4xl md:text-5xl uppercase tracking-wider text-black">
+        Public Art
+      </h1>
+      <p class="font-sans text-base sm:text-lg text-neutral-600 mt-4 max-w-2xl mx-auto">
+        Here, my Urban Art Portfolio. Shape and colors make me fill better.
+      </p>
+    </header>
+
+    <!-- Griglia Responsive Progetti (1 col mobile, 2 tablet, 3-4 desktop) -->
+    <section aria-label="Elenco progetti Public Art">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+        {projects.map((project, index) => (
+          <ProjectCard
+            project={project}
+            eager={index < 4}
+          />
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

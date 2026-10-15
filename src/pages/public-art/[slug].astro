@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import publicArtData from '../../data/public-art.json';
+import type { Project } from '../../types';
+
+export async function getStaticPaths() {
+  const projects = publicArtData as Project[];
+  return projects.map((project, index) => {
+    const prevProject = index > 0 ? projects[index - 1] : null;
+    const nextProject = index < projects.length - 1 ? projects[index + 1] : null;
+
+    return {
+      params: { slug: project.slug },
+      props: { project, prevProject, nextProject },
+    };
+  });
+}
+
+interface Props {
+  project: Project;
+  prevProject: Project | null;
+  nextProject: Project | null;
+}
+
+const { project, prevProject, nextProject } = Astro.props;
+
+// Filtra eventuali immagini aggiuntive diverse dalla coverImage principale
+const additionalImages = project.galleryImages
+  ? project.galleryImages.filter((img, idx) => img !== project.coverImage || idx > 0)
+  : [];
+---
+
+<BaseLayout
+  title={`${project.title} - Public Art - Nico Skolp`}
+  description={project.description || `${project.title} - Opera di Public Art e Muralismo di Nico Skolp a ${project.city || ''} (${project.year || ''})`}
+  image={project.coverImage}
+  canonical={`/public-art/${project.slug}`}
+>
+  <article class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+    <!-- Link Breadcrumb Torna a Public Art -->
+    <nav class="mb-8 sm:mb-10" aria-label="Breadcrumb">
+      <a
+        href="/public-art"
+        class="no-underline inline-flex items-center gap-2 font-druk font-medium text-xs sm:text-sm uppercase tracking-wider text-[#8f8f8f] hover:text-black transition-colors"
+      >
+        <span aria-hidden="true">←</span>
+        <span>Torna a Public Art</span>
+      </a>
+    </nav>
+
+    <!-- Header Opera: Metadati e Titolo -->
+    <header class="mb-8 sm:mb-12">
+      {(project.city || project.year) && (
+        <div class="flex items-center gap-2 text-xs sm:text-sm font-sans uppercase tracking-wider text-[#8f8f8f] mb-3">
+          {project.city && <span>{project.city}</span>}
+          {project.city && project.year && <span aria-hidden="true">•</span>}
+          {project.year && <span>{project.year}</span>}
+        </div>
+      )}
+      <h1 class="font-druk font-bold text-2xl sm:text-3xl md:text-4xl uppercase tracking-wider text-black leading-tight">
+        {project.title}
+      </h1>
+    </header>
+
+    <!-- Immagine Monumentale Principale -->
+    <div class="border border-[#e2e2e2] bg-[#fcfcfc] overflow-hidden mb-8 sm:mb-12">
+      <img
+        src={project.coverImage}
+        alt={`Murales ${project.title}${project.city ? ` a ${project.city}` : ''}${project.year ? ` (${project.year})` : ''}`}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="w-full h-auto object-cover max-h-[85vh] mx-auto block"
+      />
+    </div>
+
+    <!-- Testo / Descrizione dell'opera -->
+    {project.description && (
+      <div class="max-w-3xl mb-10 sm:mb-14">
+        <p class="font-sans text-base sm:text-lg leading-relaxed text-neutral-800">
+          {project.description}
+        </p>
+      </div>
+    )}
+
+    <!-- Galleria Foto Aggiuntive / Backstage (se presenti ulteriori immagini) -->
+    {additionalImages.length > 0 && (
+      <section class="mt-12 sm:mt-16 pt-10 sm:pt-14 border-t border-[#e2e2e2]" aria-label="Galleria foto e dettagli">
+        <h2 class="font-druk font-bold text-lg sm:text-xl uppercase tracking-wider text-black mb-6 sm:mb-8">
+          Galleria Foto & Dettagli
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+          {additionalImages.map((imgUrl, imgIndex) => (
+            <figure class="group border border-[#e2e2e2] bg-[#fcfcfc] overflow-hidden transition-all duration-300 hover:border-black hover:shadow-md">
+              <img
+                src={imgUrl}
+                alt={`${project.title} - Foto ${imgIndex + 1}`}
+                loading="lazy"
+                decoding="async"
+                class="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              />
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Navigazione tra Opere (Precedente / Successivo) -->
+    <nav class="border-t border-[#e2e2e2] pt-8 sm:pt-12 mt-12 sm:mt-16" aria-label="Navigazione tra opere">
+      <div class="flex items-center justify-between gap-4">
+        {prevProject ? (
+          <a
+            href={`/public-art/${prevProject.slug}`}
+            class="no-underline group flex flex-col items-start text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-black max-w-[45%]"
+            rel="prev"
+          >
+            <span class="font-sans text-xs uppercase tracking-wider text-[#8f8f8f] group-hover:text-black transition-colors flex items-center gap-1.5">
+              <span aria-hidden="true">←</span>
+              <span>Progetto Precedente</span>
+            </span>
+            <span class="font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black mt-1 group-hover:underline truncate w-full">
+              {prevProject.title}
+            </span>
+          </a>
+        ) : (
+          <div class="w-1" aria-hidden="true" />
+        )}
+
+        <a
+          href="/public-art"
+          class="no-underline hidden sm:inline-block font-druk font-bold text-xs uppercase tracking-wider px-5 py-2.5 border border-[#e2e2e2] hover:border-black hover:bg-black hover:text-white transition-colors text-center shrink-0"
+        >
+          Tutti i murales
+        </a>
+
+        {nextProject ? (
+          <a
+            href={`/public-art/${nextProject.slug}`}
+            class="no-underline group flex flex-col items-end text-right focus:outline-none focus-visible:ring-2 focus-visible:ring-black max-w-[45%]"
+            rel="next"
+          >
+            <span class="font-sans text-xs uppercase tracking-wider text-[#8f8f8f] group-hover:text-black transition-colors flex items-center gap-1.5">
+              <span>Progetto Successivo</span>
+              <span aria-hidden="true">→</span>
+            </span>
+            <span class="font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black mt-1 group-hover:underline truncate w-full">
+              {nextProject.title}
+            </span>
+          </a>
+        ) : (
+          <div class="w-1" aria-hidden="true" />
+        )}
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
