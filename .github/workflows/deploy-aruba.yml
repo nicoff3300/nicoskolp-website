@@ -47,7 +47,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR || './' }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR || 'www.nicoskolp.com/' }}
           local-dir: ./dist/
           protocol: ftps
           dangerous-clean-slate: false
