@@ -40,6 +40,9 @@ jobs:
       - name: 🚀 Compila sito Astro (dist)
         run: npm run build
 
+      - name: 🩺 Audit e validazione build di produzione
+        run: npm run audit
+
       - name: 🧹 Rimuovi file default Aruba (file di cortesia)
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}

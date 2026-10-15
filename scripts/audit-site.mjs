@@ -19,7 +19,7 @@ function addWarning(message, details = null) {
 }
 
 function getAttr(tagString, attrName) {
-  const match = tagString.match(new RegExp(`${attrName}=(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i'));
+  const match = tagString.match(new RegExp(`\\b${attrName}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i'));
   return match ? (match[1] ?? match[2] ?? match[3]) : null;
 }
 
@@ -194,16 +194,39 @@ for (const htmlFile of htmlFiles) {
       addError(`Missing og:url meta tag in: ${relHtml}`);
     }
 
-    // Verify og:image target exists locally if site-local URL
+    // Twitter card tags
+    const twCard = metas.find((m) => m.name && m.name.toLowerCase() === 'twitter:card');
+    const twTitle = metas.find((m) => m.name && m.name.toLowerCase() === 'twitter:title');
+    const twDesc = metas.find((m) => m.name && m.name.toLowerCase() === 'twitter:description');
+    const twImage = metas.find((m) => m.name && m.name.toLowerCase() === 'twitter:image');
+
+    if (!twCard || !twCard.content) {
+      addError(`Missing twitter:card meta tag in: ${relHtml}`);
+    }
+    if (!twTitle || !twTitle.content) {
+      addError(`Missing twitter:title meta tag in: ${relHtml}`);
+    }
+    if (!twDesc || !twDesc.content) {
+      addError(`Missing twitter:description meta tag in: ${relHtml}`);
+    }
+    if (!twImage || !twImage.content) {
+      addError(`Missing twitter:image meta tag in: ${relHtml}`);
+    }
+
+    // Verify og:image target exists locally if site-local URL and is non-empty
     if (ogImage?.content) {
       let imgTarget = ogImage.content;
       if (imgTarget.startsWith('https://nicoskolp.com/')) {
         imgTarget = imgTarget.replace('https://nicoskolp.com', '');
+      } else if (imgTarget.startsWith('https://www.nicoskolp.com/')) {
+        imgTarget = imgTarget.replace('https://www.nicoskolp.com', '');
       }
       if (imgTarget.startsWith('/')) {
         const ogImagePath = path.join(distDir, imgTarget.split('?')[0].split('#')[0]);
         if (!fs.existsSync(ogImagePath)) {
           addError(`og:image file does not exist: ${ogImage.content} in ${relHtml}`);
+        } else if (fs.statSync(ogImagePath).size === 0) {
+          addError(`og:image file is empty (0 bytes): ${ogImage.content} in ${relHtml}`);
         }
       }
     }
@@ -317,7 +340,7 @@ for (const htmlFile of htmlFiles) {
 
     if (href.startsWith('http://') || href.startsWith('https://')) {
       // If external domain, skip
-      if (!href.startsWith('https://nicoskolp.com')) {
+      if (!href.startsWith('https://nicoskolp.com') && !href.startsWith('https://www.nicoskolp.com')) {
         continue;
       }
     }
@@ -325,7 +348,10 @@ for (const htmlFile of htmlFiles) {
     totalLinksChecked++;
 
     let pathOnly = href;
-    if (pathOnly.startsWith('https://nicoskolp.com')) {
+    if (pathOnly.startsWith('https://www.nicoskolp.com')) {
+      pathOnly = pathOnly.replace('https://www.nicoskolp.com', '');
+      if (!pathOnly) pathOnly = '/';
+    } else if (pathOnly.startsWith('https://nicoskolp.com')) {
       pathOnly = pathOnly.replace('https://nicoskolp.com', '');
       if (!pathOnly) pathOnly = '/';
     }
@@ -355,7 +381,14 @@ for (const htmlFile of htmlFiles) {
       ];
     }
 
-    const exists = candidatePaths.some((p) => fs.existsSync(p));
+    const exists = candidatePaths.some((p) => {
+      if (!fs.existsSync(p)) return false;
+      const stat = fs.statSync(p);
+      if (stat.isDirectory()) {
+        return fs.existsSync(path.join(p, 'index.html'));
+      }
+      return true;
+    });
     if (!exists) {
       addError(`Broken internal link: "${href}" in ${relHtml}`);
     }

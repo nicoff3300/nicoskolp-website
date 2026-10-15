@@ -42,6 +42,7 @@ Sito web ufficiale e archivio opere dell'artista urbano Nico Skolp. Il progetto 
 | `npm run preview` | Avvia un'anteprima locale della build statica |
 | `npm run check` | Esegue il controllo dei tipi e la diagnostica di Astro (`astro check`) |
 | `npm run test:data` | Esegue lo script di validazione dell'integrità dei dati JSON e dei percorsi immagini |
+| `npm run audit` | Esegue l'audit automatico della build in `dist/` (integrità rotte, immagini, CSS, font, metatag SEO/OG e link) |
 
 ---
 
