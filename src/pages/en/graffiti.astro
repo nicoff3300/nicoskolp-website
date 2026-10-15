@@ -25,11 +25,11 @@ const graffitiPieces = graffitiData as GraffitiPiece[];
       </p>
     </header>
 
-    <!-- Responsive Graffiti Grid (25 pieces from Hall of Fame) -->
+    <!-- Two-Column Graffiti Grid (25 pieces from Hall of Fame) -->
     <section aria-label="Graffiti Hall of Fame Gallery">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {graffitiPieces.map((piece, index) => {
-          const isLCP = index < 4;
+          const isLCP = index < 2;
           const metaParts = [piece.city, piece.year].filter(Boolean);
           const metaText = metaParts.join(' • ');
 

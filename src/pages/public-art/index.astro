@@ -23,13 +23,13 @@ const projects = publicArtData as Project[];
       </p>
     </header>
 
-    <!-- Griglia Responsive Progetti (1 col mobile, 2 tablet, 3-4 desktop) -->
+    <!-- Griglia Progetti a 2 Colonne -->
     <section aria-label="Elenco progetti Public Art">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {projects.map((project, index) => (
           <ProjectCard
             project={project}
-            eager={index < 4}
+            eager={index < 2}
           />
         ))}
       </div>
