@@ -6,8 +6,8 @@
 /* Druk Text Wide - Medium (500) */
 @font-face {
   font-family: 'Druk Text Wide';
-  src: url('/fonts/druk/DrukTextWide-Medium.woff2') format('woff2'),
-       url('/fonts/druk/DrukTextWide-Medium.woff') format('woff');
+  src: url('./druk/DrukTextWide-Medium.woff2') format('woff2'),
+       url('./druk/DrukTextWide-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -16,8 +16,8 @@
 /* Druk Text Wide - Bold (700) */
 @font-face {
   font-family: 'Druk Text Wide';
-  src: url('/fonts/druk/DrukTextWide-Bold.woff2') format('woff2'),
-       url('/fonts/druk/DrukTextWide-Bold.woff') format('woff');
+  src: url('./druk/DrukTextWide-Bold.woff2') format('woff2'),
+       url('./druk/DrukTextWide-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -26,8 +26,8 @@
 /* Druk Wide - Medium (500) */
 @font-face {
   font-family: 'Druk Wide';
-  src: url('/fonts/druk/DrukWide-Medium.woff2') format('woff2'),
-       url('/fonts/druk/DrukWide-Medium.woff') format('woff');
+  src: url('./druk/DrukWide-Medium.woff2') format('woff2'),
+       url('./druk/DrukWide-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -36,8 +36,8 @@
 /* Druk Text - Medium (500) */
 @font-face {
   font-family: 'Druk Text';
-  src: url('/fonts/druk/DrukText-Medium.woff2') format('woff2'),
-       url('/fonts/druk/DrukText-Medium.woff') format('woff');
+  src: url('./druk/DrukText-Medium.woff2') format('woff2'),
+       url('./druk/DrukText-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -46,7 +46,7 @@
 /* Open Sans - Regular (400) */
 @font-face {
   font-family: 'Open Sans';
-  src: url('/fonts/opensans/OpenSans-Regular.woff2') format('woff2');
+  src: url('./opensans/OpenSans-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -55,7 +55,7 @@
 /* Open Sans - Italic (400) */
 @font-face {
   font-family: 'Open Sans';
-  src: url('/fonts/opensans/OpenSans-Italic.woff2') format('woff2');
+  src: url('./opensans/OpenSans-Italic.woff2') format('woff2');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -64,7 +64,7 @@
 /* Open Sans - Bold (700) */
 @font-face {
   font-family: 'Open Sans';
-  src: url('/fonts/opensans/OpenSans-Bold.woff2') format('woff2');
+  src: url('./opensans/OpenSans-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -73,7 +73,7 @@
 /* Open Sans - Bold Italic (700) */
 @font-face {
   font-family: 'Open Sans';
-  src: url('/fonts/opensans/OpenSans-BoldItalic.woff2') format('woff2');
+  src: url('./opensans/OpenSans-BoldItalic.woff2') format('woff2');
   font-weight: 700;
   font-style: italic;
   font-display: swap;

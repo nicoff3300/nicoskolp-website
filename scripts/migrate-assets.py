@@ -491,17 +491,22 @@ def copy_local_files():
 
 
 def download_file(url: str, dest_path: Path) -> bool:
-    """Scarica un file tramite HTTP e lo salva nel percorso di destinazione."""
+    """Scarica un file tramite HTTP e lo salva atomicamente nel percorso di destinazione."""
     if dest_path.exists() and dest_path.stat().st_size > 0:
         return True
+    tmp_path = dest_path.with_suffix(dest_path.suffix + ".part")
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
-        with urllib.request.urlopen(req, timeout=30) as response, open(dest_path, "wb") as out_file:
+        with urllib.request.urlopen(req, timeout=30) as response, open(tmp_path, "wb") as out_file:
             shutil.copyfileobj(response, out_file)
+        tmp_path.replace(dest_path)
         return True
     except Exception as e:
+        if tmp_path.exists():
+            tmp_path.unlink()
         print(f"  [!] Errore durante il download da {url} verso {dest_path.name}: {e}")
         return False
+
 
 
 def download_wix_assets():
