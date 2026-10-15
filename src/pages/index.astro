@@ -15,25 +15,73 @@ import heroArtworks from '../data/hero.json';
     </div>
   </section>
 
-  <!-- Vetrina Opere (Hero Showcase - 13 opere da hero.json) -->
+  <!-- Vetrina Opere Dinamica (Hero Showcase - 13 opere da hero.json) -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28" aria-label="Opere in evidenza">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
-      {heroArtworks.map((artwork, index) => (
-        <div class="relative w-full aspect-square bg-[#fcfcfc] border border-[#e2e2e2] overflow-hidden flex items-center justify-center p-6">
-          <img
-            src={artwork.image}
-            alt={artwork.title}
-            loading={index < 4 ? "eager" : "lazy"}
-            fetchpriority={index < 2 ? "high" : "auto"}
-            decoding="async"
-            width="1080"
-            height="1350"
-            class="w-full h-full object-contain"
-          />
-        </div>
-      ))}
+    <div id="hero-gallery-grid" class="hero-grid">
+      {heroArtworks.map((artwork, index) => {
+        const isDefaultLarge = index === 0 || index === 5;
+        return (
+          <div
+            class:list={[
+              "hero-item relative w-full h-full flex items-center justify-center p-3 sm:p-4 lg:p-6 overflow-hidden",
+              isDefaultLarge ? "card-2x2" : "card-1x1"
+            ]}
+            data-index={index}
+          >
+            <img
+              src={artwork.image}
+              alt={artwork.title}
+              loading={index < 4 ? "eager" : "lazy"}
+              fetchpriority={index < 2 ? "high" : "auto"}
+              decoding="async"
+              width="1080"
+              height="1350"
+              class="w-full h-full object-contain pointer-events-none select-none"
+            />
+          </div>
+        );
+      })}
     </div>
   </section>
+
+  <!-- Script inline per randomizzare la griglia ad ogni caricamento -->
+  <script is:inline>
+    (function () {
+      function randomizeHeroGrid() {
+        const grid = document.getElementById('hero-gallery-grid');
+        if (!grid) return;
+        const items = Array.from(grid.children);
+        if (items.length < 4) return;
+
+        // Shuffle Fisher-Yates per ordine casuale delle immagini
+        for (let i = items.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [items[i], items[j]] = [items[j], items[i]];
+        }
+
+        // Seleziona casualmente 2 o 3 immagini per il formato a 2 colonne e 2 righe (2x2)
+        const numFeatured = Math.random() < 0.5 ? 2 : 3;
+        const featuredIndices = new Set();
+        while (featuredIndices.size < numFeatured) {
+          featuredIndices.add(Math.floor(Math.random() * items.length));
+        }
+
+        // Riassegna le classi: card-2x2 per gli elementi in risalto, card-1x1 per gli altri
+        items.forEach((item, index) => {
+          item.classList.remove('card-1x1', 'card-2x2');
+          if (featuredIndices.has(index)) {
+            item.classList.add('card-2x2');
+          } else {
+            item.classList.add('card-1x1');
+          }
+          grid.appendChild(item);
+        });
+      }
+
+      randomizeHeroGrid();
+      document.addEventListener('astro:page-load', randomizeHeroGrid);
+    })();
+  </script>
 
   <!-- Sezione Contatto -->
   <section class="py-16 sm:py-24 border-t border-brand-gray-light bg-white px-4 sm:px-6 lg:px-8" id="contatti">
@@ -45,3 +93,46 @@ import heroArtworks from '../data/hero.json';
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 200px;
+    grid-auto-flow: dense;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-grid {
+      grid-auto-rows: 250px;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: 280px;
+      gap: 1.75rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: 320px;
+      gap: 2rem;
+    }
+  }
+
+  .card-1x1 {
+    grid-column: span 1 / span 1;
+    grid-row: span 1 / span 1;
+  }
+
+  .card-2x2 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+  }
+</style>
