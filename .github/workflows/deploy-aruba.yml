@@ -37,15 +37,27 @@ jobs:
       - name: 🚀 Compila sito Astro (dist)
         run: npm run build
 
-      - name: 🧹 Rimuovi file default Aruba (index.php di cortesia)
+      - name: 🧹 Rimuovi file default Aruba (file di cortesia)
         env:
           TARGET_DIR: ${{ secrets.FTP_SERVER_DIR || 'www.nicoskolp.com/' }}
         run: |
-          curl --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/${TARGET_DIR}" -Q "-DELE index.php" || true
-          curl --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/${TARGET_DIR}" -Q "-DELE default.html" || true
+          if [ -z "${{ secrets.FTP_SERVER }}" ] || [ -z "${{ secrets.FTP_USERNAME }}" ] || [ -z "${{ secrets.FTP_PASSWORD }}" ]; then
+            echo "⚠️ Credenziali FTP non configurate nei secrets. Salto la rimozione dei file di cortesia."
+            exit 0
+          fi
+          CLEAN_DIR="${TARGET_DIR#/}"
+          [[ "$CLEAN_DIR" != */ && -n "$CLEAN_DIR" ]] && CLEAN_DIR="${CLEAN_DIR}/"
+          FTP_URL="ftp://${{ secrets.FTP_SERVER }}/${CLEAN_DIR}"
+          echo "Verifica e rimozione file di benvenuto Aruba (index.php, default.html) su ${FTP_URL}..."
+          for file in index.php default.html; do
+            curl -s --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "${FTP_URL}" -Q "-DELE ${file}" -o /dev/null || \
+            curl -s --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "${FTP_URL}" -Q "-DELE ${file}" -o /dev/null || true
+          done
 
-      - name: 📤 Deploy FTPS su Aruba
+      - name: 📤 Deploy FTPS su Aruba (connessione protetta TLS)
+        id: deploy-ftps
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        continue-on-error: true
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
@@ -53,4 +65,19 @@ jobs:
           server-dir: ${{ secrets.FTP_SERVER_DIR || 'www.nicoskolp.com/' }}
           local-dir: ./dist/
           protocol: ftps
+          port: 21
+          security: loose
+          dangerous-clean-slate: false
+
+      - name: 📤 Fallback Deploy FTP standard (se FTPS non disponibile)
+        if: steps.deploy-ftps.outcome == 'failure'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR || 'www.nicoskolp.com/' }}
+          local-dir: ./dist/
+          protocol: ftp
+          port: 21
           dangerous-clean-slate: false
