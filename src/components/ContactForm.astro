@@ -10,7 +10,7 @@
   <!-- Feedback Messaggio di Successo (Wix original copy) -->
   <div
     id="contact-success"
-    class="hidden mb-6 p-4 sm:p-5 bg-black text-white text-sm font-sans flex items-center gap-3 transition-all duration-300"
+    class="hidden mb-6 p-4 sm:p-5 bg-black text-white text-sm font-sans items-center gap-3 transition-all duration-300"
     role="status"
     aria-live="polite"
   >
@@ -23,7 +23,7 @@
   <!-- Feedback Messaggio di Errore -->
   <div
     id="contact-error"
-    class="hidden mb-6 p-4 sm:p-5 bg-red-50 border border-red-200 text-red-900 text-sm font-sans flex items-center gap-3 transition-all duration-300"
+    class="hidden mb-6 p-4 sm:p-5 bg-red-50 border border-red-200 text-red-900 text-sm font-sans items-center gap-3 transition-all duration-300"
     role="alert"
     aria-live="assertive"
   >
@@ -49,6 +49,7 @@
           name="nome"
           required
           aria-required="true"
+          autocomplete="given-name"
           placeholder="Il tuo nome"
           class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
         />
@@ -63,6 +64,7 @@
           type="text"
           id="contact-cognome"
           name="cognome"
+          autocomplete="family-name"
           placeholder="Il tuo cognome"
           class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
         />
@@ -81,6 +83,7 @@
           name="email"
           required
           aria-required="true"
+          autocomplete="email"
           placeholder="nome@esempio.com"
           class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
         />
@@ -95,6 +98,7 @@
           type="text"
           id="contact-oggetto"
           name="oggetto"
+          autocomplete="off"
           placeholder="Motivo del messaggio"
           class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
         />
@@ -155,11 +159,38 @@
     const errorBox = document.getElementById('contact-error');
     const errorText = document.getElementById('contact-error-text');
 
+    function showSuccess() {
+      if (!successBox) return;
+      successBox.classList.remove('hidden');
+      successBox.classList.add('flex');
+      successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideSuccess() {
+      if (!successBox) return;
+      successBox.classList.remove('flex');
+      successBox.classList.add('hidden');
+    }
+
+    function showError(msg: string) {
+      if (!errorBox || !errorText) return;
+      errorText.textContent = msg;
+      errorBox.classList.remove('hidden');
+      errorBox.classList.add('flex');
+      errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideError() {
+      if (!errorBox) return;
+      errorBox.classList.remove('flex');
+      errorBox.classList.add('hidden');
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      if (successBox) successBox.classList.add('hidden');
-      if (errorBox) errorBox.classList.add('hidden');
+      hideSuccess();
+      hideError();
 
       const formData = new FormData(form);
       const data: Record<string, string> = {};
@@ -167,22 +198,30 @@
         data[key] = value.toString().trim();
       });
 
-      // Validazione preliminare client-side
-      if (!data.nome || !data.email || !data.messaggio) {
-        if (errorBox && errorText) {
-          errorText.textContent = 'Per favore compila tutti i campi obbligatori (Nome, Email, Messaggio).';
-          errorBox.classList.remove('hidden');
-        }
+      // Validazione preliminare client-side e focus sull'elemento mancante
+      if (!data.nome) {
+        showError('Per favore compila il campo obbligatorio: Nome.');
+        (document.getElementById('contact-nome') as HTMLInputElement | null)?.focus();
+        return;
+      }
+
+      if (!data.email) {
+        showError('Per favore compila il campo obbligatorio: Email.');
+        (document.getElementById('contact-email') as HTMLInputElement | null)?.focus();
         return;
       }
 
       // Validazione formato email client-side
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(data.email)) {
-        if (errorBox && errorText) {
-          errorText.textContent = 'Inserisci un indirizzo email valido.';
-          errorBox.classList.remove('hidden');
-        }
+        showError('Inserisci un indirizzo email valido.');
+        (document.getElementById('contact-email') as HTMLInputElement | null)?.focus();
+        return;
+      }
+
+      if (!data.messaggio) {
+        showError('Per favore compila il campo obbligatorio: Messaggio.');
+        (document.getElementById('contact-messaggio') as HTMLTextAreaElement | null)?.focus();
         return;
       }
 
@@ -204,25 +243,14 @@
         const result = await response.json().catch(() => null);
 
         if (response.ok && result?.success) {
-          if (successBox) {
-            successBox.classList.remove('hidden');
-            successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
+          showSuccess();
           form.reset();
         } else {
           const msg = result?.message || 'Si è verificato un errore durante l\'invio. Riprova più tardi.';
-          if (errorBox && errorText) {
-            errorText.textContent = msg;
-            errorBox.classList.remove('hidden');
-            errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
+          showError(msg);
         }
       } catch {
-        if (errorBox && errorText) {
-          errorText.textContent = 'Errore di connessione con il server. Riprova più tardi o scrivi direttamente a nicoskolp@gmail.com.';
-          errorBox.classList.remove('hidden');
-          errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+        showError('Errore di connessione con il server. Riprova più tardi o scrivi direttamente a nicoskolp@gmail.com.');
       } finally {
         if (submitBtn) submitBtn.disabled = false;
         if (submitSpinner) submitSpinner.classList.add('hidden');

@@ -29,13 +29,14 @@ import heroArtworks from '../data/hero.json';
   <!-- Vetrina Opere (Hero Showcase - 13 opere da hero.json) -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28" aria-label="Vetrina opere in evidenza">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
-      {heroArtworks.map((artwork) => (
+      {heroArtworks.map((artwork, index) => (
         <article class="group relative bg-white border border-[#e2e2e2] overflow-hidden flex flex-col transition-all duration-300 hover:border-black hover:shadow-lg">
           <div class="relative w-full aspect-square bg-[#fcfcfc] overflow-hidden flex items-center justify-center p-6">
             <img
               src={artwork.image}
               alt={artwork.title}
-              loading="lazy"
+              loading={index < 4 ? "eager" : "lazy"}
+              fetchpriority={index < 2 ? "high" : "auto"}
               decoding="async"
               width="1080"
               height="1350"

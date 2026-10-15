@@ -6,8 +6,20 @@
  * Supporta payload JSON e form-encoded via POST.
  */
 
-// Imposta header CORS per consentire chiamate asincrone sicure
-header('Access-Control-Allow-Origin: *');
+// Imposta header CORS restrittivo per consentire chiamate solo da origini autorizzate
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowedOrigins = [
+    'https://nicoskolp.com',
+    'https://www.nicoskolp.com',
+    'http://localhost:4321',
+    'http://localhost:3000',
+    'http://127.0.0.1:4321'
+];
+if (in_array($origin, $allowedOrigins, true)) {
+    header("Access-Control-Allow-Origin: {$origin}");
+} else if ($origin === '') {
+    header('Access-Control-Allow-Origin: *');
+}
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
 header('Content-Type: application/json; charset=UTF-8');
@@ -90,6 +102,15 @@ if (mb_strlen($nome) > 100 || mb_strlen($cognome) > 100) {
     exit;
 }
 
+if (mb_strlen($oggetto) > 200 || mb_strlen($email) > 254) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Oggetto o email superano la lunghezza massima consentita.'
+    ]);
+    exit;
+}
+
 if (mb_strlen($messaggio) > 10000) {
     http_response_code(400);
     echo json_encode([
@@ -129,10 +150,11 @@ $bodyLines = [
     'IP Mittente: ' . ($_SERVER['REMOTE_ADDR'] ?? 'Non disponibile'),
     'User Agent: ' . ($_SERVER['HTTP_USER_AGENT'] ?? 'Non specificato'),
 ];
-$body = implode("\r\n", $bodyLines);
+$body = implode("\n", $bodyLines);
 
 // Headers standard per la funzione mail() compatibile con Aruba
-$replyToHeader = $cleanSenderName !== '' ? "{$cleanSenderName} <{$email}>" : $email;
+$encodedSenderName = $cleanSenderName !== '' ? '=?UTF-8?B?' . base64_encode($cleanSenderName) . '?=' : '';
+$replyToHeader = $encodedSenderName !== '' ? "{$encodedSenderName} <{$email}>" : $email;
 $headers = [
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
@@ -141,10 +163,10 @@ $headers = [
     'Reply-To: ' . $replyToHeader,
     'X-Mailer: PHP/' . phpversion()
 ];
-$headersStr = implode("\r\n", $headers);
+$headersStr = implode("\n", $headers);
 
-// Invio dell'email tramite la funzione mail() nativa di PHP
-$sent = @mail($to, $emailSubject, $body, $headersStr);
+// Invio dell'email tramite la funzione mail() nativa con envelope sender (-f) per SPF/DMARC Aruba
+$sent = @mail($to, $emailSubject, $body, $headersStr, '-f noreply@nicoskolp.com');
 
 if ($sent) {
     http_response_code(200);
@@ -170,7 +192,8 @@ if ($isLocal) {
     exit;
 }
 
-// Su Aruba, se mail() fallisce restituisci errore 500 con messaggio informativo
+// Su Aruba, se mail() fallisce registra l'errore e restituisci 500
+error_log("ContactForm mail() delivery failed for: " . $email);
 http_response_code(500);
 echo json_encode([
     'success' => false,
