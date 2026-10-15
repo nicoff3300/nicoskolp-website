@@ -1,0 +1,337 @@
+---
+import type { GraffitiPiece } from '../types';
+
+interface Props {
+  items: GraffitiPiece[];
+}
+
+const { items = [] } = Astro.props;
+const firstItem = items[0];
+const initialMeta = firstItem ? [firstItem.city, firstItem.year].filter(Boolean).join(' • ') : '';
+---
+
+<dialog
+  id="lightbox-dialog"
+  class="fixed inset-0 m-auto bg-black/95 text-white p-0 w-full h-full max-w-none max-h-none border-none backdrop:bg-black/90 flex flex-col justify-between overflow-hidden z-50"
+  aria-modal="true"
+  aria-labelledby="lightbox-title"
+>
+  <!-- Top bar: Contatore a sinistra e pulsante di chiusura a destra -->
+  <header id="lightbox-topbar" class="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-white/10 bg-black/40 z-20">
+    <div id="lightbox-counter" class="font-sans text-xs sm:text-sm tracking-wider uppercase text-neutral-400">
+      {items.length > 0 ? `1 / ${items.length}` : ''}
+    </div>
+    <button
+      type="button"
+      id="lightbox-close"
+      class="p-2 -mr-2 text-white hover:text-neutral-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded cursor-pointer"
+      aria-label="Chiudi visualizzatore"
+    >
+      <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </header>
+
+  <!-- Area centrale: Prev, Immagine centrale, Next -->
+  <div id="lightbox-middle" class="relative flex-1 flex items-center justify-between px-2 sm:px-6 min-h-0 min-w-0">
+    <!-- Tasto Freccia Sinistra (Prev) -->
+    <button
+      type="button"
+      id="lightbox-prev"
+      class="p-2 sm:p-3 text-white hover:text-neutral-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-full bg-black/50 sm:bg-black/30 hover:bg-black/70 z-20 cursor-pointer shrink-0 absolute left-2 sm:left-6"
+      aria-label="Immagine precedente"
+    >
+      <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    <!-- Contenitore immagine centrale -->
+    <div id="lightbox-img-container" class="flex-1 flex items-center justify-center p-2 sm:p-4 h-full min-h-0 min-w-0 w-full">
+      <img
+        id="lightbox-img"
+        class="object-contain max-h-[75vh] sm:max-h-[82vh] max-w-[90vw] select-none"
+        src={firstItem?.image ?? ''}
+        alt={firstItem ? `${firstItem.title}${initialMeta ? ` - ${initialMeta}` : ''}` : ''}
+        draggable="false"
+      />
+    </div>
+
+    <!-- Tasto Freccia Destra (Next) -->
+    <button
+      type="button"
+      id="lightbox-next"
+      class="p-2 sm:p-3 text-white hover:text-neutral-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-full bg-black/50 sm:bg-black/30 hover:bg-black/70 z-20 cursor-pointer shrink-0 absolute right-2 sm:right-6"
+      aria-label="Immagine successiva"
+    >
+      <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Bottom bar: Didascalia con titolo e sottotitolo -->
+  <footer id="lightbox-caption" class="text-center px-4 py-3 sm:py-4 border-t border-white/10 bg-black/40 z-20">
+    <h2 id="lightbox-title" class="font-druk font-bold text-sm sm:text-base uppercase tracking-wider text-white truncate max-w-2xl mx-auto">
+      {firstItem?.title ?? ''}
+    </h2>
+    <p id="lightbox-subtitle" class="font-sans text-xs text-[#8f8f8f] uppercase tracking-wider mt-1 truncate max-w-2xl mx-auto">
+      {initialMeta}
+    </p>
+  </footer>
+</dialog>
+
+<!-- Dati JSON sicuri per l'idratazione lato client -->
+<script type="application/json" id="lightbox-data" set:html={JSON.stringify(items)} />
+
+<style>
+  #lightbox-dialog:not([open]) {
+    display: none !important;
+  }
+  #lightbox-dialog[open] {
+    display: flex !important;
+  }
+  #lightbox-dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+</style>
+
+<script>
+  interface LightboxItem {
+    id?: string;
+    title: string;
+    year?: string;
+    city?: string;
+    image: string;
+    description?: string;
+  }
+
+  function setupLightbox() {
+    const dialogElement = document.getElementById('lightbox-dialog') as HTMLDialogElement | null;
+    const dataEl = document.getElementById('lightbox-data');
+    if (!dialogElement || !dataEl) return;
+    const dialog: HTMLDialogElement = dialogElement;
+
+    if (dialog.hasAttribute('data-lightbox-ready')) return;
+    dialog.setAttribute('data-lightbox-ready', 'true');
+
+    let items: LightboxItem[] = [];
+    try {
+      items = JSON.parse(dataEl.textContent || '[]');
+    } catch {
+      items = [];
+    }
+
+    const counterEl = document.getElementById('lightbox-counter');
+    const closeBtn = document.getElementById('lightbox-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+    const imgEl = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const titleEl = document.getElementById('lightbox-title');
+    const subtitleEl = document.getElementById('lightbox-subtitle');
+
+    let currentIndex = 0;
+    let lastActiveElement: HTMLElement | null = null;
+
+    function preloadAdjacent() {
+      if (items.length <= 1) return;
+      const nextIdx = (currentIndex + 1) % items.length;
+      const prevIdx = (currentIndex - 1 + items.length) % items.length;
+      if (items[nextIdx]?.image) {
+        const nextImg = new Image();
+        nextImg.src = items[nextIdx].image;
+      }
+      if (items[prevIdx]?.image) {
+        const prevImg = new Image();
+        prevImg.src = items[prevIdx].image;
+      }
+    }
+
+    function updateView() {
+      if (items.length === 0) return;
+      const item = items[currentIndex];
+      if (!item) return;
+
+      if (counterEl) {
+        counterEl.textContent = `${currentIndex + 1} / ${items.length}`;
+      }
+      if (imgEl) {
+        imgEl.src = item.image;
+        const meta = [item.city, item.year].filter(Boolean).join(', ');
+        imgEl.alt = `${item.title}${meta ? ` - ${meta}` : ''}`;
+      }
+      if (titleEl) {
+        titleEl.textContent = item.title;
+      }
+      if (subtitleEl) {
+        const meta = [item.city, item.year].filter(Boolean).join(' • ');
+        subtitleEl.textContent = meta;
+        subtitleEl.style.display = meta ? '' : 'none';
+      }
+
+      preloadAdjacent();
+    }
+
+    function showNext() {
+      if (items.length === 0) return;
+      currentIndex = (currentIndex + 1) % items.length;
+      updateView();
+    }
+
+    function showPrev() {
+      if (items.length === 0) return;
+      currentIndex = (currentIndex - 1 + items.length) % items.length;
+      updateView();
+    }
+
+    function openLightbox(index = 0, trigger?: HTMLElement) {
+      if (items.length === 0) return;
+      lastActiveElement = trigger || (document.activeElement as HTMLElement);
+      currentIndex = ((index % items.length) + items.length) % items.length;
+      updateView();
+
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+      document.body.style.overflow = 'hidden';
+      closeBtn?.focus();
+    }
+
+    function closeLightbox() {
+      if (dialog.open) {
+        dialog.close();
+      }
+      document.body.style.overflow = '';
+      if (lastActiveElement && typeof lastActiveElement.focus === 'function') {
+        lastActiveElement.focus();
+      }
+    }
+
+    // Event listeners bottoni
+    closeBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeLightbox();
+    });
+
+    prevBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showPrev();
+    });
+
+    nextBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showNext();
+    });
+
+    // Chiusura al click sul backdrop (fuori dall'immagine e controlli)
+    dialog.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (
+        target.closest('#lightbox-close') ||
+        target.closest('#lightbox-prev') ||
+        target.closest('#lightbox-next') ||
+        target.closest('#lightbox-img') ||
+        target.closest('#lightbox-caption') ||
+        target.closest('#lightbox-topbar')
+      ) {
+        return;
+      }
+      closeLightbox();
+    });
+
+    // Chiusura nativa evento cancel (tasto Esc)
+    dialog.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      closeLightbox();
+    });
+
+    // Gestione tastiera: Escape, Freccia Sinistra, Freccia Destra
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!dialog.open) return;
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        showNext();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        showPrev();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeLightbox();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Supporto gesture touch swipe su mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    dialog.addEventListener(
+      'touchstart',
+      (e) => {
+        if (e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }
+      },
+      { passive: true }
+    );
+
+    dialog.addEventListener(
+      'touchend',
+      (e) => {
+        if (e.changedTouches.length === 1) {
+          const touchEndX = e.changedTouches[0].clientX;
+          const touchEndY = e.changedTouches[0].clientY;
+          const diffX = touchEndX - touchStartX;
+          const diffY = touchEndY - touchStartY;
+
+          if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX < 0) {
+              showNext();
+            } else {
+              showPrev();
+            }
+          }
+        }
+      },
+      { passive: true }
+    );
+
+    // Gestione apertura al click su elementi con data-lightbox-trigger o data-lightbox-index
+    const handleDocClick = (e: MouseEvent) => {
+      const trigger = (e.target as HTMLElement).closest('[data-lightbox-trigger], [data-lightbox-index]');
+      if (trigger) {
+        e.preventDefault();
+        const indexAttr = trigger.getAttribute('data-lightbox-index');
+        const idx = indexAttr ? parseInt(indexAttr, 10) : 0;
+        openLightbox(idx, trigger as HTMLElement);
+      }
+    };
+    document.addEventListener('click', handleDocClick);
+
+    // Gestione apertura via Custom Event 'open-lightbox'
+    const handleCustomOpen = (e: Event) => {
+      const ce = e as CustomEvent<{ index?: number; trigger?: HTMLElement }>;
+      const idx = ce.detail?.index ?? 0;
+      openLightbox(idx, ce.detail?.trigger);
+    };
+    window.addEventListener('open-lightbox', handleCustomOpen);
+
+    // Pulizia listener prima del page-swap di Astro
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        document.removeEventListener('click', handleDocClick);
+        window.removeEventListener('open-lightbox', handleCustomOpen);
+        window.removeEventListener('keydown', handleKeyDown);
+        document.body.style.overflow = '';
+      },
+      { once: true }
+    );
+  }
+
+  // Inizializza su primo caricamento e su navigazioni Astro
+  setupLightbox();
+  document.addEventListener('astro:page-load', setupLightbox);
+</script>
