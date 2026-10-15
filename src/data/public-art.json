@@ -40,7 +40,9 @@
     "category": "public-art",
     "coverImage": "/images/public-art/sanpaolo.jpg",
     "galleryImages": [
-      "/images/public-art/sanpaolo.jpg"
+      "/images/public-art/sanpaolo/01_skolp_sanpaolo_1.jpg",
+      "/images/public-art/sanpaolo/02_skolp_sanpaolo_2.jpg",
+      "/images/public-art/sanpaolo/03_skolp_sanpaolo_3a.jpg"
     ],
     "description": "Murale realizzato nell'ambito del progetto Museo a Cielo Aperto del Quartiere San Paolo a Bari."
   },
@@ -53,7 +55,15 @@
     "category": "public-art",
     "coverImage": "/images/public-art/trust-taranto.jpg",
     "galleryImages": [
-      "/images/public-art/trust-taranto.jpg"
+      "/images/public-art/trust-taranto/01_dji_0892-hdr-2.jpg",
+      "/images/public-art/trust-taranto/02_dji_0908-hdr.jpg",
+      "/images/public-art/trust-taranto/03_dji_0911-hdr.jpg",
+      "/images/public-art/trust-taranto/04_dji_0917-hdr.jpg",
+      "/images/public-art/trust-taranto/05_dji_0920-hdr.jpg",
+      "/images/public-art/trust-taranto/06_dji_0929.jpg",
+      "/images/public-art/trust-taranto/07_dji_0938.jpg",
+      "/images/public-art/trust-taranto/08_dji_0969-hdr.jpg",
+      "/images/public-art/trust-taranto/09_sm_6348.jpg"
     ],
     "description": "Opera monumentale per il T.R.U.S.T. Taranto Regeneration Urban Street art Tale festival."
   },
@@ -66,7 +76,16 @@
     "category": "public-art",
     "coverImage": "/images/public-art/rore-festival-rovigo.jpg",
     "galleryImages": [
-      "/images/public-art/rore-festival-rovigo.jpg"
+      "/images/public-art/rore-festival-rovigo/01_skolp_rovigo_48_drone_1.jpg",
+      "/images/public-art/rore-festival-rovigo/02_skolp_rovigo_48_drone_2.jpg",
+      "/images/public-art/rore-festival-rovigo/03_skolp_rovigo_48_drone_5.jpg",
+      "/images/public-art/rore-festival-rovigo/04_skolp_rovigo_48_drone_6.jpg",
+      "/images/public-art/rore-festival-rovigo/05_skolp_rovigo_48_dettagli_2.jpg",
+      "/images/public-art/rore-festival-rovigo/06_skolp_rovigo_48_dettagli_3.jpg",
+      "/images/public-art/rore-festival-rovigo/07_skolp_rovigo_48_dettagli_4.jpg",
+      "/images/public-art/rore-festival-rovigo/08_skolp_rovigo_48_dettagli_6.jpg",
+      "/images/public-art/rore-festival-rovigo/09_skolp_rovigo_48_dettagli_7.jpg",
+      "/images/public-art/rore-festival-rovigo/10_skolp_rovigo_48_dettagli_8.jpg"
     ],
     "description": "Intervento murale per il Rore Festival a Rovigo, astrazione geometrica su facciata."
   },
@@ -79,7 +98,20 @@
     "category": "public-art",
     "coverImage": "/images/public-art/skolp-basketball-court-matera-2019.jpg",
     "galleryImages": [
-      "/images/public-art/skolp-basketball-court-matera-2019.jpg"
+      "/images/public-art/skolp-basketball-court-matera-2019/01_v3a6463_low.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/02_v3a6553_low.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/03_v3a6583_low.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/04_v3a6630_low.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/05_v3a6710_low.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/06_v3a6727_low.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/07_v3a6443.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/08_v3a6455.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/09_v3a6458.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/10_v3a6459.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/11_v3a6471.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/12_v3a6474.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/13_v3a6475.jpg",
+      "/images/public-art/skolp-basketball-court-matera-2019/14_v3a6496.jpg"
     ],
     "description": "Playground art e riqualificazione grafica del campo da basket UISP a Matera."
   },
@@ -92,7 +124,18 @@
     "category": "public-art",
     "coverImage": "/images/public-art/graffiti-factory.jpg",
     "galleryImages": [
-      "/images/public-art/graffiti-factory.jpg"
+      "/images/public-art/graffiti-factory/01_graffitifactory_1.jpg",
+      "/images/public-art/graffiti-factory/02_graffitifactory_2.jpg",
+      "/images/public-art/graffiti-factory/03_graffitifactory_3.jpg",
+      "/images/public-art/graffiti-factory/04_graffitifactory_5.jpg",
+      "/images/public-art/graffiti-factory/05_graffitifactory_6.jpg",
+      "/images/public-art/graffiti-factory/06_graffitifactory_7.jpg",
+      "/images/public-art/graffiti-factory/07_graffitifactory_8.jpg",
+      "/images/public-art/graffiti-factory/08_graffitifactory_9.jpg",
+      "/images/public-art/graffiti-factory/09_graffitifactory_11.jpg",
+      "/images/public-art/graffiti-factory/10_graffitifactory_12.jpg",
+      "/images/public-art/graffiti-factory/11_graffitifactory_interno1.jpg",
+      "/images/public-art/graffiti-factory/12_graffitifactory_interno3.jpg"
     ],
     "description": "Grande opera murale realizzata per il progetto Graffiti Factory a Corato."
   },
@@ -144,7 +187,12 @@
     "category": "public-art",
     "coverImage": "/images/public-art/mottola.jpg",
     "galleryImages": [
-      "/images/public-art/mottola.jpg"
+      "/images/public-art/mottola/01_2019_mottola1.jpg",
+      "/images/public-art/mottola/02_2019_mottola2.jpg",
+      "/images/public-art/mottola/03_2019_mottola3.jpg",
+      "/images/public-art/mottola/04_2019_mottola5.jpg",
+      "/images/public-art/mottola/05_2019_mottola6.jpg",
+      "/images/public-art/mottola/06_2019_mottola7.jpg"
     ],
     "description": "Intervento di street art per il festival di Mottola, esplorazione di volumi e cromie."
   },
@@ -172,7 +220,11 @@
     "category": "public-art",
     "coverImage": "/images/public-art/expost-moderno.jpg",
     "galleryImages": [
-      "/images/public-art/expost-moderno.jpg"
+      "/images/public-art/expost-moderno/01_expost1.jpg",
+      "/images/public-art/expost-moderno/02_expost2.jpg",
+      "/images/public-art/expost-moderno/03_expost3.jpg",
+      "/images/public-art/expost-moderno/04_expost4.jpg",
+      "/images/public-art/expost-moderno/05_expost5.jpg"
     ],
     "description": "Intervento artistico site-specific per Expost Moderno a Bari."
   },
@@ -198,7 +250,10 @@
     "category": "public-art",
     "coverImage": "/images/public-art/ex-fadda.jpg",
     "galleryImages": [
-      "/images/public-art/ex-fadda.jpg"
+      "/images/public-art/ex-fadda/01_2019_exfadda1.jpg",
+      "/images/public-art/ex-fadda/02_2019_exfadda3.jpg",
+      "/images/public-art/ex-fadda/03_2019_exfadda4.jpg",
+      "/images/public-art/ex-fadda/04_2019_exfadda5.jpg"
     ],
     "description": "Intervento di rigenerazione urbana presso lo spazio culturale ExFadda."
   },
@@ -263,7 +318,11 @@
     "category": "public-art",
     "coverImage": "/images/public-art/roma-binario18.jpg",
     "galleryImages": [
-      "/images/public-art/roma-binario18.jpg"
+      "/images/public-art/roma-binario18/01_binario.18-1.jpg",
+      "/images/public-art/roma-binario18/02_binario.18-155.jpg",
+      "/images/public-art/roma-binario18/03_binario.18-165.jpg",
+      "/images/public-art/roma-binario18/04_binario.18-79.jpg",
+      "/images/public-art/roma-binario18/05_binario.18-80.jpg"
     ],
     "description": "Intervento per Binario 18 a Roma, esplorazione dinamica di linee e campiture."
   },
