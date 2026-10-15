@@ -139,6 +139,25 @@ La pipeline CI/CD è progettata per garantire affidabilità, sicurezza e zero in
 
 ---
 
+## Guide e Documentazione
+
+Per la gestione editoriale e la manutenzione del sito sono disponibili le seguenti guide dettagliate nella cartella `docs/`:
+
+1. 📖 **[Guida Aggiornamento Progetti, Gallery e Homepage](docs/GUIDA-AGGIORNAMENTO-PROGETTI.md)**:
+   - Come inserire nuovi interventi di Public Art (murales) in `src/data/public-art.json`.
+   - Dimensioni, risoluzione e convenzioni di denominazione delle fotografie.
+   - Funzionamento dell'algoritmo di impaginazione dinamica della gallery (ritmo bento 1H+2V, 2V+1H, strip).
+   - Aggiornamento della vetrina opere in Homepage (`src/data/hero.json`).
+   - Gestione delle sezioni Graffiti e Archivio storico.
+   - Comandi di verifica locale e rilascio automatico.
+
+2. 🚀 **[Guida SEO e Posizionamento Geografico](docs/SEO-GEO-GUIDA-POSIZIONAMENTO.md)**:
+   - Strategia di posizionamento organico per arte urbana, muralismo a Bari, in Puglia e a livello internazionale.
+   - Dati strutturati Schema.org (VisualArtwork, Person, LocalBusiness).
+   - Ottimizzazione Google Immagini e gestione sitemap bilingue (IT/EN).
+
+---
+
 ## Licenza
 
 Tutti i diritti sulle opere d'arte, immagini e testi sono riservati a Nico Skolp.

@@ -93,12 +93,26 @@ const expectedPages = [
   'en/skolp-archive/index.html',
 ];
 
+// Detect legacy redirects configured in astro.config.mjs
+const configuredLegacyRedirects = new Set();
+try {
+  const astroConfigContent = fs.readFileSync(path.join(rootDir, 'astro.config.mjs'), 'utf8');
+  const redirectMatches = astroConfigContent.matchAll(/['"]\/([^'"]+)['"]\s*:\s*['"]\/([^'"]+)['"]/g);
+  for (const match of redirectMatches) {
+    configuredLegacyRedirects.add(`${match[1]}/index.html`);
+  }
+} catch (err) {
+  // Non-blocking fallback
+}
+
 if (Array.isArray(publicArtProjects)) {
   for (const project of publicArtProjects) {
     if (project.slug) {
       expectedPages.push(`public-art/${project.slug}/index.html`); // Italian detail page
       expectedPages.push(`en/public-art/${project.slug}/index.html`); // English detail page
-      expectedPages.push(`${project.slug}/index.html`); // Legacy redirect page
+      if (configuredLegacyRedirects.has(`${project.slug}/index.html`)) {
+        expectedPages.push(`${project.slug}/index.html`); // Legacy redirect page
+      }
     }
   }
 }
