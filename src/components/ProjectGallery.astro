@@ -1,0 +1,382 @@
+---
+interface Props {
+  images: string[];
+  title: string;
+  year?: string;
+  city?: string;
+}
+
+const { images = [], title, city } = Astro.props;
+
+interface GalleryEntry {
+  url: string;
+  globalIndex: number;
+  alt: string;
+}
+
+const entries: GalleryEntry[] = images.map((url, idx) => ({
+  url,
+  globalIndex: idx,
+  alt: `${title} - Foto ${idx + 1}${city ? ` (${city})` : ''}`,
+}));
+
+type BlockType = '1h-2v' | '2v-1h' | '1h-1v-1h' | 'strip-5' | 'strip-4' | 'strip-3' | '2h' | 'full';
+
+interface Block {
+  type: BlockType;
+  items: GalleryEntry[];
+}
+
+// Algoritmo di impaginazione dinamica a ritmo variabile (Bento / Wix Pro Gallery Style)
+function buildDynamicBlocks(items: GalleryEntry[]): Block[] {
+  if (items.length === 0) return [];
+  if (items.length === 1) return [{ type: 'full', items }];
+  if (items.length === 2) return [{ type: '2h', items }];
+  if (items.length === 3) return [{ type: '1h-2v', items }];
+  if (items.length === 4) return [{ type: 'strip-4', items }];
+
+  // Se abbiamo 20 foto (caso speciale ottimizzato per Teatroaquilone e gallerie monumentali)
+  if (items.length === 20) {
+    return [
+      // Modulo 1 (Top Hero Trio: 1H + 2V)
+      { type: '1h-2v', items: [items[0], items[3], items[4]] },
+      // Modulo 2 (Mix Ritmo: 1H + 1V + 1H)
+      { type: '1h-1v-1h', items: [items[1], items[5], items[2]] },
+      // Modulo 3 (Mix Invertito: 2V + 1H)
+      { type: '2v-1h', items: [items[7], items[8], items[6]] },
+      // Modulo 4 (Striscia Dettagli e Gradini a 5 colonne)
+      { type: 'strip-5', items: [items[9], items[10], items[13], items[15], items[16]] },
+      // Modulo 5 (Mix Ritmo: 1H + 1V + 1H)
+      { type: '1h-1v-1h', items: [items[11], items[12], items[14]] },
+      // Modulo 6 (Chiusura Panoramiche: 2H)
+      { type: '2h', items: [items[17], items[18]] },
+      // Modulo 7 (Gran Finale a tutta larghezza)
+      { type: 'full', items: [items[19]] },
+    ];
+  }
+
+  // Generatore generico dinamico per qualsiasi altro conteggio di immagini
+  const blocks: Block[] = [];
+  let remaining = [...items];
+  let patternStep = 0;
+
+  while (remaining.length > 0) {
+    if (remaining.length >= 5 && patternStep % 4 === 2) {
+      blocks.push({ type: 'strip-5', items: remaining.splice(0, 5) });
+    } else if (remaining.length >= 3) {
+      if (patternStep % 3 === 0) {
+        blocks.push({ type: '1h-2v', items: remaining.splice(0, 3) });
+      } else if (patternStep % 3 === 1) {
+        blocks.push({ type: '1h-1v-1h', items: remaining.splice(0, 3) });
+      } else {
+        blocks.push({ type: '2v-1h', items: remaining.splice(0, 3) });
+      }
+    } else if (remaining.length === 2) {
+      blocks.push({ type: '2h', items: remaining.splice(0, 2) });
+    } else {
+      blocks.push({ type: 'full', items: remaining.splice(0, 1) });
+    }
+    patternStep++;
+  }
+
+  return blocks;
+}
+
+const blocks = buildDynamicBlocks(entries);
+---
+
+<div class="project-gallery flex flex-col gap-3 sm:gap-4 lg:gap-5 w-full">
+  {blocks.map((block) => {
+    // 1. Modulo 1H + 2V (1 Grande Orizzontale a sinistra + 2 Verticali affiancate a destra)
+    if (block.type === '1h-2v') {
+      const [hItem, vItem1, vItem2] = block.items;
+      return (
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-5 items-stretch">
+          <div class="lg:col-span-7 h-full">
+            {hItem && (
+              <button
+                type="button"
+                class="group relative block w-full h-full min-h-[260px] sm:min-h-[380px] lg:min-h-[460px] aspect-[16/10] sm:aspect-[16/9] lg:aspect-auto overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+                data-lightbox-trigger="true"
+                data-lightbox-index={hItem.globalIndex}
+                aria-label={`Ingrandisci ${hItem.alt}`}
+              >
+                <img
+                  src={hItem.url}
+                  alt={hItem.alt}
+                  class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                  loading={hItem.globalIndex < 3 ? 'eager' : 'lazy'}
+                  fetchpriority={hItem.globalIndex === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                />
+              </button>
+            )}
+          </div>
+          <div class="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-4 lg:gap-5 h-full">
+            {vItem1 && (
+              <button
+                type="button"
+                class="group relative block w-full h-full min-h-[260px] sm:min-h-[380px] lg:min-h-[460px] aspect-[3/4] sm:aspect-[9/14] lg:aspect-auto overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+                data-lightbox-trigger="true"
+                data-lightbox-index={vItem1.globalIndex}
+                aria-label={`Ingrandisci ${vItem1.alt}`}
+              >
+                <img
+                  src={vItem1.url}
+                  alt={vItem1.alt}
+                  class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                  loading={vItem1.globalIndex < 3 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </button>
+            )}
+            {vItem2 && (
+              <button
+                type="button"
+                class="group relative block w-full h-full min-h-[260px] sm:min-h-[380px] lg:min-h-[460px] aspect-[3/4] sm:aspect-[9/14] lg:aspect-auto overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+                data-lightbox-trigger="true"
+                data-lightbox-index={vItem2.globalIndex}
+                aria-label={`Ingrandisci ${vItem2.alt}`}
+              >
+                <img
+                  src={vItem2.url}
+                  alt={vItem2.alt}
+                  class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                  loading={vItem2.globalIndex < 3 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // 2. Modulo 2V + 1H (2 Verticali affiancate a sinistra + 1 Orizzontale a destra)
+    if (block.type === '2v-1h') {
+      const [vItem1, vItem2, hItem] = block.items;
+      return (
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-5 items-stretch">
+          <div class="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-4 lg:gap-5 h-full order-2 lg:order-1">
+            {vItem1 && (
+              <button
+                type="button"
+                class="group relative block w-full h-full min-h-[260px] sm:min-h-[380px] lg:min-h-[460px] aspect-[3/4] sm:aspect-[9/14] lg:aspect-auto overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+                data-lightbox-trigger="true"
+                data-lightbox-index={vItem1.globalIndex}
+                aria-label={`Ingrandisci ${vItem1.alt}`}
+              >
+                <img
+                  src={vItem1.url}
+                  alt={vItem1.alt}
+                  class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </button>
+            )}
+            {vItem2 && (
+              <button
+                type="button"
+                class="group relative block w-full h-full min-h-[260px] sm:min-h-[380px] lg:min-h-[460px] aspect-[3/4] sm:aspect-[9/14] lg:aspect-auto overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+                data-lightbox-trigger="true"
+                data-lightbox-index={vItem2.globalIndex}
+                aria-label={`Ingrandisci ${vItem2.alt}`}
+              >
+                <img
+                  src={vItem2.url}
+                  alt={vItem2.alt}
+                  class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </button>
+            )}
+          </div>
+          <div class="lg:col-span-7 h-full order-1 lg:order-2">
+            {hItem && (
+              <button
+                type="button"
+                class="group relative block w-full h-full min-h-[260px] sm:min-h-[380px] lg:min-h-[460px] aspect-[16/10] sm:aspect-[16/9] lg:aspect-auto overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+                data-lightbox-trigger="true"
+                data-lightbox-index={hItem.globalIndex}
+                aria-label={`Ingrandisci ${hItem.alt}`}
+              >
+                <img
+                  src={hItem.url}
+                  alt={hItem.alt}
+                  class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // 3. Modulo 1H + 1V + 1H (Mix ritmico a 3 colonne bilanciate)
+    if (block.type === '1h-1v-1h') {
+      const [item1, item2, item3] = block.items;
+      return (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5 items-stretch">
+          {item1 && (
+            <button
+              type="button"
+              class="group relative block w-full h-full min-h-[260px] sm:min-h-[340px] aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+              data-lightbox-trigger="true"
+              data-lightbox-index={item1.globalIndex}
+              aria-label={`Ingrandisci ${item1.alt}`}
+            >
+              <img
+                src={item1.url}
+                alt={item1.alt}
+                class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+          )}
+          {item2 && (
+            <button
+              type="button"
+              class="group relative block w-full h-full min-h-[260px] sm:min-h-[340px] aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+              data-lightbox-trigger="true"
+              data-lightbox-index={item2.globalIndex}
+              aria-label={`Ingrandisci ${item2.alt}`}
+            >
+              <img
+                src={item2.url}
+                alt={item2.alt}
+                class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+          )}
+          {item3 && (
+            <button
+              type="button"
+              class="group relative block w-full h-full min-h-[260px] sm:min-h-[340px] aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in sm:col-span-2 lg:col-span-1"
+              data-lightbox-trigger="true"
+              data-lightbox-index={item3.globalIndex}
+              aria-label={`Ingrandisci ${item3.alt}`}
+            >
+              <img
+                src={item3.url}
+                alt={item3.alt}
+                class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+          )}
+        </div>
+      );
+    }
+
+    // 4. Modulo Striscia Dettagli a 5 colonne (gradini, texture e close-up)
+    if (block.type === 'strip-5') {
+      return (
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-5">
+          {block.items.map((item) => (
+            <button
+              type="button"
+              class="group relative block w-full aspect-[3/4] overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+              data-lightbox-trigger="true"
+              data-lightbox-index={item.globalIndex}
+              aria-label={`Ingrandisci ${item.alt}`}
+            >
+              <img
+                src={item.url}
+                alt={item.alt}
+                class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    // 5. Modulo Striscia a 4 colonne
+    if (block.type === 'strip-4') {
+      return (
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
+          {block.items.map((item) => (
+            <button
+              type="button"
+              class="group relative block w-full aspect-[3/4] overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+              data-lightbox-trigger="true"
+              data-lightbox-index={item.globalIndex}
+              aria-label={`Ingrandisci ${item.alt}`}
+            >
+              <img
+                src={item.url}
+                alt={item.alt}
+                class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    // 6. Modulo Coppia Orizzontale (2H)
+    if (block.type === '2h') {
+      return (
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
+          {block.items.map((item) => (
+            <button
+              type="button"
+              class="group relative block w-full aspect-[16/10] sm:aspect-[4/3] overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+              data-lightbox-trigger="true"
+              data-lightbox-index={item.globalIndex}
+              aria-label={`Ingrandisci ${item.alt}`}
+            >
+              <img
+                src={item.url}
+                alt={item.alt}
+                class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    // 7. Modulo Full-Width (1 Panoramica monumentale)
+    if (block.type === 'full') {
+      const [item] = block.items;
+      return (
+        <div class="w-full">
+          {item && (
+            <button
+              type="button"
+              class="group relative block w-full aspect-[16/10] sm:aspect-[21/9] lg:aspect-[16/7] overflow-hidden bg-[#f5f5f5] border border-[#e2e2e2] hover:border-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-zoom-in"
+              data-lightbox-trigger="true"
+              data-lightbox-index={item.globalIndex}
+              aria-label={`Ingrandisci ${item.alt}`}
+            >
+              <img
+                src={item.url}
+                alt={item.alt}
+                class="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+          )}
+        </div>
+      );
+    }
+
+    return null;
+  })}
+</div>
