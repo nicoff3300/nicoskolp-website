@@ -1,0 +1,80 @@
+[
+  {
+    "id": "skolptura-a012",
+    "title": "Skolptura A012",
+    "image": "/images/hero/01_skolptura-a012.jpg",
+    "category": "sculpture"
+  },
+  {
+    "id": "skolptura-a013",
+    "title": "Skolptura A013",
+    "image": "/images/hero/02_skolptura-a013.jpg",
+    "category": "sculpture"
+  },
+  {
+    "id": "skolp-guzzini",
+    "title": "Skolp x Guzzini",
+    "image": "/images/hero/03_skolp-guzzini.png",
+    "category": "design"
+  },
+  {
+    "id": "skolptura-a005",
+    "title": "Skolptura A005",
+    "image": "/images/hero/04_skolptura-a005.png",
+    "category": "sculpture"
+  },
+  {
+    "id": "skolptura-s002",
+    "title": "Skolptura S002",
+    "image": "/images/hero/05_skolptura-s002.png",
+    "category": "sculpture"
+  },
+  {
+    "id": "skolptura-a003",
+    "title": "Skolptura A003",
+    "image": "/images/hero/06_skolptura-a003.png",
+    "category": "sculpture"
+  },
+  {
+    "id": "skolptura-s003",
+    "title": "Skolptura S003",
+    "image": "/images/hero/07_skolptura-s003.png",
+    "category": "sculpture"
+  },
+  {
+    "id": "skolptura-a004",
+    "title": "Skolptura A004",
+    "image": "/images/hero/08_skolptura-a004.png",
+    "category": "sculpture"
+  },
+  {
+    "id": "skolptura-s001",
+    "title": "Skolptura S001",
+    "image": "/images/hero/09_skolptura-s001.png",
+    "category": "sculpture"
+  },
+  {
+    "id": "canvas-c001",
+    "title": "Canvas C001",
+    "image": "/images/hero/10_canvas-c001.png",
+    "category": "canvas"
+  },
+  {
+    "id": "canvas-c002",
+    "title": "Canvas C002",
+    "image": "/images/hero/11_canvas-c002.png",
+    "category": "canvas"
+  },
+  {
+    "id": "skolptura-d001",
+    "title": "Skolptura D001",
+    "image": "/images/hero/12_skolptura-d001.png",
+    "category": "sculpture"
+  },
+  {
+    "id": "athletic-shorts",
+    "title": "Athletic Shorts",
+    "image": "/images/hero/13_athletic-shorts.png",
+    "category": "apparel"
+  }
+]

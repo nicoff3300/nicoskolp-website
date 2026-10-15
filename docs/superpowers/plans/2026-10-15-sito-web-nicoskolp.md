@@ -188,7 +188,7 @@ git commit -m "feat: migrazione e catalogazione asset immagini e font"
 **Interfacce:**
 - Produce: Schemi TypeScript e collezioni di dati complete per tutti i 22 progetti di Public Art, le 25 foto di Graffiti e l'Archivio 1999-2019.
 
-- [ ] **Passaggio 1: Definizione interfacce TypeScript in `src/types/index.ts`**
+- [x] **Passaggio 1: Definizione interfacce TypeScript in `src/types/index.ts`**
 
 ```typescript
 export interface Project {
@@ -236,13 +236,13 @@ export interface SiteConfig {
 }
 ```
 
-- [ ] **Passaggio 2: Creazione dei file JSON con i dati estratti dal sito Wix**
+- [x] **Passaggio 2: Creazione dei file JSON con i dati estratti dal sito Wix**
 Scrittura di `src/data/site.json`, `src/data/public-art.json`, `src/data/graffiti.json`, `src/data/archive.json`.
 
-- [ ] **Passaggio 3: Test di caricamento dati**
+- [x] **Passaggio 3: Test di caricamento dati**
 Verifica con test Node che tutti i file JSON siano validi e contengano tutte le opere censite.
 
-- [ ] **Passaggio 4: Commit dei dati strutturati**
+- [x] **Passaggio 4: Commit dei dati strutturati**
 
 ```bash
 git add src/types/ src/data/

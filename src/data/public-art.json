@@ -1,0 +1,311 @@
+[
+  {
+    "id": "teatro-aquilone",
+    "slug": "teatro-aquilone",
+    "title": "Teatroaquilone",
+    "year": "2022",
+    "city": "Carosino (Taranto)",
+    "category": "public-art",
+    "coverImage": "/images/public-art/teatro-aquilone.jpg",
+    "galleryImages": [
+      "/images/public-art/teatro-aquilone.jpg",
+      "/images/public-art/Teatroaquilone_DroneCarosino_27_A.jpg"
+    ],
+    "description": "Intervento di pittura murale realizzato a Carosino per il Cantiere Aquilone."
+  },
+  {
+    "id": "sanpaolo",
+    "slug": "sanpaolo",
+    "title": "Museo Quartiere San Paolo",
+    "year": "2022",
+    "city": "Bari",
+    "category": "public-art",
+    "coverImage": "/images/public-art/sanpaolo.jpg",
+    "galleryImages": [
+      "/images/public-art/sanpaolo.jpg",
+      "/images/public-art/Skolp_sanpaolo_3a.jpg"
+    ],
+    "description": "Murale realizzato nell'ambito del progetto Museo a Cielo Aperto del Quartiere San Paolo a Bari."
+  },
+  {
+    "id": "trust-taranto",
+    "slug": "trust-taranto",
+    "title": "T.R.U.S.T Festival",
+    "year": "2021",
+    "city": "Taranto",
+    "category": "public-art",
+    "coverImage": "/images/public-art/trust-taranto.jpg",
+    "galleryImages": [
+      "/images/public-art/trust-taranto.jpg",
+      "/images/public-art/DJI_0920-HDR.jpg"
+    ],
+    "description": "Opera monumentale per il T.R.U.S.T. Taranto Regeneration Urban Street art Tale festival."
+  },
+  {
+    "id": "rore-festival-rovigo",
+    "slug": "rore-festival-rovigo",
+    "title": "Rore Festival",
+    "year": "2021",
+    "city": "Rovigo",
+    "category": "public-art",
+    "coverImage": "/images/public-art/rore-festival-rovigo.jpg",
+    "galleryImages": [
+      "/images/public-art/rore-festival-rovigo.jpg",
+      "/images/public-art/Skolp_Rovigo_48_drone_6.jpg"
+    ],
+    "description": "Intervento murale per il Rore Festival a Rovigo, astrazione geometrica su facciata."
+  },
+  {
+    "id": "skolp-basketball-court-matera-2019",
+    "slug": "skolp-basketball-court-matera-2019",
+    "title": "Basketcourt",
+    "year": "2019",
+    "city": "Matera",
+    "category": "public-art",
+    "coverImage": "/images/public-art/skolp-basketball-court-matera-2019.jpg",
+    "galleryImages": [
+      "/images/public-art/skolp-basketball-court-matera-2019.jpg",
+      "/images/public-art/Matera_basketcourt_Uisp_skolp_4.jpg"
+    ],
+    "description": "Playground art e riqualificazione grafica del campo da basket UISP a Matera."
+  },
+  {
+    "id": "graffiti-factory",
+    "slug": "graffiti-factory",
+    "title": "Graffiti Gallery",
+    "year": "2019",
+    "city": "Corato",
+    "category": "public-art",
+    "coverImage": "/images/public-art/graffiti-factory.jpg",
+    "galleryImages": [
+      "/images/public-art/graffiti-factory.jpg",
+      "/images/public-art/GraffitiFactory_7_cover.jpg"
+    ],
+    "description": "Grande opera murale realizzata per il progetto Graffiti Factory a Corato."
+  },
+  {
+    "id": "skolp-steps-molise",
+    "slug": "skolp-steps-molise",
+    "title": "Steps",
+    "year": "2020",
+    "city": "Molise",
+    "category": "public-art",
+    "coverImage": "/images/public-art/skolp-steps-molise.jpg",
+    "galleryImages": [
+      "/images/public-art/skolp-steps-molise.jpg",
+      "/images/public-art/01_PAG_Steps_Skolp_aerea.jpg"
+    ],
+    "description": "Intervento anamorfico e geometrico su scalinata urbana per il festival PAG in Molise."
+  },
+  {
+    "id": "matera-basket",
+    "slug": "matera-basket",
+    "title": "Concrete Crack",
+    "year": "2019",
+    "city": "Matera",
+    "category": "public-art",
+    "coverImage": "/images/public-art/matera-basket.jpg",
+    "galleryImages": [
+      "/images/public-art/matera-basket.jpg",
+      "/images/public-art/matera_basket_skolp_1.jpg"
+    ],
+    "description": "Pittura murale nel complesso scolastico e sportivo a Matera."
+  },
+  {
+    "id": "matera-piazza",
+    "slug": "matera-piazza",
+    "title": "Play Hard",
+    "year": "2019",
+    "city": "Matera",
+    "category": "public-art",
+    "coverImage": "/images/public-art/matera-piazza.jpg",
+    "galleryImages": [
+      "/images/public-art/matera-piazza.jpg",
+      "/images/public-art/matera_thoms_skolp_3.jpg"
+    ],
+    "description": "Collaborazione artistica 'Play Hard' con Thoms a Matera Capitale Europea della Cultura."
+  },
+  {
+    "id": "mottola",
+    "slug": "mottola",
+    "title": "Mottola",
+    "year": "2019",
+    "city": "Mottola (Taranto)",
+    "category": "public-art",
+    "coverImage": "/images/public-art/mottola.jpg",
+    "galleryImages": [
+      "/images/public-art/mottola.jpg",
+      "/images/public-art/2019_mottola3.jpg"
+    ],
+    "description": "Intervento di street art per il festival di Mottola, esplorazione di volumi e cromie."
+  },
+  {
+    "id": "ecopoli",
+    "slug": "ecopoli",
+    "title": "Ecopoli",
+    "year": "2018",
+    "city": "Bari",
+    "category": "public-art",
+    "coverImage": "/images/public-art/ecopoli.jpg",
+    "galleryImages": [
+      "/images/public-art/ecopoli.jpg",
+      "/images/public-art/2018_EcopoliBiagio.jpg",
+      "/images/public-art/2018_Ecopoli_SKolp.jpg"
+    ],
+    "description": "Progetto di arte pubblica partecipata Ecopoli a Bari."
+  },
+  {
+    "id": "expost-moderno",
+    "slug": "expost-moderno",
+    "title": "Expost",
+    "year": "2017",
+    "city": "Bari",
+    "category": "public-art",
+    "coverImage": "/images/public-art/expost-moderno.jpg",
+    "galleryImages": [
+      "/images/public-art/expost-moderno.jpg",
+      "/images/public-art/Expost4.jpg"
+    ],
+    "description": "Intervento artistico site-specific per Expost Moderno a Bari."
+  },
+  {
+    "id": "umberto-eco-tribute",
+    "slug": "umberto-eco-tribute",
+    "title": "Umberto Eco Tribute",
+    "year": "2018",
+    "city": "Matera",
+    "category": "public-art",
+    "coverImage": "/images/public-art/umberto-eco-tribute.jpg",
+    "galleryImages": [
+      "/images/public-art/umberto-eco-tribute.jpg",
+      "/images/public-art/2018_MateraUmbretoEco.jpg"
+    ],
+    "description": "Tributo murale a Umberto Eco realizzato a Matera."
+  },
+  {
+    "id": "ex-fadda",
+    "slug": "ex-fadda",
+    "title": "ExFadda",
+    "year": "2019",
+    "city": "San Vito dei Normanni (Brindisi)",
+    "category": "public-art",
+    "coverImage": "/images/public-art/ex-fadda.jpg",
+    "galleryImages": [
+      "/images/public-art/ex-fadda.jpg",
+      "/images/public-art/2019_Exfadda2.jpg"
+    ],
+    "description": "Intervento di rigenerazione urbana presso lo spazio culturale ExFadda."
+  },
+  {
+    "id": "matera-alter",
+    "slug": "matera-alter",
+    "title": "Matera's Stone",
+    "year": "2017",
+    "city": "Matera",
+    "category": "public-art",
+    "coverImage": "/images/public-art/matera-alter.jpg",
+    "galleryImages": [
+      "/images/public-art/matera-alter.jpg",
+      "/images/public-art/Matera2017_1.jpg"
+    ],
+    "description": "Matera's Stone - opera d'arte pubblica realizzata per Momart a Matera."
+  },
+  {
+    "id": "verso-sud-festival",
+    "slug": "verso-sud-festival",
+    "title": "Verso Sud Festival",
+    "year": "2015",
+    "city": "Corato",
+    "category": "public-art",
+    "coverImage": "/images/public-art/verso-sud-festival.jpg",
+    "galleryImages": [
+      "/images/public-art/verso-sud-festival.jpg",
+      "/images/public-art/2015_tiles8_Corato.jpg"
+    ],
+    "description": "Pittura murale per il festival d'arte pubblica Verso Sud a Corato."
+  },
+  {
+    "id": "bar-project",
+    "slug": "bar-project",
+    "title": "Bar Project",
+    "year": "2015",
+    "city": "Bari",
+    "category": "public-art",
+    "coverImage": "/images/public-art/bar-project.jpg",
+    "galleryImages": [
+      "/images/public-art/bar-project.jpg",
+      "/images/public-art/2015_tiles7_Bari.jpg"
+    ],
+    "description": "Installazione e pittura murale a Bari per il progetto Bar Project."
+  },
+  {
+    "id": "splash",
+    "slug": "splash",
+    "title": "Splash",
+    "year": "2018",
+    "city": "Bari",
+    "category": "public-art",
+    "coverImage": "/images/public-art/splash.jpg",
+    "galleryImages": [
+      "/images/public-art/splash.jpg",
+      "/images/public-art/2018_WN_Splash_Canvas_Skolp.jpg"
+    ],
+    "description": "Opera murale e tela Splash realizzata con il collettivo Wallness."
+  },
+  {
+    "id": "roma-binario18",
+    "slug": "roma-binario18",
+    "title": "Binario 18",
+    "year": "2018",
+    "city": "Roma",
+    "category": "public-art",
+    "coverImage": "/images/public-art/roma-binario18.jpg",
+    "galleryImages": [
+      "/images/public-art/roma-binario18.jpg",
+      "/images/public-art/2018_Roma.jpg"
+    ],
+    "description": "Intervento per Binario 18 a Roma, esplorazione dinamica di linee e campiture."
+  },
+  {
+    "id": "tempelhof",
+    "slug": "tempelhof",
+    "title": "Tempelhof",
+    "year": "2015",
+    "city": "Berlin",
+    "category": "public-art",
+    "coverImage": "/images/public-art/tempelhof.jpg",
+    "galleryImages": [
+      "/images/public-art/tempelhof.jpg",
+      "/images/public-art/2015_tiles5_feat.klub7_minahamada_zosenBandido_Berlino.jpg"
+    ],
+    "description": "Intervento a Tempelhof Berlino feat. Klub7, Mina Hamada e Zosen Bandido."
+  },
+  {
+    "id": "untitled",
+    "slug": "untitled",
+    "title": "Untitled",
+    "year": "2015",
+    "city": "Matera",
+    "category": "public-art",
+    "coverImage": "/images/public-art/untitled.jpg",
+    "galleryImages": [
+      "/images/public-art/untitled.jpg",
+      "/images/public-art/2015_tiles6_Matera.jpg"
+    ],
+    "description": "Opera murale astratta realizzata a Matera."
+  },
+  {
+    "id": "berlin-klub7",
+    "slug": "berlin-klub7",
+    "title": "Berlin Pipe",
+    "year": "2015",
+    "city": "Berlin",
+    "category": "public-art",
+    "coverImage": "/images/public-art/berlin-klub7.jpg",
+    "galleryImages": [
+      "/images/public-art/berlin-klub7.jpg",
+      "/images/public-art/2015_tiles4_Berlino.jpg"
+    ],
+    "description": "Pittura murale Berlin Pipe realizzata a Berlino in collaborazione con Klub7."
+  }
+]

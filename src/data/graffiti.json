@@ -1,0 +1,202 @@
+[
+  {
+    "id": "quapos",
+    "title": "Quapos",
+    "year": "2018",
+    "city": "Matera",
+    "image": "/images/graffiti/Quapos_skolp.jpg",
+    "description": "Pezzo graffiti Quapos realizzato a Matera."
+  },
+  {
+    "id": "mainz-hall-of-fame",
+    "title": "Mainz Hall of Fame",
+    "year": "2019",
+    "city": "Mainz",
+    "image": "/images/graffiti/2019_CantwoHall.jpg",
+    "description": "CanTwo Hall of Fame a Mainz."
+  },
+  {
+    "id": "lincolnjam",
+    "title": "LincolnJam",
+    "year": "2019",
+    "city": "Lincoln",
+    "image": "/images/graffiti/2019_Lincolnjam.jpg",
+    "description": "Murale realizzato durante la Lincoln Jam."
+  },
+  {
+    "id": "altespostlager",
+    "title": "Altespostlager",
+    "year": "2019",
+    "city": "Mainz",
+    "image": "/images/graffiti/2019_Altespostlager.jpg",
+    "description": "Graffiti all'Altes Postlager a Mainz."
+  },
+  {
+    "id": "altespostlager-cabina",
+    "title": "Altespostlager Cabina",
+    "year": "2019",
+    "city": "Mainz",
+    "image": "/images/graffiti/2019_Altespostlager_cabina.jpg",
+    "description": "Cabina dipinta all'Altes Postlager a Mainz."
+  },
+  {
+    "id": "hamburg-goldengreen",
+    "title": "Hamburg GoldenGreen",
+    "year": "2019",
+    "city": "Hamburg",
+    "image": "/images/graffiti/2019_GoldenGreen_skolp_Hamburg.jpg",
+    "description": "Pezzo realizzato ad Amburgo con Golden Green."
+  },
+  {
+    "id": "torino-hall-of-fame",
+    "title": "Torino Hall of Fame",
+    "year": "2018",
+    "city": "Torino",
+    "image": "/images/graffiti/2018_Torino1.jpg",
+    "description": "Graffiti Hall of Fame a Torino."
+  },
+  {
+    "id": "turin-wall",
+    "title": "Turin Wall",
+    "year": "2015",
+    "city": "Torino",
+    "image": "/images/graffiti/2015_Turin.jpg",
+    "description": "Pezzo storico a Torino."
+  },
+  {
+    "id": "matera-space",
+    "title": "Matera Space",
+    "year": "2018",
+    "city": "Matera",
+    "image": "/images/graffiti/2018_Matera_space.jpg",
+    "description": "Lettering e sfondi cosmici a Matera."
+  },
+  {
+    "id": "matera-black",
+    "title": "Matera Black",
+    "year": "2018",
+    "city": "Matera",
+    "image": "/images/graffiti/2018_Matera_black.jpg",
+    "description": "Stile grafico su fondo scuro a Matera."
+  },
+  {
+    "id": "matera-quapos",
+    "title": "Matera Quapos Wall",
+    "year": "2018",
+    "city": "Matera",
+    "image": "/images/graffiti/2018_Matera_quapos.jpg",
+    "description": "Pezzo realizzato a Matera."
+  },
+  {
+    "id": "mario-bday-jam",
+    "title": "Mario Bday Jam",
+    "year": "2019",
+    "city": "Bari",
+    "image": "/images/graffiti/2019_MarioBday.jpg",
+    "description": "Pezzo per il Mario Bday Jam a Bari."
+  },
+  {
+    "id": "skolp-sannicandro",
+    "title": "Sannicandro Jam",
+    "year": "2019",
+    "city": "Sannicandro di Bari",
+    "image": "/images/graffiti/2019_Skolp_Sannicandro.jpg",
+    "description": "Graffiti a Sannicandro di Bari."
+  },
+  {
+    "id": "skolp-typography",
+    "title": "Typography",
+    "year": "2019",
+    "city": "Bari",
+    "image": "/images/graffiti/2019_Skolp_typografy.jpg",
+    "description": "Studio tipografico e lettering a Bari."
+  },
+  {
+    "id": "parco-rossani",
+    "title": "Parco Rossani",
+    "year": "2018",
+    "city": "Bari",
+    "image": "/images/graffiti/2018_rossani.jpg",
+    "description": "Pezzo nell'area dell'ex Caserma Rossani a Bari."
+  },
+  {
+    "id": "glitch-style",
+    "title": "Glitch Style",
+    "year": "2018",
+    "city": "Bari",
+    "image": "/images/graffiti/2018_glitch.jpg",
+    "description": "Lettering con effetti glitch e scomposizione."
+  },
+  {
+    "id": "geometric-piece",
+    "title": "Geometric Piece",
+    "year": "2018",
+    "city": "Bari",
+    "image": "/images/graffiti/2018_geometrico.jpg",
+    "description": "Composizione geometrica e campiture piatte."
+  },
+  {
+    "id": "container-jam",
+    "title": "Container Jam",
+    "year": "2018",
+    "city": "Bari",
+    "image": "/images/graffiti/2018_container.jpg",
+    "description": "Graffiti su container industriale."
+  },
+  {
+    "id": "adelfia-wall",
+    "title": "Adelfia Wall",
+    "year": "2018",
+    "city": "Adelfia",
+    "image": "/images/graffiti/2018_Adelfia2.jpg",
+    "description": "Pezzo murale ad Adelfia."
+  },
+  {
+    "id": "santeramo",
+    "title": "Santeramo",
+    "year": "2018",
+    "city": "Santeramo in Colle",
+    "image": "/images/graffiti/2018_Santeramo.jpg",
+    "description": "Intervento di graffiti a Santeramo in Colle."
+  },
+  {
+    "id": "toritto",
+    "title": "Toritto",
+    "year": "2018",
+    "city": "Toritto",
+    "image": "/images/graffiti/2018_Toritto.jpg",
+    "description": "Pittura murale a Toritto."
+  },
+  {
+    "id": "tigerman",
+    "title": "Tiger Man",
+    "year": "2016",
+    "city": "Bari",
+    "image": "/images/graffiti/2016_tigerman.jpg",
+    "description": "Pezzo con character Tiger Man a Bari."
+  },
+  {
+    "id": "pesche-fresche",
+    "title": "Pesche Fresche",
+    "year": "2016",
+    "city": "Bari",
+    "image": "/images/graffiti/2016_Peschefresche.jpg",
+    "description": "Pezzo Pesche Fresche a Bari."
+  },
+  {
+    "id": "monza-500",
+    "title": "Monza 500",
+    "year": "2017",
+    "city": "Monza",
+    "image": "/images/graffiti/500_Monza.jpg",
+    "description": "Graffiti wall per la 500 Hall of Fame a Monza."
+  },
+  {
+    "id": "terlizzi-wall",
+    "title": "Terlizzi Wall",
+    "year": "2017",
+    "city": "Terlizzi",
+    "image": "/images/graffiti/506_Terlizzi.jpg",
+    "description": "Pezzo graffiti realizzato a Terlizzi."
+  }
+]
