@@ -6,7 +6,10 @@ import type { ArchiveItem, LightboxItem } from '../../types';
 import { useTranslations } from '../../i18n/utils';
 
 const t = useTranslations('en');
-const archiveItems = archiveData as ArchiveItem[];
+// Reverse chronological order: from most recent to oldest (2019 -> 1999)
+const archiveItems = [...(archiveData as ArchiveItem[])].sort((a, b) => {
+  return parseInt(b.year, 10) - parseInt(a.year, 10);
+});
 
 const lightboxItems: LightboxItem[] = archiveItems.map((item) => ({
   id: item.id,

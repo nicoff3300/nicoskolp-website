@@ -4,7 +4,10 @@ import Lightbox from '../components/Lightbox.astro';
 import archiveData from '../data/archive.json';
 import type { ArchiveItem, LightboxItem } from '../types';
 
-const archiveItems = archiveData as ArchiveItem[];
+// Distribuzione cronologica inversa: dall'anno più recente al più lontano (2019 -> 1999)
+const archiveItems = [...(archiveData as ArchiveItem[])].sort((a, b) => {
+  return parseInt(b.year, 10) - parseInt(a.year, 10);
+});
 
 const lightboxItems: LightboxItem[] = archiveItems.map((item) => ({
   id: item.id,
