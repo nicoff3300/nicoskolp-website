@@ -1,3 +1,12 @@
+export interface ProjectGalleryItem {
+  url: string;
+  width?: number;
+  height?: number;
+  orientation?: 'landscape' | 'portrait' | 'square';
+  aspectRatio?: string;
+  caption?: string;
+}
+
 export interface Project {
   id: string;
   slug: string;
@@ -7,6 +16,7 @@ export interface Project {
   category: 'public-art' | 'canvas' | 'other';
   coverImage: string;
   galleryImages: string[];
+  galleryItems?: ProjectGalleryItem[];
   description?: string;
 }
 
