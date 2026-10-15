@@ -132,13 +132,6 @@ const visualArtworkSchema = {
           <div class="w-1" aria-hidden="true" />
         )}
 
-        <a
-          href="/en/public-art"
-          class="no-underline hidden sm:inline-block font-druk font-bold text-xs uppercase tracking-wider px-5 py-2.5 border border-[#e2e2e2] hover:border-black hover:bg-black hover:text-white transition-colors text-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
-        >
-          {t('publicArt.allProjects')}
-        </a>
-
         {nextProject ? (
           <a
             href={`/en/public-art/${nextProject.slug}`}
