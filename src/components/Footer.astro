@@ -10,71 +10,73 @@ const pressHref = currentLang === 'en' ? '/en/press' : '/press';
 ---
 
 <footer class="w-full bg-white border-t border-brand-gray-light text-black transition-colors" role="contentinfo">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-8">
-    <!-- Top Row: Social & Archive CTA -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-brand-gray-light">
-      <!-- Social section -->
-      <div class="flex flex-wrap items-center gap-3">
-        <span class="text-xs uppercase tracking-wider text-brand-gray-text font-sans">
-          {t('footer.follow')}
-        </span>
-        <a
-          href={siteData.social.instagram}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-druk font-medium text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 transition-opacity"
-          aria-label="Instagram Nico Skolp"
-        >
-          Instagram
-        </a>
-        <span class="text-brand-gray-text" aria-hidden="true">•</span>
-        <a
-          href={siteData.social.behance}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-druk font-medium text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 transition-opacity"
-          aria-label="Behance Nico Skolp"
-        >
-          Behance
-        </a>
-      </div>
-
-      <!-- Links: Press & Archive -->
-      <div class="flex flex-wrap items-center gap-6">
-        <a
-          href={pressHref}
-          class="font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black hover:underline underline-offset-4 transition-colors"
-        >
-          {t('nav.press')}
-        </a>
-        <span class="text-brand-gray-text hidden sm:inline" aria-hidden="true">•</span>
-        <a
-          href={archiveHref}
-          class="inline-flex items-center gap-2 font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black hover:underline underline-offset-4 transition-transform group"
-        >
-          <span>{t('footer.archiveCta')}</span>
-          <span class="inline-block transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Bottom Row: Credits & Dynamic Copyright -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-brand-gray-text font-sans">
-      <!-- Credits -->
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <span>
-          member of: <a
-            href={siteData.credits.collectiveUrl}
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
+      <!-- Colonna Sinistra: Social & Member of -->
+      <div class="space-y-1.5 sm:space-y-2">
+        <!-- Social: seguimi su -->
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="text-xs uppercase tracking-wider text-brand-gray-text font-sans">
+            {t('footer.follow')}
+          </span>
+          <a
+            href={siteData.social.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-black font-medium hover:underline underline-offset-2"
-          >{siteData.credits.collectiveName}</a>
-        </span>
+            class="font-druk font-medium text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 transition-opacity"
+            aria-label="Instagram Nico Skolp"
+          >
+            Instagram
+          </a>
+          <span class="text-brand-gray-text" aria-hidden="true">•</span>
+          <a
+            href={siteData.social.behance}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-druk font-medium text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 transition-opacity"
+            aria-label="Behance Nico Skolp"
+          >
+            Behance
+          </a>
+        </div>
+
+        <!-- Credits: member of -->
+        <div class="text-xs text-brand-gray-text font-sans">
+          <span>
+            {t('footer.memberOf')} <a
+              href={siteData.credits.collectiveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-black font-medium hover:underline underline-offset-2"
+            >{siteData.credits.collectiveName}</a>
+          </span>
+        </div>
       </div>
 
-      <!-- Copyright -->
-      <div class="text-brand-gray-text">
-        &copy; {currentYear} Nico Skolp
+      <!-- Colonna Destra: Press & Archivio + Copyright -->
+      <div class="space-y-1.5 sm:space-y-2 md:text-right">
+        <!-- Links: Press & Archive -->
+        <div class="flex flex-wrap items-center gap-4 md:justify-end">
+          <a
+            href={pressHref}
+            class="font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black hover:underline underline-offset-4 transition-colors"
+          >
+            {t('nav.press')}
+          </a>
+          <span class="text-brand-gray-text hidden sm:inline" aria-hidden="true">•</span>
+          <a
+            href={archiveHref}
+            class="inline-flex items-center gap-2 font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black hover:underline underline-offset-4 transition-transform group"
+          >
+            <span>{t('footer.archiveCta')}</span>
+            <span class="inline-block transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Copyright -->
+        <div class="text-xs text-brand-gray-text font-sans md:text-right">
+          &copy; {currentYear} Nico Skolp
+        </div>
       </div>
     </div>
   </div>
