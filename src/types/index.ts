@@ -52,6 +52,8 @@ export interface SiteConfig {
     studioUrl: string;
     collectiveName: string;
     collectiveUrl: string;
+    brandName?: string;
+    brandUrl?: string;
   };
 }
 

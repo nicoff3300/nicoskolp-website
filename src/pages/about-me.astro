@@ -117,7 +117,7 @@ const collaborationMotto = siteConfig.bio[4] || 'Collaboration welcomed';
       </div>
 
       <!-- Cards Grid: FF3300 & Wallness -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-10">
         <!-- Card FF3300 -->
         <article class="bg-white border border-[#e2e2e2] p-6 sm:p-8 flex flex-col justify-between hover:border-black hover:shadow-md transition-all duration-300">
           <div>
@@ -179,10 +179,39 @@ const collaborationMotto = siteConfig.bio[4] || 'Collaboration welcomed';
               href={siteConfig.credits.collectiveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline group"
+              class="inline-flex items-center gap-2 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline group focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
               aria-label="Visita il profilo Instagram di Wallness Club (si apre in una nuova scheda)"
             >
               <span>Segui @wallness.club</span>
+              <span class="inline-block transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card Deceit -->
+        <article class="bg-white border border-[#e2e2e2] p-6 sm:p-8 flex flex-col justify-between hover:border-black hover:shadow-md transition-all duration-300">
+          <div>
+            <div class="h-16 flex items-center justify-start mb-6">
+              <span class="font-druk font-bold text-2xl sm:text-3xl uppercase tracking-widest text-black select-none">
+                Deceit
+              </span>
+            </div>
+            <h3 class="font-druk font-bold text-base sm:text-lg uppercase tracking-wider text-black">
+              {siteConfig.credits.brandName}
+            </h3>
+            <p class="font-sans text-sm text-neutral-600 mt-3 leading-relaxed">
+              Independent streetwear label and creative project blending urban aesthetic, underground culture and exclusive apparel drops.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-[#e2e2e2]">
+            <a
+              href={siteConfig.credits.brandUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline group focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+              aria-label="Visita il sito ufficiale Deceit (si apre in una nuova scheda)"
+            >
+              <span>Visita deceitdeceit.com</span>
               <span class="inline-block transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
             </a>
           </div>
