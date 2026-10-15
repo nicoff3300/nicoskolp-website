@@ -1,5 +1,80 @@
 [
   {
+    "id": "sky-arte-matera",
+    "title": "Matera: l'incontro fra street art e sport è spettacolare",
+    "titleEn": "Matera: The Spectacular Intersection of Street Art and Sports",
+    "outlet": "Sky Arte",
+    "date": "26 Gennaio 2020",
+    "year": "2020",
+    "type": "Magazine",
+    "project": "Let's Play Culture (Matera 2019)",
+    "city": "Matera",
+    "quote": "La città è balzata agli onori delle cronache per lo spettacolare intervento di arte urbana messo a punto dal muralista e designer pugliese Nicolò Loprieno, in arte Skolp: un'ipnotica combinazione di motivi geometrici e colori per rendere l'arte funzionale al gioco e alla comunità.",
+    "quoteEn": "The city made headlines for the spectacular urban artwork created by Apulian muralist and designer Nicolò Loprieno, aka Skolp: a hypnotic combination of geometric patterns and colors turning public art functional for community play.",
+    "url": "https://arte.sky.it/archivio/2020/01/matera-basket-street-art-nico-skolp",
+    "featured": true
+  },
+  {
+    "id": "repubblica-adelfia",
+    "title": "Street art, ad Adelfia il collettivo si ritrova dopo vent'anni e colora la città: 'Dieci opere sulle rotte possibili'",
+    "titleEn": "Street Art, In Adelfia The Collective Reunites After 20 Years: 'Ten Works on Possible Routes'",
+    "outlet": "la Repubblica (Bari)",
+    "date": "09 Luglio 2022",
+    "year": "2022",
+    "type": "Daily",
+    "project": "Rotte Possibili - Adelfia",
+    "city": "Adelfia (Bari)",
+    "quote": "Il collettivo storico si ritrova a vent'anni dagli esordi per rigenerare la città con dieci grandi opere murali sulle rotte possibili dell'arte contemporanea pugliese.",
+    "quoteEn": "The historic collective reunites twenty years after their debut to regenerate the town with ten monumental murals exploring possible routes in contemporary Apulian street art.",
+    "url": "https://bari.repubblica.it/cronaca/2022/07/09/video/street_art_ad_adelfia_il_collettivo_si_ritrova_dopo_ventanni_e_colora_la_citta_dieci_opere_sulle_rotte_possibili-422945411/",
+    "featured": true
+  },
+  {
+    "id": "rainews-taranto-trust",
+    "title": "A Taranto un festival sulla rigenerazione urbana con la Street Art",
+    "titleEn": "In Taranto, An Urban Regeneration Festival Through Street Art",
+    "outlet": "Rai News",
+    "date": "14 Settembre 2021",
+    "year": "2021",
+    "type": "Daily",
+    "project": "T.R.U.St. Taranto",
+    "city": "Taranto",
+    "quote": "A Taranto la street art trasforma i quartieri periferici nel museo a cielo aperto più importante d'Europa: tra i grandi muralisti italiani protagonisti del festival figura Nico Skolp.",
+    "quoteEn": "In Taranto, street art transforms suburban districts into one of Europe's largest open-air museums: Italian muralist Nico Skolp features among the festival's prominent headliners.",
+    "url": "https://www.rainews.it/archivio-rainews/articoli/taranto-rigenerazione-urbana-street-art-25b06aa3-2ac1-45b1-8d2c-9a2989ef1dbb.html",
+    "featured": true
+  },
+  {
+    "id": "radio-deejay-matera",
+    "title": "Matera, il campetto da basket colorato di Nico Skolp e Mr.Quapos",
+    "titleEn": "Matera, The Colorful Basketball Court by Nico Skolp and Mr.Quapos",
+    "outlet": "Radio Deejay",
+    "date": "10 Gennaio 2020",
+    "year": "2020",
+    "type": "Magazine",
+    "project": "Let's Play Culture (Matera 2019)",
+    "city": "Matera",
+    "quote": "La photogallery ufficiale del playground in Piazza degli Olmi a Matera: l'esplosione di geometrie e colori dello street artist Nico Skolp e Mr.Quapos che ha fatto il giro d'Italia.",
+    "quoteEn": "The official photo gallery of the Piazza degli Olmi playground in Matera: the explosion of geometry and vibrant colors by street artist Nico Skolp that went viral across Italy.",
+    "url": "https://www.deejay.it/gallery/matera-il-campetto-da-basket-colorato-di-nico-skolp-e-mr-quaros/",
+    "featured": true
+  },
+  {
+    "id": "streetartnyc-interview-lois-stavsky",
+    "title": "Meet Nico Skolp — Masterful Italian Designer, Graffiti Writer & Muralist",
+    "titleEn": "Meet Nico Skolp — Masterful Italian Designer, Graffiti Writer & Muralist",
+    "outlet": "Street Art NYC",
+    "date": "06 Giugno 2019",
+    "year": "2019",
+    "type": "Interview",
+    "project": "Monographic Interview (New York)",
+    "city": "New York / Bari",
+    "quote": "Based in Bari in the South of Italy, Nico Skolp is a masterful designer, graffiti writer and muralist with a particular passion for working in public spaces. My murals blend shapes and colors into elaborate site-specific abstractions.",
+    "quoteEn": "Based in Bari in the South of Italy, Nico Skolp is a masterful designer, graffiti writer and muralist with a particular passion for working in public spaces. My murals blend shapes and colors into elaborate site-specific abstractions.",
+    "url": "https://streetartnyc.org/blog/2019/06/06/meet-nico-skolp-masterful-italian-designer-graffiti-writer-muralist/",
+    "featured": true
+  },
+  {
     "id": "collateral-lets-play-culture",
     "title": "Let’s Play Culture – Il campo da basket colorato a Matera da Nico Skolp",
     "titleEn": "Let’s Play Culture – The colorful basketball court in Matera by Nico Skolp",
@@ -27,7 +102,7 @@
     "quote": "Nico Skolp interviene sulla facciata del quartiere San Paolo con un'elaborata astrazione geometrica dai toni vibranti, integrandosi armoniosamente nel programma di museo a cielo aperto.",
     "quoteEn": "Nico Skolp creates a vibrant geometric abstraction on the San Paolo facade, harmoniously integrating into Bari's open-air museum program.",
     "url": "https://www.art-vibes.com/",
-    "featured": true
+    "featured": false
   },
   {
     "id": "collateral-48-rovigo",
@@ -42,7 +117,7 @@
     "quote": "300 metri quadri nel cortile dell'Urban Digital Center: 48 sagome e pattern generativi per omaggiare il concetto matematico di numero semiperfetto.",
     "quoteEn": "300 square meters in the Urban Digital Center courtyard: 48 shapes and generative patterns paying tribute to the mathematical semi-perfect number.",
     "url": "https://www.collater.al/48-nico-skolp-rovigo/",
-    "featured": true
+    "featured": false
   },
   {
     "id": "finestre-arte-sanpaolo",
@@ -73,21 +148,6 @@
     "quoteEn": "In Taranto's Tramontone district, Nico Skolp's mural redefines the urban volumes through bold geometric patterns and chromatic contrasts.",
     "url": "https://www.art-vibes.com/",
     "featured": false
-  },
-  {
-    "id": "streetartnyc-skolp",
-    "title": "Italian Street Artist Nico Skolp and Geometric Urban Muralism",
-    "titleEn": "Italian Street Artist Nico Skolp and Geometric Urban Muralism",
-    "outlet": "Street Art NYC",
-    "date": "Maggio 2021",
-    "year": "2021",
-    "type": "Magazine",
-    "project": "Artist Profile",
-    "city": "New York / Bari",
-    "quote": "From late nineties graffiti writing to generative computational design: Nico Skolp represents a distinctive Italian voice in contemporary geometric muralism.",
-    "quoteEn": "From late nineties graffiti writing to generative computational design: Nico Skolp represents a distinctive Italian voice in contemporary geometric muralism.",
-    "url": "https://streetartnyc.org/",
-    "featured": true
   },
   {
     "id": "borderline24-matera-basket",
