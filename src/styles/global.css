@@ -109,3 +109,11 @@ body {
     padding-inline: calc(var(--spacing) * 4);
   }
 }
+
+/* Margini gallery: mantieni i margini laterali compatti degli schermi a 1150px anche sui formati più grandi */
+@media (min-width: 1150px) {
+  .max-w-6xl,
+  .max-w-7xl {
+    max-width: 100%;
+  }
+}

@@ -34,7 +34,7 @@ const t = useTranslations('en');
   </section>
 
   <!-- Dynamic Artwork Showcase (13 artworks from hero.json) -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28" aria-label={t('hero.showcaseTitle')}>
+  <section class="w-full px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28" aria-label={t('hero.showcaseTitle')}>
     <div id="hero-gallery-grid" class="hero-grid">
       {heroArtworks.map((artwork, index) => {
         const isDefaultLarge = index === 0 || index === 5;
