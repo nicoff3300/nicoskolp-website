@@ -1,0 +1,237 @@
+---
+/**
+ * ContactForm.astro
+ * Modulo contatti asincrono con estetica minimalista fedele a Wix.
+ * Invia richieste via POST verso /contact.php (backend PHP su Aruba).
+ */
+---
+
+<div class="w-full">
+  <!-- Feedback Messaggio di Successo (Wix original copy) -->
+  <div
+    id="contact-success"
+    class="hidden mb-6 p-4 sm:p-5 bg-black text-white text-sm font-sans flex items-center gap-3 transition-all duration-300"
+    role="status"
+    aria-live="polite"
+  >
+    <svg class="w-5 h-5 flex-shrink-0 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+    <span class="font-medium tracking-wide">Il tuo modulo è stato inviato!</span>
+  </div>
+
+  <!-- Feedback Messaggio di Errore -->
+  <div
+    id="contact-error"
+    class="hidden mb-6 p-4 sm:p-5 bg-red-50 border border-red-200 text-red-900 text-sm font-sans flex items-center gap-3 transition-all duration-300"
+    role="alert"
+    aria-live="assertive"
+  >
+    <svg class="w-5 h-5 flex-shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+    </svg>
+    <span id="contact-error-text" class="font-medium">Si è verificato un errore durante l'invio. Riprova più tardi.</span>
+  </div>
+
+  <form id="contact-form" class="space-y-6" novalidate>
+    <!-- Honeypot anti-spam invisibile -->
+    <input type="text" name="bot_field" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <!-- Campo Nome -->
+      <div>
+        <label for="contact-nome" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
+          Nome <span class="text-neutral-500">*</span>
+        </label>
+        <input
+          type="text"
+          id="contact-nome"
+          name="nome"
+          required
+          aria-required="true"
+          placeholder="Il tuo nome"
+          class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
+        />
+      </div>
+
+      <!-- Campo Cognome -->
+      <div>
+        <label for="contact-cognome" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
+          Cognome
+        </label>
+        <input
+          type="text"
+          id="contact-cognome"
+          name="cognome"
+          placeholder="Il tuo cognome"
+          class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <!-- Campo Email -->
+      <div>
+        <label for="contact-email" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
+          Email <span class="text-neutral-500">*</span>
+        </label>
+        <input
+          type="email"
+          id="contact-email"
+          name="email"
+          required
+          aria-required="true"
+          placeholder="nome@esempio.com"
+          class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
+        />
+      </div>
+
+      <!-- Campo Oggetto -->
+      <div>
+        <label for="contact-oggetto" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
+          Oggetto
+        </label>
+        <input
+          type="text"
+          id="contact-oggetto"
+          name="oggetto"
+          placeholder="Motivo del messaggio"
+          class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
+        />
+      </div>
+    </div>
+
+    <!-- Campo Messaggio -->
+    <div>
+      <label for="contact-messaggio" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
+        Messaggio <span class="text-neutral-500">*</span>
+      </label>
+      <textarea
+        id="contact-messaggio"
+        name="messaggio"
+        rows="5"
+        required
+        aria-required="true"
+        placeholder="Scrivi qui il tuo messaggio..."
+        class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none resize-y min-h-[130px]"
+      ></textarea>
+    </div>
+
+    <!-- Submit Button in font Druk Text Wide -->
+    <div class="pt-2">
+      <button
+        type="submit"
+        id="contact-submit"
+        class="no-underline w-full sm:w-auto inline-flex items-center justify-center px-10 py-3.5 bg-black text-white font-druk font-bold text-xs sm:text-sm tracking-wider uppercase border border-black hover:bg-neutral-800 transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none"
+      >
+        <svg
+          id="contact-spinner"
+          class="hidden animate-spin -ml-1 mr-2.5 h-4 w-4 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span id="contact-submit-text">Invia</span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (!form) return;
+    if (form.getAttribute('data-initialized') === 'true') return;
+    form.setAttribute('data-initialized', 'true');
+
+    const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
+    const submitText = document.getElementById('contact-submit-text');
+    const submitSpinner = document.getElementById('contact-spinner');
+    const successBox = document.getElementById('contact-success');
+    const errorBox = document.getElementById('contact-error');
+    const errorText = document.getElementById('contact-error-text');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (successBox) successBox.classList.add('hidden');
+      if (errorBox) errorBox.classList.add('hidden');
+
+      const formData = new FormData(form);
+      const data: Record<string, string> = {};
+      formData.forEach((value, key) => {
+        data[key] = value.toString().trim();
+      });
+
+      // Validazione preliminare client-side
+      if (!data.nome || !data.email || !data.messaggio) {
+        if (errorBox && errorText) {
+          errorText.textContent = 'Per favore compila tutti i campi obbligatori (Nome, Email, Messaggio).';
+          errorBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      // Validazione formato email client-side
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        if (errorBox && errorText) {
+          errorText.textContent = 'Inserisci un indirizzo email valido.';
+          errorBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      // Stato di invio (loading)
+      if (submitBtn) submitBtn.disabled = true;
+      if (submitSpinner) submitSpinner.classList.remove('hidden');
+      if (submitText) submitText.textContent = 'Invio in corso...';
+
+      try {
+        const response = await fetch('/contact.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json().catch(() => null);
+
+        if (response.ok && result?.success) {
+          if (successBox) {
+            successBox.classList.remove('hidden');
+            successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+          form.reset();
+        } else {
+          const msg = result?.message || 'Si è verificato un errore durante l\'invio. Riprova più tardi.';
+          if (errorBox && errorText) {
+            errorText.textContent = msg;
+            errorBox.classList.remove('hidden');
+            errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
+      } catch {
+        if (errorBox && errorText) {
+          errorText.textContent = 'Errore di connessione con il server. Riprova più tardi o scrivi direttamente a nicoskolp@gmail.com.';
+          errorBox.classList.remove('hidden');
+          errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (submitSpinner) submitSpinner.classList.add('hidden');
+        if (submitText) submitText.textContent = 'Invia';
+      }
+    });
+  }
+
+  // Inizializzazione al caricamento e dopo transizioni di pagina Astro
+  initContactForm();
+  document.addEventListener('astro:page-load', initContactForm);
+</script>
