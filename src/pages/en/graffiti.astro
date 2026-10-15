@@ -27,7 +27,7 @@ const graffitiPieces = graffitiData as GraffitiPiece[];
 
     <!-- Two-Column Graffiti Grid (25 pieces from Hall of Fame) -->
     <section aria-label="Graffiti Hall of Fame Gallery">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
         {graffitiPieces.map((piece, index) => {
           const isLCP = index < 2;
           const metaParts = [piece.city, piece.year].filter(Boolean);
