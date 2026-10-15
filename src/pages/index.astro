@@ -8,7 +8,19 @@ import heroArtworks from '../data/hero.json';
 <BaseLayout title="Nico Skolp - Urban Art, Graffiti & Muralism">
   <!-- Sezione Hero -->
   <section class="pt-16 pb-12 sm:pt-20 sm:pb-16 md:pt-24 md:pb-16 text-center px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-4xl mx-auto flex flex-col items-center">
+      <div class="mb-6 sm:mb-8 flex justify-center">
+        <img
+          src="/images/brand/skolp_gif.gif"
+          alt="Nico Skolp"
+          width="400"
+          height="32"
+          class="h-6 sm:h-8 w-auto max-w-full object-contain select-none pointer-events-none"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
       <h1 class="font-druk font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl uppercase tracking-wider text-black leading-tight sm:leading-snug">
         {siteConfig.tagline}
       </h1>
