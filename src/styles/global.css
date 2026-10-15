@@ -102,3 +102,10 @@ body {
   background-color: #000000;
   color: #ffffff;
 }
+
+/* Override padding desktop lg:px-8 a 16px (calc(var(--spacing) * 4)) */
+@media (min-width: 64rem) {
+  .lg\:px-8 {
+    padding-inline: calc(var(--spacing) * 4);
+  }
+}
