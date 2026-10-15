@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title?: string;
   description?: string;
@@ -11,7 +13,9 @@ const {
   image = "/images/brand/Skolp_logo.png"
 } = Astro.props;
 
-import '../styles/global.css';
+const siteURL = Astro.site ?? new URL('https://nicoskolp.com');
+const canonicalURL = new URL(Astro.url.pathname, siteURL);
+const socialImageURL = new URL(image, siteURL);
 ---
 
 <!doctype html>
@@ -23,20 +27,21 @@ import '../styles/global.css';
     <meta name="description" content={description} />
     <meta name="keywords" content="Nico Skolp, arte urbana, graffiti, street art, tele, murales, wallness" />
     <meta name="author" content="Nico Skolp" />
+    <link rel="canonical" href={canonicalURL.href} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://nicoskolp.com" />
+    <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+    <meta property="og:image" content={socialImageURL.href} />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://nicoskolp.com" />
+    <meta property="twitter:url" content={canonicalURL.href} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={image} />
+    <meta property="twitter:image" content={socialImageURL.href} />
 
     <!-- Favicon & Fonts -->
     <link rel="icon" type="image/png" href="/images/brand/monogram.png" />
