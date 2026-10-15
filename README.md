@@ -38,6 +38,8 @@ Sito web ufficiale e archivio opere dell'artista urbano Nico Skolp. Il progetto 
 | `npm run dev` | Avvia il server di sviluppo locale (`http://localhost:4321`) |
 | `npm run build` | Compila il sito statico nella directory `dist/` |
 | `npm run preview` | Avvia un'anteprima locale della build statica |
+| `npm run check` | Esegue il controllo dei tipi e la diagnostica di Astro (`astro check`) |
+| `npm run test:data` | Esegue lo script di validazione dell'integrità dei dati JSON e dei percorsi immagini |
 
 ## Licenza
 
