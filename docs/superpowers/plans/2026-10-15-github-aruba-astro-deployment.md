@@ -212,7 +212,7 @@ Atteso: `origin https://github.com/<username>/nicoskolp-website (fetch)` e `(pus
 - Consuma: Node.js e npm
 - Produce: comando `npm run build` funzionante che genera output valido in `dist/`
 
-- [ ] **Step 1: Creare `package.json`**
+- [x] **Step 1: Creare `package.json`**
 
 Creare `/Volumes/SSD_Skolp/Skolp/SITOWEB/package.json`:
 ```json
@@ -236,7 +236,7 @@ Creare `/Volumes/SSD_Skolp/Skolp/SITOWEB/package.json`:
 }
 ```
 
-- [ ] **Step 2: Installare le dipendenze npm**
+- [x] **Step 2: Installare le dipendenze npm**
 
 ```bash
 cd /Volumes/SSD_Skolp/Skolp/SITOWEB
@@ -248,7 +248,7 @@ test -d node_modules && echo "OK"
 ```
 Atteso: `OK`.
 
-- [ ] **Step 3: Creare `astro.config.mjs` e `tsconfig.json`**
+- [x] **Step 3: Creare `astro.config.mjs` e `tsconfig.json`**
 
 Creare `/Volumes/SSD_Skolp/Skolp/SITOWEB/astro.config.mjs`:
 ```javascript
@@ -273,7 +273,7 @@ Creare `/Volumes/SSD_Skolp/Skolp/SITOWEB/tsconfig.json`:
 }
 ```
 
-- [ ] **Step 4: Creare foglio di stile e layout base**
+- [x] **Step 4: Creare foglio di stile e layout base**
 
 Creare `/Volumes/SSD_Skolp/Skolp/SITOWEB/src/styles/global.css`:
 ```css
@@ -321,7 +321,7 @@ import '../styles/global.css';
 </html>
 ```
 
-- [ ] **Step 5: Creare la homepage introduttiva `index.astro`**
+- [x] **Step 5: Creare la homepage introduttiva `index.astro`**
 
 Creare `/Volumes/SSD_Skolp/Skolp/SITOWEB/src/pages/index.astro`:
 ```astro
@@ -369,7 +369,7 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 ```
 
-- [ ] **Step 6: Test di build locale**
+- [x] **Step 6: Test di build locale**
 
 Eseguire la build per verificare la correttezza del codice:
 ```bash
@@ -382,7 +382,7 @@ test -f dist/index.html && echo "BUILD SUCCESS"
 ```
 Atteso: `BUILD SUCCESS` e creazione di `dist/index.html`.
 
-- [ ] **Step 7: Commit delle modifiche del progetto Astro**
+- [x] **Step 7: Commit delle modifiche del progetto Astro**
 
 ```bash
 cd /Volumes/SSD_Skolp/Skolp/SITOWEB
