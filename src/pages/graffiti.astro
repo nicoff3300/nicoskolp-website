@@ -4,7 +4,9 @@ import Lightbox from '../components/Lightbox.astro';
 import graffitiData from '../data/graffiti.json';
 import type { GraffitiPiece } from '../types';
 
-const graffitiPieces = graffitiData as GraffitiPiece[];
+const graffitiPieces = [...(graffitiData as GraffitiPiece[])].sort((a, b) => {
+  return parseInt(b.year || '0', 10) - parseInt(a.year || '0', 10);
+});
 ---
 
 <BaseLayout

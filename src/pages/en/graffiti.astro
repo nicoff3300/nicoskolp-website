@@ -6,7 +6,9 @@ import type { GraffitiPiece } from '../../types';
 import { useTranslations } from '../../i18n/utils';
 
 const t = useTranslations('en');
-const graffitiPieces = graffitiData as GraffitiPiece[];
+const graffitiPieces = [...(graffitiData as GraffitiPiece[])].sort((a, b) => {
+  return parseInt(b.year || '0', 10) - parseInt(a.year || '0', 10);
+});
 ---
 
 <BaseLayout
