@@ -6,7 +6,8 @@ export default defineConfig({
   site: 'https://nicoskolp.com',
   output: 'static',
   build: {
-    format: 'directory'
+    format: 'directory',
+    assets: 'assets'
   },
   vite: {
     plugins: [tailwindcss()]
