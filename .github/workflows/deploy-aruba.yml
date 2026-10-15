@@ -29,6 +29,11 @@ jobs:
       - name: 📦 Installa dipendenze
         run: npm ci
 
+      - name: 🔍 Controllo tipi e validazione dati
+        run: |
+          npm run test:data
+          npm run check
+
       - name: 🚀 Compila sito Astro (dist)
         run: npm run build
 

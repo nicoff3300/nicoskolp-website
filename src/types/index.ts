@@ -36,6 +36,7 @@ export interface SiteConfig {
   social: {
     instagram: string;
     behance: string;
+    linktree?: string;
   };
   credits: {
     studioName: string;
