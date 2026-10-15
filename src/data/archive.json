@@ -39,7 +39,6 @@
     "id": "archive-2004",
     "year": "2004",
     "title": "Bologna Jam",
-    "year": "2004",
     "city": "Bologna",
     "image": "/images/archive/2004-bolo.jpg",
     "description": "Graffiti jam a Bologna."
@@ -151,10 +150,10 @@
     "description": "Cabina all'Altes Postlager di Mainz."
   },
   {
-    "id": "archive-2040",
-    "year": "2040",
-    "title": "Green Day (Futuro)",
+    "id": "archive-2011-greenday",
+    "year": "2011",
+    "title": "Green Day",
     "image": "/images/archive/2040-greenday.jpg",
-    "description": "Visione futuristica Green Day 2040."
+    "description": "Pezzo storico firmato Scolp '11."
   }
 ]
