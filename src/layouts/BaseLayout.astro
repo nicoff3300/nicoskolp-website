@@ -1,0 +1,65 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+}
+
+const {
+  title = "Nico Skolp - Urban Art, Graffiti & Muralism",
+  description = "Portfolio artistico ufficiale di Nico Skolp: Arte Urbana, Muralismo, Graffiti e Tele.",
+  image = "/images/brand/Skolp_logo.png",
+  canonical,
+} = Astro.props;
+
+const siteURL = Astro.site ?? new URL('https://nicoskolp.com');
+const canonicalURL = canonical ? new URL(canonical, siteURL) : new URL(Astro.url.pathname, siteURL);
+const socialImageURL = new URL(image, siteURL);
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Nico Skolp, arte urbana, graffiti, murales, street art, tele, FF3300, Wallness" />
+    <meta name="author" content="Nico Skolp" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="canonical" href={canonicalURL.href} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImageURL.href} />
+    <meta property="og:site_name" content="Nico Skolp" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL.href} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL.href} />
+
+    <!-- Favicon & Web Fonts -->
+    <link rel="icon" type="image/png" href="/images/brand/monogram.png" />
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen flex flex-col bg-white text-black antialiased selection:bg-black selection:text-white">
+    <Header />
+    <main class="min-h-screen flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

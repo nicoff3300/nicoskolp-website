@@ -1,0 +1,78 @@
+---
+import siteData from '../data/site.json';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="w-full bg-white border-t border-[#e2e2e2] text-black transition-colors" role="contentinfo">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-8">
+    <!-- Top Row: Social & Archive CTA -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-[#e2e2e2]">
+      <!-- Social section -->
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="text-xs uppercase tracking-wider text-[#8f8f8f] font-sans">
+          seguimi su:
+        </span>
+        <a
+          href={siteData.social.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-druk font-medium text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 transition-opacity"
+          aria-label="Instagram Nico Skolp"
+        >
+          Instagram
+        </a>
+        <span class="text-[#8f8f8f]" aria-hidden="true">•</span>
+        <a
+          href={siteData.social.behance}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-druk font-medium text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 transition-opacity"
+          aria-label="Behance Nico Skolp"
+        >
+          Behance
+        </a>
+      </div>
+
+      <!-- Archive Link -->
+      <div>
+        <a
+          href="/skolp-archive"
+          class="inline-flex items-center gap-2 font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black hover:underline underline-offset-4 transition-transform group"
+        >
+          <span>Guarda qui il mio ARCHIVIO</span>
+          <span class="inline-block transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Bottom Row: Credits & Dynamic Copyright -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#8f8f8f] font-sans">
+      <!-- Credits -->
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <span>
+          design by: <a
+            href={siteData.credits.studioUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-black font-medium hover:underline underline-offset-2"
+          >{siteData.credits.studioName}</a>
+        </span>
+        <span aria-hidden="true">•</span>
+        <span>
+          member of: <a
+            href={siteData.credits.collectiveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-black font-medium hover:underline underline-offset-2"
+          >{siteData.credits.collectiveName}</a>
+        </span>
+      </div>
+
+      <!-- Copyright -->
+      <div class="text-[#8f8f8f]">
+        &copy; {currentYear} Nico Skolp
+      </div>
+    </div>
+  </div>
+</footer>

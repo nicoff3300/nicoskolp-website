@@ -1,0 +1,9 @@
+# Imposta index.html come priorità principale per Apache su Aruba
+DirectoryIndex index.html index.php default.html
+
+# Reindirizzamento HTTPS automatico
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
