@@ -11,7 +11,7 @@ export const ui = {
   it: {
     // Navigazione
     'nav.publicArt': 'Public Art',
-    'nav.about': 'About me',
+    'nav.about': 'About',
     'nav.press': 'Press',
     'nav.graffiti': 'Graffiti',
     'nav.archive': 'Archivio',
@@ -100,7 +100,7 @@ export const ui = {
   en: {
     // Navigation
     'nav.publicArt': 'Public Art',
-    'nav.about': 'About me',
+    'nav.about': 'About',
     'nav.press': 'Press',
     'nav.graffiti': 'Graffiti',
     'nav.archive': 'Archive',

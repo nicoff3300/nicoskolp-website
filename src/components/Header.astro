@@ -58,6 +58,18 @@ const isActiveArchive = currentPath === archiveHref;
         {t('nav.publicArt')}
       </a>
       <a
+        href={graffitiHref}
+        aria-current={isActiveGraffiti ? "page" : undefined}
+        class:list={[
+          "font-druk text-xs lg:text-sm tracking-wider uppercase transition-colors duration-150",
+          isActiveGraffiti
+            ? "font-bold text-black underline underline-offset-4 decoration-2"
+            : "font-medium text-black hover:underline underline-offset-4 decoration-2"
+        ]}
+      >
+        {t('nav.graffiti')}
+      </a>
+      <a
         href={aboutHref}
         aria-current={isActiveAbout ? "page" : undefined}
         class:list={[
@@ -80,18 +92,6 @@ const isActiveArchive = currentPath === archiveHref;
         ]}
       >
         {t('nav.press')}
-      </a>
-      <a
-        href={graffitiHref}
-        aria-current={isActiveGraffiti ? "page" : undefined}
-        class:list={[
-          "font-druk text-xs lg:text-sm tracking-wider uppercase transition-colors duration-150",
-          isActiveGraffiti
-            ? "font-bold text-black underline underline-offset-4 decoration-2"
-            : "font-medium text-black hover:underline underline-offset-4 decoration-2"
-        ]}
-      >
-        {t('nav.graffiti')}
       </a>
       <a
         href={siteData.social.linktree}
@@ -203,6 +203,16 @@ const isActiveArchive = currentPath === archiveHref;
         {t('nav.publicArt')}
       </a>
       <a
+        href={graffitiHref}
+        aria-current={isActiveGraffiti ? "page" : undefined}
+        class:list={[
+          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-brand-gray-light/50 transition-colors",
+          isActiveGraffiti ? "font-bold text-black underline underline-offset-4 decoration-2" : "font-medium text-black hover:underline"
+        ]}
+      >
+        {t('nav.graffiti')}
+      </a>
+      <a
         href={aboutHref}
         aria-current={isActiveAbout ? "page" : undefined}
         class:list={[
@@ -221,16 +231,6 @@ const isActiveArchive = currentPath === archiveHref;
         ]}
       >
         {t('nav.press')}
-      </a>
-      <a
-        href={graffitiHref}
-        aria-current={isActiveGraffiti ? "page" : undefined}
-        class:list={[
-          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-brand-gray-light/50 transition-colors",
-          isActiveGraffiti ? "font-bold text-black underline underline-offset-4 decoration-2" : "font-medium text-black hover:underline"
-        ]}
-      >
-        {t('nav.graffiti')}
       </a>
       <a
         href={siteData.social.linktree}
