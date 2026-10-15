@@ -18,7 +18,7 @@ const initialMeta = firstItem ? [firstItem.city, firstItem.year].filter(Boolean)
 >
   <!-- Top bar: Contatore a sinistra e pulsante di chiusura a destra -->
   <header id="lightbox-topbar" class="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-white/10 bg-black/40 z-20">
-    <div id="lightbox-counter" class="font-sans text-xs sm:text-sm tracking-wider uppercase text-neutral-400">
+    <div id="lightbox-counter" class="font-sans text-xs sm:text-sm tracking-wider uppercase text-neutral-400" aria-live="polite" aria-atomic="true">
       {items.length > 0 ? `1 / ${items.length}` : ''}
     </div>
     <button
@@ -158,7 +158,7 @@ const initialMeta = firstItem ? [firstItem.city, firstItem.year].filter(Boolean)
       }
       if (imgEl) {
         imgEl.src = item.image;
-        const meta = [item.city, item.year].filter(Boolean).join(', ');
+        const meta = [item.city, item.year].filter(Boolean).join(' • ');
         imgEl.alt = `${item.title}${meta ? ` - ${meta}` : ''}`;
       }
       if (titleEl) {
@@ -207,6 +207,11 @@ const initialMeta = firstItem ? [firstItem.city, firstItem.year].filter(Boolean)
         lastActiveElement.focus();
       }
     }
+
+    // Reset dello scroll del body su chiusura nativa del dialog (defense-in-depth)
+    dialog.addEventListener('close', () => {
+      document.body.style.overflow = '';
+    });
 
     // Event listeners bottoni
     closeBtn?.addEventListener('click', (e) => {
@@ -304,7 +309,7 @@ const initialMeta = firstItem ? [firstItem.city, firstItem.year].filter(Boolean)
       if (trigger) {
         e.preventDefault();
         const indexAttr = trigger.getAttribute('data-lightbox-index');
-        const idx = indexAttr ? parseInt(indexAttr, 10) : 0;
+        const idx = Number.parseInt(indexAttr ?? '0', 10) || 0;
         openLightbox(idx, trigger as HTMLElement);
       }
     };
