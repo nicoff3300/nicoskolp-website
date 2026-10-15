@@ -1,7 +1,11 @@
 ---
 import siteData from '../data/site.json';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
+const currentLang = getLangFromUrl(Astro.url);
+const t = useTranslations(currentLang);
 const currentYear = new Date().getFullYear();
+const archiveHref = currentLang === 'en' ? '/en/skolp-archive' : '/skolp-archive';
 ---
 
 <footer class="w-full bg-white border-t border-brand-gray-light text-black transition-colors" role="contentinfo">
@@ -11,7 +15,7 @@ const currentYear = new Date().getFullYear();
       <!-- Social section -->
       <div class="flex flex-wrap items-center gap-3">
         <span class="text-xs uppercase tracking-wider text-brand-gray-text font-sans">
-          seguimi su:
+          {t('footer.follow')}
         </span>
         <a
           href={siteData.social.instagram}
@@ -37,10 +41,10 @@ const currentYear = new Date().getFullYear();
       <!-- Archive Link -->
       <div>
         <a
-          href="/skolp-archive"
+          href={archiveHref}
           class="inline-flex items-center gap-2 font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black hover:underline underline-offset-4 transition-transform group"
         >
-          <span>Guarda qui il mio ARCHIVIO</span>
+          <span>{t('footer.archiveCta')}</span>
           <span class="inline-block transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
         </a>
       </div>

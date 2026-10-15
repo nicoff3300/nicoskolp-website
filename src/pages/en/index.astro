@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import heroArtworks from '../../data/hero.json';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('en');
+---
+
+<BaseLayout
+  lang="en"
+  title="Nico Skolp - Urban Art, Muralism & Contemporary Street Art | Bari, Italy"
+  description="Official portfolio of Nico Skolp, contemporary urban artist and muralist based in Bari, Puglia (Italy). Large-scale murals, geometric abstraction, graffiti writing and architectural public art across Europe."
+>
+  <!-- Hero Section -->
+  <section class="pt-16 pb-12 sm:pt-20 sm:pb-16 md:pt-24 md:pb-16 text-center px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto flex flex-col items-center">
+      <div class="mb-6 sm:mb-8 flex justify-center">
+        <img
+          src="/images/brand/skolp_gif.gif"
+          alt="Nico Skolp"
+          width="400"
+          height="32"
+          class="h-6 sm:h-8 w-auto max-w-full object-contain select-none pointer-events-none"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <h1 class="font-druk font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl uppercase tracking-wider text-black leading-tight sm:leading-snug">
+        {t('hero.tagline')}
+      </h1>
+    </div>
+  </section>
+
+  <!-- Dynamic Artwork Showcase (13 artworks from hero.json) -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28" aria-label={t('hero.showcaseTitle')}>
+    <div id="hero-gallery-grid" class="hero-grid">
+      {heroArtworks.map((artwork, index) => {
+        const isDefaultLarge = index === 0 || index === 5;
+        return (
+          <div
+            class:list={[
+              "hero-item relative w-full h-full flex items-center justify-center p-3 sm:p-4 lg:p-6 overflow-hidden",
+              isDefaultLarge ? "card-2x2" : "card-1x1"
+            ]}
+            data-index={index}
+          >
+            <img
+              src={artwork.image}
+              alt={artwork.title}
+              loading={index < 4 ? "eager" : "lazy"}
+              fetchpriority={index < 2 ? "high" : "auto"}
+              decoding="async"
+              width="1080"
+              height="1350"
+              class="w-full h-full object-contain pointer-events-none select-none"
+            />
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Inline Script for randomized dynamic grid on every page load -->
+  <script is:inline>
+    (function () {
+      function randomizeHeroGrid() {
+        const grid = document.getElementById('hero-gallery-grid');
+        if (!grid) return;
+        const items = Array.from(grid.children);
+        if (items.length < 4) return;
+
+        // Fisher-Yates shuffle for random order on each reload
+        for (let i = items.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [items[i], items[j]] = [items[j], items[i]];
+        }
+
+        // Randomly select 2 or 3 artworks to span 2 columns and 2 rows (2x2)
+        const numFeatured = Math.random() < 0.5 ? 2 : 3;
+        const featuredIndices = new Set();
+        while (featuredIndices.size < numFeatured) {
+          featuredIndices.add(Math.floor(Math.random() * items.length));
+        }
+
+        items.forEach((item, index) => {
+          item.classList.remove('card-1x1', 'card-2x2');
+          if (featuredIndices.has(index)) {
+            item.classList.add('card-2x2');
+          } else {
+            item.classList.add('card-1x1');
+          }
+          grid.appendChild(item);
+        });
+      }
+
+      randomizeHeroGrid();
+      document.addEventListener('astro:page-load', randomizeHeroGrid);
+    })();
+  </script>
+
+  <!-- Contact Section -->
+  <section class="py-16 sm:py-24 border-t border-brand-gray-light bg-white px-4 sm:px-6 lg:px-8" id="contatti">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="font-druk-wide font-bold text-xl sm:text-2xl md:text-3xl text-center uppercase tracking-wider text-black mb-10 sm:mb-12">
+        {t('contact.title')}
+      </h2>
+      <ContactForm lang="en" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 200px;
+    grid-auto-flow: dense;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-grid {
+      grid-auto-rows: 250px;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: 280px;
+      gap: 1.75rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: 320px;
+      gap: 2rem;
+    }
+  }
+
+  .card-1x1 {
+    grid-column: span 1 / span 1;
+    grid-row: span 1 / span 1;
+  }
+
+  .card-2x2 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+  }
+</style>

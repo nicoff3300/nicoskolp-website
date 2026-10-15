@@ -26,13 +26,34 @@ const { project, prevProject, nextProject } = Astro.props;
 
 // Filtra eventuali immagini aggiuntive diverse dalla coverImage principale
 const additionalImages = (project.galleryImages || []).filter((img) => img !== project.coverImage);
+
+// Schema.org VisualArtwork per Google Image e Ricerca
+const visualArtworkSchema = {
+  "@type": "VisualArtwork",
+  "@id": `https://nicoskolp.com/public-art/${project.slug}#artwork`,
+  "name": project.title,
+  "artMedium": "Pittura murale / Pittura acrilica e spray su parete",
+  "artform": "Murales, Arte Urbana, Public Art, Street Art",
+  "dateCreated": project.year || undefined,
+  "image": new URL(project.coverImage, 'https://nicoskolp.com').href,
+  "creator": {
+    "@id": "https://nicoskolp.com/#artist"
+  },
+  "locationCreated": project.city ? {
+    "@type": "Place",
+    "name": `${project.city}, Italia`
+  } : undefined,
+  "description": project.description || `${project.title} - Opera di pittura murale e arte urbana contemporanea realizzata da Nico Skolp a ${project.city || 'Italia'} (${project.year || ''})`
+};
 ---
 
 <BaseLayout
-  title={`${project.title} - Public Art - Nico Skolp`}
+  lang="it"
+  title={`${project.title} - Murales Public Art - Nico Skolp`}
   description={project.description || `${project.title} - Opera di Public Art e Muralismo di Nico Skolp a ${project.city || ''} (${project.year || ''})`}
   image={project.coverImage}
   canonical={`/public-art/${project.slug}`}
+  jsonLd={visualArtworkSchema}
 >
   <article class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
     <!-- Link Breadcrumb Torna a Public Art -->

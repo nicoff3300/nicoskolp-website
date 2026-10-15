@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import graffitiData from '../../data/graffiti.json';
+import type { GraffitiPiece } from '../../types';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('en');
+const graffitiPieces = graffitiData as GraffitiPiece[];
+---
+
+<BaseLayout
+  lang="en"
+  title="Graffiti Hall of Fame - Nico Skolp | Street Art & Lettering"
+  description="Hall of Fame selection. The 5 letters that boost my style. Curated collection of 25 historical graffiti walls and lettering evolution by Nico Skolp since 1997."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+    <!-- Section Header with original copy -->
+    <header class="text-center mb-12 sm:mb-16 md:mb-20">
+      <h1 class="font-druk font-bold text-3xl sm:text-4xl md:text-5xl uppercase tracking-wider text-black">
+        {t('graffiti.title')}
+      </h1>
+      <p class="font-sans text-base sm:text-lg text-neutral-600 mt-4 max-w-2xl mx-auto">
+        {t('graffiti.subtitle')}
+      </p>
+    </header>
+
+    <!-- Responsive Graffiti Grid (25 pieces from Hall of Fame) -->
+    <section aria-label="Graffiti Hall of Fame Gallery">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+        {graffitiPieces.map((piece, index) => {
+          const isLCP = index < 4;
+          const metaParts = [piece.city, piece.year].filter(Boolean);
+          const metaText = metaParts.join(' • ');
+
+          return (
+            <button
+              type="button"
+              data-lightbox-trigger
+              data-lightbox-index={index}
+              aria-haspopup="dialog"
+              aria-label={`View ${piece.title}${metaText ? `, ${metaText}` : ''} in full screen`}
+              class="group text-left w-full bg-white border border-[#e2e2e2] overflow-hidden flex flex-col transition-all duration-300 hover:border-black hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-black cursor-pointer"
+            >
+              <span class="relative w-full aspect-[4/3] bg-[#fcfcfc] overflow-hidden block">
+                <img
+                  src={piece.image}
+                  alt={`Graffiti ${piece.title}${piece.city ? ` in ${piece.city}` : ''}`}
+                  loading={isLCP ? 'eager' : 'lazy'}
+                  fetchpriority={isLCP ? 'high' : 'auto'}
+                  decoding="async"
+                  class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                />
+                <span class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none block" />
+              </span>
+
+              <span class="p-4 sm:p-5 bg-white border-t border-[#e2e2e2] flex flex-col justify-between flex-1 gap-1.5 w-full block">
+                <span class="font-druk font-bold text-xs sm:text-sm uppercase tracking-wider text-black truncate block">
+                  {piece.title}
+                </span>
+                {metaText && (
+                  <span class="font-sans text-[11px] sm:text-xs text-[#8f8f8f] uppercase tracking-wider block">
+                    {metaText}
+                  </span>
+                )}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  </div>
+
+  <!-- Native Modal Lightbox with Touch & Keyboard Controls -->
+  <Lightbox items={graffitiPieces} />
+</BaseLayout>

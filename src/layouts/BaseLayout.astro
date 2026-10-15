@@ -2,37 +2,135 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import { getLangFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
   canonical?: string;
+  lang?: Lang;
+  jsonLd?: Record<string, any>;
 }
 
 const {
-  title = "Nico Skolp - Urban Art, Graffiti & Muralism",
-  description = "Portfolio artistico ufficiale di Nico Skolp: Arte Urbana, Muralismo, Graffiti e Tele.",
-  image = "/images/brand/Skolp_logo.png",
+  title: propTitle,
+  description: propDescription,
+  image = "/images/brand/Nico_skolp.jpg",
   canonical,
+  lang: propLang,
+  jsonLd,
 } = Astro.props;
 
+const currentLang = propLang || getLangFromUrl(Astro.url);
+const t = useTranslations(currentLang);
+
+const title = propTitle || t('seo.defaultTitle');
+const description = propDescription || t('seo.defaultDescription');
+const keywords = t('seo.keywords');
+
 const siteURL = Astro.site ?? new URL('https://nicoskolp.com');
-const canonicalURL = canonical ? new URL(canonical, siteURL) : new URL(Astro.url.pathname, siteURL);
+const currentPath = Astro.url.pathname;
+const canonicalURL = canonical ? new URL(canonical, siteURL) : new URL(currentPath, siteURL);
 const socialImageURL = new URL(image, siteURL);
+
+// Calcolo URL alternativi hreflang per SEO multilingua
+const itAlternateURL = new URL(getLocalizedPath(currentPath, 'it'), siteURL).href;
+const enAlternateURL = new URL(getLocalizedPath(currentPath, 'en'), siteURL).href;
+
+// Schema.org JSON-LD composito per Person, VisualArtist e WebSite
+const baseSchemaGraph: any[] = [
+  {
+    "@type": ["Person", "VisualArtist"],
+    "@id": "https://nicoskolp.com/#artist",
+    "name": "Nico Skolp",
+    "alternateName": ["Skolp", "Nico Skolp Artist"],
+    "url": "https://nicoskolp.com",
+    "image": new URL("/images/brand/Nico_skolp.jpg", siteURL).href,
+    "jobTitle": currentLang === 'it' ? "Artista Urbano & Muralista" : "Urban Artist & Muralist",
+    "description": currentLang === 'it'
+      ? "Artista urbano, writer e muralista attivo dal 1997 con base a Bari, Puglia. Grandi interventi di pittura murale, graffiti writing e arte pubblica in Italia ed Europa."
+      : "Contemporary urban artist and muralist based in Bari, Puglia (Italy). Public murals, geometric abstraction, graffiti writing and architectural art across Europe.",
+    "birthPlace": {
+      "@type": "Place",
+      "name": "Bari, Puglia, Italia"
+    },
+    "homeLocation": {
+      "@type": "Place",
+      "name": "Bari, Puglia, Italia",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 41.117143,
+        "longitude": 16.871871
+      }
+    },
+    "areaServed": [
+      { "@type": "AdministrativeArea", "name": "Puglia" },
+      { "@type": "AdministrativeArea", "name": "Bari" },
+      { "@type": "Country", "name": "Italia" },
+      { "@type": "Continent", "name": "Europa" }
+    ],
+    "knowsAbout": [
+      "Street Art",
+      "Arte Urbana",
+      "Muralismo Contemporaneo",
+      "Murales",
+      "Graffiti Writing",
+      "Astrazione Geometrica",
+      "Public Art",
+      "Rigenerazione Urbana"
+    ],
+    "sameAs": [
+      "https://instagram.com/nicoskolp",
+      "https://www.behance.net/nicoff3300",
+      "https://linktr.ee/nicoskolp",
+      "https://www.ff3300.com",
+      "https://www.instagram.com/wallness.club",
+      "https://www.deceitdeceit.com"
+    ]
+  },
+  {
+    "@type": "WebSite",
+    "@id": "https://nicoskolp.com/#website",
+    "url": "https://nicoskolp.com",
+    "name": "Nico Skolp",
+    "inLanguage": ["it", "en"]
+  }
+];
+
+if (jsonLd) {
+  baseSchemaGraph.push(jsonLd);
+}
+
+const finalSchemaJson = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": baseSchemaGraph
+});
 ---
 
 <!doctype html>
-<html lang="it">
+<html lang={currentLang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
-    <meta name="keywords" content="Nico Skolp, arte urbana, graffiti, murales, street art, tele, FF3300, Wallness" />
+    <meta name="keywords" content={keywords} />
     <meta name="author" content="Nico Skolp" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href={canonicalURL.href} />
+
+    <!-- Tag Hreflang Bidirezionali per Google SEO Multilingua -->
+    <link rel="alternate" hreflang="it" href={itAlternateURL} />
+    <link rel="alternate" hreflang="en" href={enAlternateURL} />
+    <link rel="alternate" hreflang="x-default" href={itAlternateURL} />
+
+    <!-- GEO Meta Tags per Ricerca Locale e Geografica (Bari, Puglia, Italia) -->
+    <meta name="geo.region" content="IT-BA" />
+    <meta name="geo.placename" content="Bari, Puglia, Italia" />
+    <meta name="geo.position" content="41.117143;16.871871" />
+    <meta name="ICBM" content="41.117143, 16.871871" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -41,19 +139,24 @@ const socialImageURL = new URL(image, siteURL);
     <meta property="og:description" content={description} />
     <meta property="og:image" content={socialImageURL.href} />
     <meta property="og:site_name" content="Nico Skolp" />
+    <meta property="og:locale" content={currentLang === 'it' ? 'it_IT' : 'en_US'} />
+    <meta property="og:locale:alternate" content={currentLang === 'it' ? 'en_US' : 'it_IT'} />
 
-    <!-- Twitter -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={canonicalURL.href} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageURL.href} />
 
-    <!-- Favicon & Web Fonts -->
+    <!-- Favicon & Web Fonts Preload -->
     <link rel="icon" type="image/png" href="/images/brand/monogram.png" />
     <link rel="preload" href="/fonts/druk/DrukTextWide-Bold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/opensans/OpenSans-Regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/fonts/fonts.css" />
+
+    <!-- Dati Strutturati Schema.org JSON-LD per Google -->
+    <script type="application/ld+json" set:html={finalSchemaJson} />
 
     <title>{title}</title>
   </head>
@@ -62,7 +165,7 @@ const socialImageURL = new URL(image, siteURL);
       href="#main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-black focus:text-white focus:font-druk focus:text-xs focus:uppercase focus:outline-none"
     >
-      Salta al contenuto principale
+      {currentLang === 'it' ? 'Salta al contenuto principale' : 'Skip to main content'}
     </a>
     <Header />
     <main id="main-content" class="flex-1">

@@ -6,6 +6,13 @@ export default defineConfig({
   site: 'https://nicoskolp.com',
   output: 'static',
   trailingSlash: 'never',
+  i18n: {
+    defaultLocale: 'it',
+    locales: ['it', 'en'],
+    routing: {
+      prefixDefaultLocale: false
+    }
+  },
   build: {
     format: 'directory',
     assets: 'assets'

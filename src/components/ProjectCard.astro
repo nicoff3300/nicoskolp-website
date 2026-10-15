@@ -1,22 +1,30 @@
 ---
 import type { Project } from '../types';
+import { getLangFromUrl } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
 
 interface Props {
   project: Project;
   eager?: boolean;
+  lang?: Lang;
 }
 
-const { project, eager = false } = Astro.props;
+const { project, eager = false, lang: propLang } = Astro.props;
+const currentLang = propLang || getLangFromUrl(Astro.url);
 
 const metaParts = [project.city, project.year].filter(Boolean);
 const metaText = metaParts.join(' • ');
+const projectHref = currentLang === 'en' ? `/en/public-art/${project.slug}` : `/public-art/${project.slug}`;
+const ariaLabel = currentLang === 'en'
+  ? `View artwork ${project.title}${metaText ? `, ${metaText}` : ''}`
+  : `Vedi opera ${project.title}${metaText ? `, ${metaText}` : ''}`;
 ---
 
 <article class="group relative bg-white border border-[#e2e2e2] overflow-hidden flex flex-col transition-all duration-300 hover:border-black hover:shadow-lg">
   <a
-    href={`/public-art/${project.slug}`}
+    href={projectHref}
     class="no-underline flex flex-col h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
-    aria-label={`Vedi opera ${project.title}${metaText ? `, ${metaText}` : ''}`}
+    aria-label={ariaLabel}
   >
     <div class="relative w-full aspect-[4/3] bg-[#fcfcfc] overflow-hidden">
       <img

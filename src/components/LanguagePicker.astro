@@ -1,0 +1,50 @@
+---
+import { getLangFromUrl, getLocalizedPath } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  currentLang?: Lang;
+  class?: string;
+}
+
+const { currentLang: propLang, class: className = '' } = Astro.props;
+const currentLang = propLang || getLangFromUrl(Astro.url);
+const currentPath = Astro.url.pathname;
+
+const itPath = getLocalizedPath(currentPath, 'it');
+const enPath = getLocalizedPath(currentPath, 'en');
+---
+
+<div class:list={["flex items-center gap-1.5 font-druk text-xs uppercase tracking-wider select-none", className]} aria-label="Selettore Lingua / Language Switcher">
+  {currentLang === 'it' ? (
+    <span class="font-bold text-black underline underline-offset-4 decoration-2" aria-current="true" aria-label="Lingua italiana attiva">
+      IT
+    </span>
+  ) : (
+    <a
+      href={itPath}
+      class="no-underline font-medium text-neutral-400 hover:text-black transition-colors duration-150 focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
+      aria-label="Passa alla lingua italiana"
+      hreflang="it"
+    >
+      IT
+    </a>
+  )}
+
+  <span class="text-[#c4c4c4] font-normal" aria-hidden="true">/</span>
+
+  {currentLang === 'en' ? (
+    <span class="font-bold text-black underline underline-offset-4 decoration-2" aria-current="true" aria-label="English language active">
+      EN
+    </span>
+  ) : (
+    <a
+      href={enPath}
+      class="no-underline font-medium text-neutral-400 hover:text-black transition-colors duration-150 focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
+      aria-label="Switch to English language"
+      hreflang="en"
+    >
+      EN
+    </a>
+  )}
+</div>

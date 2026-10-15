@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://nicoskolp.com/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/brand/Nico_skolp.jpg</image:loc>
+      <image:title>Nico Skolp - Urban Art, Graffiti Writing e Muralismo</image:title>
+      <image:caption>Nico Skolp artista visivo, street art e murales a Bari e in Puglia</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/brand/Nico_skolp.jpg</image:loc>
+      <image:title>Nico Skolp - Urban Art, Graffiti Writing e Muralismo</image:title>
+      <image:caption>Nico Skolp artista visivo, street art e murales a Bari e in Puglia</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/brand/Nico_skolp.jpg</image:loc>
+      <image:title>Public Art &amp; Murales - Nico Skolp</image:title>
+      <image:caption>Portfolio di arte pubblica e grandi murales a Bari, in Puglia e in Europa</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/brand/Nico_skolp.jpg</image:loc>
+      <image:title>Public Art &amp; Murales - Nico Skolp</image:title>
+      <image:caption>Portfolio di arte pubblica e grandi murales a Bari, in Puglia e in Europa</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/about-me</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/about-me" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/about-me" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/about-me" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/brand/Nico_skolp.jpg</image:loc>
+      <image:title>Nico Skolp - Biografia e Profilo Artistico</image:title>
+      <image:caption>Biografia di Nico Skolp, co-fondatore studio FF3300 e membro Wallness Club a Bari</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/about-me</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/about-me" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/about-me" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/about-me" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/brand/Nico_skolp.jpg</image:loc>
+      <image:title>Nico Skolp - Biografia e Profilo Artistico</image:title>
+      <image:caption>Biografia di Nico Skolp, co-fondatore studio FF3300 e membro Wallness Club a Bari</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/graffiti</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/graffiti" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/graffiti" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/graffiti" />
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/graffiti</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/graffiti" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/graffiti" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/graffiti" />
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/skolp-archive</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/skolp-archive" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/skolp-archive" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/skolp-archive" />
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/skolp-archive</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/skolp-archive" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/skolp-archive" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/skolp-archive" />
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/teatro-aquilone</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/teatro-aquilone" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/teatro-aquilone" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/teatro-aquilone" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/teatro-aquilone.jpg</image:loc>
+      <image:title>Teatroaquilone - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Teatroaquilone&quot; a Carosino (Taranto) (2022) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/teatro-aquilone</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/teatro-aquilone" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/teatro-aquilone" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/teatro-aquilone" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/teatro-aquilone.jpg</image:loc>
+      <image:title>Teatroaquilone - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Teatroaquilone&quot; a Carosino (Taranto) (2022) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/sanpaolo</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/sanpaolo" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/sanpaolo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/sanpaolo" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/sanpaolo.jpg</image:loc>
+      <image:title>Museo Quartiere San Paolo - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Museo Quartiere San Paolo&quot; a Bari (2022) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/sanpaolo</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/sanpaolo" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/sanpaolo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/sanpaolo" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/sanpaolo.jpg</image:loc>
+      <image:title>Museo Quartiere San Paolo - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Museo Quartiere San Paolo&quot; a Bari (2022) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/trust-taranto</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/trust-taranto" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/trust-taranto" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/trust-taranto" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/trust-taranto.jpg</image:loc>
+      <image:title>T.R.U.S.T Festival - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;T.R.U.S.T Festival&quot; a Taranto (2021) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/trust-taranto</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/trust-taranto" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/trust-taranto" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/trust-taranto" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/trust-taranto.jpg</image:loc>
+      <image:title>T.R.U.S.T Festival - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;T.R.U.S.T Festival&quot; a Taranto (2021) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/rore-festival-rovigo</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/rore-festival-rovigo" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/rore-festival-rovigo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/rore-festival-rovigo" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/rore-festival-rovigo.jpg</image:loc>
+      <image:title>Rore Festival - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Rore Festival&quot; a Rovigo (2021) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/rore-festival-rovigo</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/rore-festival-rovigo" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/rore-festival-rovigo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/rore-festival-rovigo" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/rore-festival-rovigo.jpg</image:loc>
+      <image:title>Rore Festival - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Rore Festival&quot; a Rovigo (2021) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/skolp-basketball-court-matera-2019</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/skolp-basketball-court-matera-2019" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/skolp-basketball-court-matera-2019" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/skolp-basketball-court-matera-2019" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/skolp-basketball-court-matera-2019.jpg</image:loc>
+      <image:title>Basketcourt - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Basketcourt&quot; a Matera (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/skolp-basketball-court-matera-2019</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/skolp-basketball-court-matera-2019" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/skolp-basketball-court-matera-2019" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/skolp-basketball-court-matera-2019" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/skolp-basketball-court-matera-2019.jpg</image:loc>
+      <image:title>Basketcourt - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Basketcourt&quot; a Matera (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/graffiti-factory</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/graffiti-factory" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/graffiti-factory" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/graffiti-factory" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/graffiti-factory.jpg</image:loc>
+      <image:title>Graffiti Gallery - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Graffiti Gallery&quot; a Corato (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/graffiti-factory</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/graffiti-factory" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/graffiti-factory" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/graffiti-factory" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/graffiti-factory.jpg</image:loc>
+      <image:title>Graffiti Gallery - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Graffiti Gallery&quot; a Corato (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/skolp-steps-molise</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/skolp-steps-molise" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/skolp-steps-molise" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/skolp-steps-molise" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/skolp-steps-molise.jpg</image:loc>
+      <image:title>Steps - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Steps&quot; a Molise (2020) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/skolp-steps-molise</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/skolp-steps-molise" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/skolp-steps-molise" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/skolp-steps-molise" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/skolp-steps-molise.jpg</image:loc>
+      <image:title>Steps - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Steps&quot; a Molise (2020) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/matera-basket</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/matera-basket" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/matera-basket" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/matera-basket" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/matera-basket.jpg</image:loc>
+      <image:title>Concrete Crack - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Concrete Crack&quot; a Matera (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/matera-basket</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/matera-basket" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/matera-basket" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/matera-basket" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/matera-basket.jpg</image:loc>
+      <image:title>Concrete Crack - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Concrete Crack&quot; a Matera (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/matera-piazza</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/matera-piazza" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/matera-piazza" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/matera-piazza" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/matera-piazza.jpg</image:loc>
+      <image:title>Play Hard - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Play Hard&quot; a Matera (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/matera-piazza</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/matera-piazza" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/matera-piazza" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/matera-piazza" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/matera-piazza.jpg</image:loc>
+      <image:title>Play Hard - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Play Hard&quot; a Matera (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/mottola</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/mottola" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/mottola" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/mottola" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/mottola.jpg</image:loc>
+      <image:title>Mottola - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Mottola&quot; a Mottola (Taranto) (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/mottola</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/mottola" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/mottola" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/mottola" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/mottola.jpg</image:loc>
+      <image:title>Mottola - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Mottola&quot; a Mottola (Taranto) (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/ecopoli</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/ecopoli" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/ecopoli" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/ecopoli" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/ecopoli.jpg</image:loc>
+      <image:title>Ecopoli - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Ecopoli&quot; a Bari (2018) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/2018_EcopoliBiagio.jpg</image:loc>
+      <image:title>Ecopoli - Dettaglio murale</image:title>
+      <image:caption>Dettaglio e visuale dell&apos;opera murale &quot;Ecopoli&quot; - Nico Skolp.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/2018_Ecopoli_SKolp.jpg</image:loc>
+      <image:title>Ecopoli - Dettaglio murale</image:title>
+      <image:caption>Dettaglio e visuale dell&apos;opera murale &quot;Ecopoli&quot; - Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/ecopoli</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/ecopoli" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/ecopoli" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/ecopoli" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/ecopoli.jpg</image:loc>
+      <image:title>Ecopoli - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Ecopoli&quot; a Bari (2018) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/2018_EcopoliBiagio.jpg</image:loc>
+      <image:title>Ecopoli - Dettaglio murale</image:title>
+      <image:caption>Dettaglio e visuale dell&apos;opera murale &quot;Ecopoli&quot; - Nico Skolp.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/2018_Ecopoli_SKolp.jpg</image:loc>
+      <image:title>Ecopoli - Dettaglio murale</image:title>
+      <image:caption>Dettaglio e visuale dell&apos;opera murale &quot;Ecopoli&quot; - Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/expost-moderno</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/expost-moderno" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/expost-moderno" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/expost-moderno" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/expost-moderno.jpg</image:loc>
+      <image:title>Expost - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Expost&quot; a Bari (2017) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/expost-moderno</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/expost-moderno" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/expost-moderno" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/expost-moderno" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/expost-moderno.jpg</image:loc>
+      <image:title>Expost - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Expost&quot; a Bari (2017) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/umberto-eco-tribute</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/umberto-eco-tribute" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/umberto-eco-tribute" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/umberto-eco-tribute" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/umberto-eco-tribute.jpg</image:loc>
+      <image:title>Umberto Eco Tribute - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Umberto Eco Tribute&quot; a Matera (2018) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/umberto-eco-tribute</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/umberto-eco-tribute" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/umberto-eco-tribute" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/umberto-eco-tribute" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/umberto-eco-tribute.jpg</image:loc>
+      <image:title>Umberto Eco Tribute - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Umberto Eco Tribute&quot; a Matera (2018) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/ex-fadda</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/ex-fadda" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/ex-fadda" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/ex-fadda" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/ex-fadda.jpg</image:loc>
+      <image:title>ExFadda - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;ExFadda&quot; a San Vito dei Normanni (Brindisi) (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/ex-fadda</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/ex-fadda" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/ex-fadda" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/ex-fadda" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/ex-fadda.jpg</image:loc>
+      <image:title>ExFadda - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;ExFadda&quot; a San Vito dei Normanni (Brindisi) (2019) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/matera-alter</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/matera-alter" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/matera-alter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/matera-alter" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/matera-alter.jpg</image:loc>
+      <image:title>Matera&apos;s Stone - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Matera&apos;s Stone&quot; a Matera (2017) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/matera-alter</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/matera-alter" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/matera-alter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/matera-alter" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/matera-alter.jpg</image:loc>
+      <image:title>Matera&apos;s Stone - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Matera&apos;s Stone&quot; a Matera (2017) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/verso-sud-festival</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/verso-sud-festival" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/verso-sud-festival" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/verso-sud-festival" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/verso-sud-festival.jpg</image:loc>
+      <image:title>Verso Sud Festival - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Verso Sud Festival&quot; a Corato (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/verso-sud-festival</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/verso-sud-festival" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/verso-sud-festival" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/verso-sud-festival" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/verso-sud-festival.jpg</image:loc>
+      <image:title>Verso Sud Festival - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Verso Sud Festival&quot; a Corato (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/bar-project</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/bar-project" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/bar-project" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/bar-project" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/bar-project.jpg</image:loc>
+      <image:title>Bar Project - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Bar Project&quot; a Bari (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/bar-project</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/bar-project" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/bar-project" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/bar-project" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/bar-project.jpg</image:loc>
+      <image:title>Bar Project - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Bar Project&quot; a Bari (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/splash</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/splash" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/splash" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/splash" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/splash.jpg</image:loc>
+      <image:title>Splash - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Splash&quot; a Bari (2018) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/splash</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/splash" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/splash" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/splash" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/splash.jpg</image:loc>
+      <image:title>Splash - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Splash&quot; a Bari (2018) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/roma-binario18</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/roma-binario18" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/roma-binario18" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/roma-binario18" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/roma-binario18.jpg</image:loc>
+      <image:title>Binario 18 - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Binario 18&quot; a Roma (2018) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/roma-binario18</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/roma-binario18" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/roma-binario18" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/roma-binario18" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/roma-binario18.jpg</image:loc>
+      <image:title>Binario 18 - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Binario 18&quot; a Roma (2018) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/tempelhof</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/tempelhof" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/tempelhof" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/tempelhof" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/tempelhof.jpg</image:loc>
+      <image:title>Tempelhof - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Tempelhof&quot; a Berlin (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/tempelhof</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/tempelhof" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/tempelhof" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/tempelhof" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/tempelhof.jpg</image:loc>
+      <image:title>Tempelhof - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Tempelhof&quot; a Berlin (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/untitled</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/untitled" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/untitled" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/untitled" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/untitled.jpg</image:loc>
+      <image:title>Untitled - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Untitled&quot; a Matera (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/untitled</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/untitled" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/untitled" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/untitled" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/untitled.jpg</image:loc>
+      <image:title>Untitled - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Untitled&quot; a Matera (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/public-art/berlin-klub7</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/berlin-klub7" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/berlin-klub7" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/berlin-klub7" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/berlin-klub7.jpg</image:loc>
+      <image:title>Berlin Pipe - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Berlin Pipe&quot; a Berlin (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nicoskolp.com/en/public-art/berlin-klub7</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://nicoskolp.com/public-art/berlin-klub7" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicoskolp.com/en/public-art/berlin-klub7" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nicoskolp.com/public-art/berlin-klub7" />
+    <image:image>
+      <image:loc>https://nicoskolp.com/images/public-art/berlin-klub7.jpg</image:loc>
+      <image:title>Berlin Pipe - Murale di Nico Skolp</image:title>
+      <image:caption>Opera di arte urbana &quot;Berlin Pipe&quot; a Berlin (2015) realizzata da Nico Skolp.</image:caption>
+    </image:image>
+  </url>
+</urlset>

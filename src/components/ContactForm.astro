@@ -4,6 +4,16 @@
  * Modulo contatti asincrono con estetica minimalista fedele a Wix.
  * Invia richieste via POST verso /contact.php (backend PHP su Aruba).
  */
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang: propLang } = Astro.props;
+const currentLang = propLang || getLangFromUrl(Astro.url);
+const t = useTranslations(currentLang);
 ---
 
 <div class="w-full">
@@ -17,7 +27,7 @@
     <svg class="w-5 h-5 flex-shrink-0 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
     </svg>
-    <span class="font-medium tracking-wide">Il tuo modulo è stato inviato!</span>
+    <span class="font-medium tracking-wide">{t('contact.success')}</span>
   </div>
 
   <!-- Feedback Messaggio di Errore -->
@@ -30,10 +40,10 @@
     <svg class="w-5 h-5 flex-shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
     </svg>
-    <span id="contact-error-text" class="font-medium">Si è verificato un errore durante l'invio. Riprova più tardi.</span>
+    <span id="contact-error-text" class="font-medium">{t('contact.error')}</span>
   </div>
 
-  <form id="contact-form" class="space-y-6" novalidate>
+  <form id="contact-form" class="space-y-6" novalidate data-sending-text={t('contact.sending')} data-idle-text={t('contact.send')}>
     <!-- Honeypot anti-spam invisibile -->
     <input type="text" name="bot_field" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
@@ -41,7 +51,7 @@
       <!-- Campo Nome -->
       <div>
         <label for="contact-nome" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
-          Nome <span class="text-neutral-500">*</span>
+          {t('contact.name')} <span class="text-neutral-500">*</span>
         </label>
         <input
           type="text"
@@ -50,7 +60,7 @@
           required
           aria-required="true"
           autocomplete="given-name"
-          placeholder="Il tuo nome"
+          placeholder={t('contact.namePlaceholder')}
           class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
         />
       </div>
@@ -58,14 +68,14 @@
       <!-- Campo Cognome -->
       <div>
         <label for="contact-cognome" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
-          Cognome
+          {t('contact.surname')}
         </label>
         <input
           type="text"
           id="contact-cognome"
           name="cognome"
           autocomplete="family-name"
-          placeholder="Il tuo cognome"
+          placeholder={t('contact.surnamePlaceholder')}
           class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
         />
       </div>
@@ -75,7 +85,7 @@
       <!-- Campo Email -->
       <div>
         <label for="contact-email" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
-          Email <span class="text-neutral-500">*</span>
+          {t('contact.email')} <span class="text-neutral-500">*</span>
         </label>
         <input
           type="email"
@@ -84,7 +94,7 @@
           required
           aria-required="true"
           autocomplete="email"
-          placeholder="nome@esempio.com"
+          placeholder={t('contact.emailPlaceholder')}
           class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
         />
       </div>
@@ -92,14 +102,14 @@
       <!-- Campo Oggetto -->
       <div>
         <label for="contact-oggetto" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
-          Oggetto
+          {t('contact.subject')}
         </label>
         <input
           type="text"
           id="contact-oggetto"
           name="oggetto"
           autocomplete="off"
-          placeholder="Motivo del messaggio"
+          placeholder={t('contact.subjectPlaceholder')}
           class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none"
         />
       </div>
@@ -108,7 +118,7 @@
     <!-- Campo Messaggio -->
     <div>
       <label for="contact-messaggio" class="block font-sans text-xs font-semibold uppercase tracking-wider text-black mb-2">
-        Messaggio <span class="text-neutral-500">*</span>
+        {t('contact.message')} <span class="text-neutral-500">*</span>
       </label>
       <textarea
         id="contact-messaggio"
@@ -116,7 +126,7 @@
         rows="5"
         required
         aria-required="true"
-        placeholder="Scrivi qui il tuo messaggio..."
+        placeholder={t('contact.messagePlaceholder')}
         class="w-full px-4 py-3 bg-white border border-[#e2e2e2] text-black text-sm font-sans placeholder:text-neutral-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors rounded-none resize-y min-h-[130px]"
       ></textarea>
     </div>
@@ -139,7 +149,7 @@
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        <span id="contact-submit-text">Invia</span>
+        <span id="contact-submit-text">{t('contact.send')}</span>
       </button>
     </div>
   </form>
@@ -225,10 +235,13 @@
         return;
       }
 
+      const sendingText = form.getAttribute('data-sending-text') || 'Invio in corso...';
+      const idleText = form.getAttribute('data-idle-text') || 'Invia';
+
       // Stato di invio (loading)
       if (submitBtn) submitBtn.disabled = true;
       if (submitSpinner) submitSpinner.classList.remove('hidden');
-      if (submitText) submitText.textContent = 'Invio in corso...';
+      if (submitText) submitText.textContent = sendingText;
 
       try {
         const response = await fetch('/contact.php', {
@@ -254,7 +267,7 @@
       } finally {
         if (submitBtn) submitBtn.disabled = false;
         if (submitSpinner) submitSpinner.classList.add('hidden');
-        if (submitText) submitText.textContent = 'Invia';
+        if (submitText) submitText.textContent = idleText;
       }
     });
   }

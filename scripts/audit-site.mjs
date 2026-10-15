@@ -80,12 +80,21 @@ const expectedPages = [
   'archive/index.html', // Legacy redirect page
   'contact.php',
   '.htaccess',
+  'robots.txt',
+  'sitemap.xml',
+  // Multilingual EN routes
+  'en/index.html',
+  'en/public-art/index.html',
+  'en/graffiti/index.html',
+  'en/about-me/index.html',
+  'en/skolp-archive/index.html',
 ];
 
 if (Array.isArray(publicArtProjects)) {
   for (const project of publicArtProjects) {
     if (project.slug) {
-      expectedPages.push(`public-art/${project.slug}/index.html`); // Detail page
+      expectedPages.push(`public-art/${project.slug}/index.html`); // Italian detail page
+      expectedPages.push(`en/public-art/${project.slug}/index.html`); // English detail page
       expectedPages.push(`${project.slug}/index.html`); // Legacy redirect page
     }
   }
@@ -158,20 +167,33 @@ for (const htmlFile of htmlFiles) {
       addError(`Missing or empty <meta name="description"> in: ${relHtml}`);
     }
 
-    const canonicalMatch = content.match(/<link\b([^>]*)>/gi);
+    const linkMatches = [...content.matchAll(/<link\b([^>]*)>/gi)];
     let hasCanonical = false;
-    if (canonicalMatch) {
-      for (const linkTag of canonicalMatch) {
-        const rel = getAttr(linkTag, 'rel');
-        const href = getAttr(linkTag, 'href');
-        if (rel && rel.toLowerCase() === 'canonical' && href && href.trim()) {
-          hasCanonical = true;
-          break;
-        }
+    let hasHreflangIt = false;
+    let hasHreflangEn = false;
+
+    for (const linkTag of linkMatches) {
+      const rel = getAttr(linkTag[1], 'rel');
+      const href = getAttr(linkTag[1], 'href');
+      const hreflang = getAttr(linkTag[1], 'hreflang');
+
+      if (rel && rel.toLowerCase() === 'canonical' && href && href.trim()) {
+        hasCanonical = true;
+      }
+      if (rel && rel.toLowerCase() === 'alternate' && hreflang) {
+        if (hreflang.toLowerCase() === 'it') hasHreflangIt = true;
+        if (hreflang.toLowerCase() === 'en') hasHreflangEn = true;
       }
     }
+
     if (!hasCanonical) {
       addError(`Missing <link rel="canonical"> in: ${relHtml}`);
+    }
+    if (!hasHreflangIt) {
+      addError(`Missing <link rel="alternate" hreflang="it"> in: ${relHtml}`);
+    }
+    if (!hasHreflangEn) {
+      addError(`Missing <link rel="alternate" hreflang="en"> in: ${relHtml}`);
     }
 
     // OpenGraph tags
