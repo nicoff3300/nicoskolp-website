@@ -157,17 +157,17 @@ git commit -m "chore: inizializzazione progetto Astro e configurazione git"
 **Interfacce:**
 - Produce: Asset grafici e fotografici in alta risoluzione organizzati e pronti per essere serviti staticamente.
 
-- [ ] **Passaggio 1: Scrittura dello script di migrazione `scripts/migrate-assets.py`**
+- [x] **Passaggio 1: Scrittura dello script di migrazione `scripts/migrate-assets.py`**
 Lo script copia i file già presenti nella cartella locale `/Volumes/SSD_Skolp/Skolp/ARTE_URBANA/Wix_site` e scarica ad alta risoluzione le immagini mancanti da `static.wixstatic.com/media/`.
 
-- [ ] **Passaggio 2: Esecuzione dello script di migrazione**
+- [x] **Passaggio 2: Esecuzione dello script di migrazione**
 Esegui: `python3 scripts/migrate-assets.py`
 Atteso: Tutte le immagini dei 22 progetti di Public Art, delle 25 foto di Graffiti, dell'Archivio e del logo Wallness/Skolp sono presenti in `public/images/`.
 
-- [ ] **Passaggio 3: Configurazione dei Web Font in `public/fonts/`**
+- [x] **Passaggio 3: Configurazione dei Web Font in `public/fonts/`**
 Organizzazione dei file `@font-face` per Druk Text Wide e Open Sans (formati woff2/woff).
 
-- [ ] **Passaggio 4: Commit degli asset**
+- [x] **Passaggio 4: Commit degli asset**
 
 ```bash
 git add scripts/ public/fonts/ public/images/
