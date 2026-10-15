@@ -83,7 +83,7 @@ const initialMeta = firstItem ? [firstItem.city, firstItem.year].filter(Boolean)
 </dialog>
 
 <!-- Dati JSON sicuri per l'idratazione lato client -->
-<script type="application/json" id="lightbox-data" set:html={JSON.stringify(items)} />
+<script type="application/json" id="lightbox-data" set:html={JSON.stringify(items).replace(/</g, '\\u003c')} />
 
 <style>
   #lightbox-dialog:not([open]) {

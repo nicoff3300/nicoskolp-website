@@ -60,6 +60,8 @@ const lightboxItems: LightboxItem[] = archiveItems.map((item) => ({
                   loading={isLCP ? 'eager' : 'lazy'}
                   fetchpriority={isLCP ? 'high' : 'auto'}
                   decoding="async"
+                  width="800"
+                  height="600"
                   class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                 />
 
