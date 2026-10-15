@@ -37,9 +37,10 @@ jobs:
       - name: 🚀 Compila sito Astro (dist)
         run: npm run build
 
-      - name: 🔍 Esplora directory FTP Aruba
+      - name: 🧹 Rimuovi file default Aruba (index.php di cortesia)
         run: |
-          curl --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/" || true
+          curl --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/www.nicoskolp.com/" -Q "-DELE index.php" || true
+          curl --ssl-reqd --insecure -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" "ftp://${{ secrets.FTP_SERVER }}/www.nicoskolp.com/" -Q "-DELE default.html" || true
 
       - name: 📤 Deploy FTPS su Aruba
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
