@@ -25,44 +25,17 @@ const collaborationMotto = siteConfig.bio[4] || 'Collaboration welcomed';
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start mb-20 sm:mb-24" aria-label="Biografia e percorso artistico">
       <!-- Colonna Visual (5 colonne) -->
       <div class="lg:col-span-5 lg:sticky lg:top-28">
-        <div class="bg-[#fcfcfc] border border-[#e2e2e2] p-8 sm:p-10 flex flex-col items-center justify-center text-center space-y-8">
-          <!-- Monogramma e origine -->
-          <div class="flex items-center gap-2.5 text-xs font-sans uppercase tracking-widest text-[#8f8f8f]">
-            <img
-              src="/images/brand/monogram.png"
-              alt="Nico Skolp Monogram"
-              class="w-5 h-5 object-contain"
-              width="20"
-              height="20"
-            />
-            <span>Est. 1997 • Bari, Italy</span>
-          </div>
-
-          <!-- Visual artistico principale: Skolp_graphic.png -->
-          <div class="w-full flex items-center justify-center py-4">
-            <img
-              src="/images/brand/Skolp_graphic.png"
-              alt="Nico Skolp Graphic Artwork"
-              class="w-full max-w-[340px] h-auto object-contain transition-transform duration-300 hover:scale-105"
-              width="673"
-              height="162"
-              loading="eager"
-            />
-          </div>
-
-          <!-- Banner animato secondario: skolp_gif.gif -->
-          <div class="w-full pt-6 border-t border-[#e2e2e2] flex flex-col items-center gap-3">
-            <img
-              src="/images/brand/skolp_gif.gif"
-              alt="Skolp animated ticker"
-              class="h-6 w-auto object-contain opacity-85"
-              width="400"
-              height="32"
-            />
-            <span class="font-druk font-bold text-[11px] uppercase tracking-widest text-black/70">
-              Muralism & Geometric Abstraction
-            </span>
-          </div>
+        <div class="relative w-full aspect-[4/5] bg-[#fcfcfc] border border-[#e2e2e2] overflow-hidden shadow-xs">
+          <img
+            src="/images/brand/Nico_skolp.jpg"
+            alt="Nico Skolp al lavoro su murale"
+            width="819"
+            height="1024"
+            class="w-full h-full object-cover select-none"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
         </div>
       </div>
 
