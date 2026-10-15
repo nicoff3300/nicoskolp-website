@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Pagina non trovata (404) - Nico Skolp" description="La pagina richiesta non è stata trovata. Torna alla home o esplora il portfolio di Nico Skolp.">
+  <section class="min-h-[70vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20 text-center">
+    <div class="max-w-xl mx-auto">
+      <p class="font-druk font-bold text-6xl sm:text-8xl text-black tracking-wider mb-4">
+        404
+      </p>
+      <h1 class="font-druk font-bold text-xl sm:text-2xl uppercase tracking-wider text-black mb-4">
+        Pagina non trovata
+      </h1>
+      <p class="font-sans text-sm sm:text-base text-neutral-600 mb-8 leading-relaxed">
+        La pagina che stai cercando non esiste o è stata spostata. Esplora le sezioni del sito o torna alla homepage.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/"
+          class="no-underline inline-flex items-center justify-center px-6 py-3.5 bg-black text-white font-druk font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+        >
+          Torna alla Home
+        </a>
+        <a
+          href="/public-art"
+          class="no-underline inline-flex items-center justify-center px-6 py-3.5 border border-black text-black font-druk font-bold text-xs uppercase tracking-wider hover:bg-black hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+        >
+          Public Art
+        </a>
+        <a
+          href="/graffiti"
+          class="no-underline inline-flex items-center justify-center px-6 py-3.5 border border-black text-black font-druk font-bold text-xs uppercase tracking-wider hover:bg-black hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+        >
+          Graffiti
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

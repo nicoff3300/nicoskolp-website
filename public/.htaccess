@@ -1,6 +1,9 @@
 # Imposta index.html come priorità principale per Apache su Aruba
 DirectoryIndex index.html index.php default.html
 
+# Pagina di errore 404 personalizzata
+ErrorDocument 404 /404.html
+
 # Reindirizzamento HTTPS automatico
 <IfModule mod_rewrite.c>
   RewriteEngine On
