@@ -76,7 +76,6 @@ const expectedPages = [
   'public-art/index.html',
   'graffiti/index.html',
   'about-me/index.html',
-  'digitalart/index.html',
   'skolp-archive/index.html',
   'archive/index.html', // Legacy redirect page
   'contact.php',
