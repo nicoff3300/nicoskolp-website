@@ -89,7 +89,7 @@ export const ui = {
 
     // Footer
     'footer.follow': 'seguimi su:',
-    'footer.archiveCta': 'Guarda qui il mio ARCHIVIO',
+    'footer.archiveCta': 'Archivio',
     'footer.memberOf': 'member of:',
 
     // SEO & GEO
@@ -178,7 +178,7 @@ export const ui = {
 
     // Footer
     'footer.follow': 'follow me on:',
-    'footer.archiveCta': 'Check out my ARCHIVE here',
+    'footer.archiveCta': 'Archive here',
     'footer.memberOf': 'member of:',
 
     // SEO & GEO
