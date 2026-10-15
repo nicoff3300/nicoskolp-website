@@ -16,7 +16,7 @@ const metaText = metaParts.join(' • ');
   <a
     href={`/public-art/${project.slug}`}
     class="no-underline flex flex-col h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
-    aria-label={`Vedi opera ${project.title}`}
+    aria-label={`Vedi opera ${project.title}${metaText ? `, ${metaText}` : ''}`}
   >
     <div class="relative w-full aspect-[4/3] bg-[#fcfcfc] overflow-hidden">
       <img

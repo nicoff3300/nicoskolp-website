@@ -25,9 +25,7 @@ interface Props {
 const { project, prevProject, nextProject } = Astro.props;
 
 // Filtra eventuali immagini aggiuntive diverse dalla coverImage principale
-const additionalImages = project.galleryImages
-  ? project.galleryImages.filter((img, idx) => img !== project.coverImage || idx > 0)
-  : [];
+const additionalImages = (project.galleryImages || []).filter((img) => img !== project.coverImage);
 ---
 
 <BaseLayout
@@ -41,7 +39,7 @@ const additionalImages = project.galleryImages
     <nav class="mb-8 sm:mb-10" aria-label="Breadcrumb">
       <a
         href="/public-art"
-        class="no-underline inline-flex items-center gap-2 font-druk font-medium text-xs sm:text-sm uppercase tracking-wider text-[#8f8f8f] hover:text-black transition-colors"
+        class="no-underline inline-flex items-center gap-2 font-druk font-medium text-xs sm:text-sm uppercase tracking-wider text-[#8f8f8f] hover:text-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
       >
         <span aria-hidden="true">←</span>
         <span>Torna a Public Art</span>
@@ -63,7 +61,7 @@ const additionalImages = project.galleryImages
     </header>
 
     <!-- Immagine Monumentale Principale -->
-    <div class="border border-[#e2e2e2] bg-[#fcfcfc] overflow-hidden mb-8 sm:mb-12">
+    <div class="border border-[#e2e2e2] bg-[#fcfcfc] overflow-hidden mb-8 sm:mb-12 min-h-[360px] sm:min-h-[480px]">
       <img
         src={project.coverImage}
         alt={`Murales ${project.title}${project.city ? ` a ${project.city}` : ''}${project.year ? ` (${project.year})` : ''}`}
@@ -128,7 +126,7 @@ const additionalImages = project.galleryImages
 
         <a
           href="/public-art"
-          class="no-underline hidden sm:inline-block font-druk font-bold text-xs uppercase tracking-wider px-5 py-2.5 border border-[#e2e2e2] hover:border-black hover:bg-black hover:text-white transition-colors text-center shrink-0"
+          class="no-underline hidden sm:inline-block font-druk font-bold text-xs uppercase tracking-wider px-5 py-2.5 border border-[#e2e2e2] hover:border-black hover:bg-black hover:text-white transition-colors text-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
         >
           Tutti i murales
         </a>

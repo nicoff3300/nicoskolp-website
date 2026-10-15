@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://nicoskolp.com',
   output: 'static',
+  trailingSlash: 'never',
   build: {
     format: 'directory',
     assets: 'assets'
