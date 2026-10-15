@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectGallery from '../../components/ProjectGallery.astro';
+import Lightbox from '../../components/Lightbox.astro';
 import publicArtData from '../../data/public-art.json';
-import type { Project } from '../../types';
+import type { Project, LightboxItem } from '../../types';
 
 export async function getStaticPaths() {
   const projects = publicArtData as Project[];
@@ -24,8 +26,20 @@ interface Props {
 
 const { project, prevProject, nextProject } = Astro.props;
 
-// Filtra eventuali immagini aggiuntive diverse dalla coverImage principale
-const additionalImages = (project.galleryImages || []).filter((img) => img !== project.coverImage);
+// Lista completa di tutte le immagini della galleria del progetto
+const galleryImages = (project.galleryImages && project.galleryImages.length > 0)
+  ? project.galleryImages
+  : [project.coverImage];
+
+// Elementi per il visualizzatore Lightbox a schermo intero
+const lightboxItems: LightboxItem[] = galleryImages.map((imgUrl, idx) => ({
+  id: `${project.slug}-${idx + 1}`,
+  title: project.title,
+  year: project.year,
+  city: project.city,
+  image: imgUrl,
+  description: project.description,
+}));
 
 // Schema.org VisualArtwork per Google Image e Ricerca
 const visualArtworkSchema = {
@@ -55,9 +69,9 @@ const visualArtworkSchema = {
   canonical={`/public-art/${project.slug}`}
   jsonLd={visualArtworkSchema}
 >
-  <article class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+  <article class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14">
     <!-- Link Breadcrumb Torna a Public Art -->
-    <nav class="mb-8 sm:mb-10" aria-label="Breadcrumb">
+    <nav class="mb-6 sm:mb-8" aria-label="Breadcrumb">
       <a
         href="/public-art"
         class="no-underline inline-flex items-center gap-2 font-druk font-medium text-xs sm:text-sm uppercase tracking-wider text-[#8f8f8f] hover:text-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
@@ -68,7 +82,7 @@ const visualArtworkSchema = {
     </nav>
 
     <!-- Header Opera: Metadati e Titolo -->
-    <header class="mb-8 sm:mb-12">
+    <header class="mb-6 sm:mb-10">
       {(project.city || project.year) && (
         <div class="flex items-center gap-2 text-xs sm:text-sm font-sans uppercase tracking-wider text-[#8f8f8f] mb-3">
           {project.city && <span>{project.city}</span>}
@@ -79,50 +93,22 @@ const visualArtworkSchema = {
       <h1 class="font-druk font-bold text-2xl sm:text-3xl md:text-4xl uppercase tracking-wider text-black leading-tight">
         {project.title}
       </h1>
-    </header>
-
-    <!-- Immagine Monumentale Principale -->
-    <div class="border border-[#e2e2e2] bg-[#fcfcfc] overflow-hidden mb-8 sm:mb-12 min-h-[360px] sm:min-h-[480px]">
-      <img
-        src={project.coverImage}
-        alt={`Murales ${project.title}${project.city ? ` a ${project.city}` : ''}${project.year ? ` (${project.year})` : ''}`}
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        class="w-full h-auto object-cover max-h-[85vh] mx-auto block"
-      />
-    </div>
-
-    <!-- Testo / Descrizione dell'opera -->
-    {project.description && (
-      <div class="max-w-3xl mb-10 sm:mb-14">
-        <p class="font-sans text-base sm:text-lg leading-relaxed text-neutral-800">
+      {project.description && (
+        <p class="font-sans text-base sm:text-lg leading-relaxed text-neutral-700 mt-4 max-w-3xl">
           {project.description}
         </p>
-      </div>
-    )}
+      )}
+    </header>
 
-    <!-- Galleria Foto Aggiuntive / Backstage (se presenti ulteriori immagini) -->
-    {additionalImages.length > 0 && (
-      <section class="mt-12 sm:mt-16 pt-10 sm:pt-14 border-t border-[#e2e2e2]" aria-label="Galleria foto e dettagli">
-        <h2 class="font-druk font-bold text-lg sm:text-xl uppercase tracking-wider text-black mb-6 sm:mb-8">
-          Galleria Foto & Dettagli
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-          {additionalImages.map((imgUrl, imgIndex) => (
-            <figure class="group border border-[#e2e2e2] bg-[#fcfcfc] overflow-hidden transition-all duration-300 hover:border-black hover:shadow-md">
-              <img
-                src={imgUrl}
-                alt={`${project.title} - Foto ${imgIndex + 1}`}
-                loading="lazy"
-                decoding="async"
-                class="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-              />
-            </figure>
-          ))}
-        </div>
-      </section>
-    )}
+    <!-- Galleria Fotografica Dinamica a Griglia Collage (Wix Style) -->
+    <section class="mb-12 sm:mb-16" aria-label={`Galleria fotografica ${project.title}`}>
+      <ProjectGallery
+        images={galleryImages}
+        title={project.title}
+        year={project.year}
+        city={project.city}
+      />
+    </section>
 
     <!-- Navigazione tra Opere (Precedente / Successivo) -->
     <nav class="border-t border-[#e2e2e2] pt-8 sm:pt-12 mt-12 sm:mt-16" aria-label="Navigazione tra opere">
@@ -172,4 +158,7 @@ const visualArtworkSchema = {
       </div>
     </nav>
   </article>
+
+  <!-- Visualizzatore Modale Lightbox Nativo Fullscreen -->
+  <Lightbox items={lightboxItems} />
 </BaseLayout>

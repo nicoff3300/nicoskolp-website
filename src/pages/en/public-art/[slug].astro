@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProjectGallery from '../../../components/ProjectGallery.astro';
+import Lightbox from '../../../components/Lightbox.astro';
 import publicArtData from '../../../data/public-art.json';
-import type { Project } from '../../../types';
+import type { Project, LightboxItem } from '../../../types';
 import { useTranslations } from '../../../i18n/utils';
 
 export async function getStaticPaths() {
@@ -26,8 +28,20 @@ interface Props {
 const { project, prevProject, nextProject } = Astro.props;
 const t = useTranslations('en');
 
-// Filter additional gallery images
-const additionalImages = (project.galleryImages || []).filter((img) => img !== project.coverImage);
+// Full gallery image collection for the project
+const galleryImages = (project.galleryImages && project.galleryImages.length > 0)
+  ? project.galleryImages
+  : [project.coverImage];
+
+// Lightbox full-screen viewer items
+const lightboxItems: LightboxItem[] = galleryImages.map((imgUrl, idx) => ({
+  id: `${project.slug}-${idx + 1}`,
+  title: project.title,
+  year: project.year,
+  city: project.city,
+  image: imgUrl,
+  description: project.description,
+}));
 
 // Specific VisualArtwork Schema.org for Google Search & Image Search
 const visualArtworkSchema = {
@@ -56,9 +70,9 @@ const visualArtworkSchema = {
   image={project.coverImage}
   jsonLd={visualArtworkSchema}
 >
-  <article class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+  <article class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14">
     <!-- Breadcrumb Link Back to Public Art -->
-    <nav class="mb-8 sm:mb-10" aria-label="Breadcrumb">
+    <nav class="mb-6 sm:mb-8" aria-label="Breadcrumb">
       <a
         href="/en/public-art"
         class="no-underline inline-flex items-center gap-2 font-druk font-medium text-xs sm:text-sm uppercase tracking-wider text-[#8f8f8f] hover:text-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
@@ -69,7 +83,7 @@ const visualArtworkSchema = {
     </nav>
 
     <!-- Artwork Header: Metadata and Title -->
-    <header class="mb-8 sm:mb-12">
+    <header class="mb-6 sm:mb-10">
       {(project.city || project.year) && (
         <div class="flex items-center gap-2 text-xs sm:text-sm font-sans uppercase tracking-wider text-[#8f8f8f] mb-3">
           {project.city && <span>{project.city}</span>}
@@ -80,50 +94,22 @@ const visualArtworkSchema = {
       <h1 class="font-druk font-bold text-2xl sm:text-3xl md:text-4xl uppercase tracking-wider text-black leading-tight">
         {project.title}
       </h1>
-    </header>
-
-    <!-- Monumental Cover Image -->
-    <div class="border border-[#e2e2e2] bg-[#fcfcfc] overflow-hidden mb-8 sm:mb-12 min-h-[360px] sm:min-h-[480px]">
-      <img
-        src={project.coverImage}
-        alt={`Mural ${project.title}${project.city ? ` in ${project.city}` : ''}${project.year ? ` (${project.year})` : ''}`}
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        class="w-full h-auto object-cover max-h-[85vh] mx-auto block"
-      />
-    </div>
-
-    <!-- Artwork Description -->
-    {project.description && (
-      <div class="max-w-3xl mb-10 sm:mb-14">
-        <p class="font-sans text-base sm:text-lg leading-relaxed text-neutral-800">
+      {project.description && (
+        <p class="font-sans text-base sm:text-lg leading-relaxed text-neutral-700 mt-4 max-w-3xl">
           {project.description}
         </p>
-      </div>
-    )}
+      )}
+    </header>
 
-    <!-- Additional Gallery / Backstage Images -->
-    {additionalImages.length > 0 && (
-      <section class="mt-12 sm:mt-16 pt-10 sm:pt-14 border-t border-[#e2e2e2]" aria-label="Photo gallery and details">
-        <h2 class="font-druk font-bold text-lg sm:text-xl uppercase tracking-wider text-black mb-6 sm:mb-8">
-          {t('publicArt.gallery')}
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-          {additionalImages.map((imgUrl, imgIndex) => (
-            <figure class="group border border-[#e2e2e2] bg-[#fcfcfc] overflow-hidden transition-all duration-300 hover:border-black hover:shadow-md">
-              <img
-                src={imgUrl}
-                alt={`${project.title} - Photo ${imgIndex + 1}`}
-                loading="lazy"
-                decoding="async"
-                class="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-              />
-            </figure>
-          ))}
-        </div>
-      </section>
-    )}
+    <!-- Dynamic Photo Gallery Bento Grid (Wix Style) -->
+    <section class="mb-12 sm:mb-16" aria-label={`Photo gallery ${project.title}`}>
+      <ProjectGallery
+        images={galleryImages}
+        title={project.title}
+        year={project.year}
+        city={project.city}
+      />
+    </section>
 
     <!-- Project Prev / Next Navigation -->
     <nav class="border-t border-[#e2e2e2] pt-8 sm:pt-12 mt-12 sm:mt-16" aria-label="Project navigation">
@@ -173,4 +159,7 @@ const visualArtworkSchema = {
       </div>
     </nav>
   </article>
+
+  <!-- Fullscreen Native Lightbox Modal Viewer -->
+  <Lightbox items={lightboxItems} />
 </BaseLayout>
