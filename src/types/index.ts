@@ -90,5 +90,6 @@ export interface PressArticle {
   quote: string;
   quoteEn?: string;
   url: string;
+  urlEn?: string;
   featured?: boolean;
 }
