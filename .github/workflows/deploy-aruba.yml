@@ -43,9 +43,29 @@ jobs:
       - name: 🩺 Audit e validazione build di produzione
         run: npm run audit
 
+      - name: 🌐 Risoluzione host FTP con fallback intelligente
+        id: ftp-host
+        env:
+          FTP_SERVER_SECRET: ${{ secrets.FTP_SERVER }}
+        run: |
+          python3 -c '
+          import socket, sys, os
+          host = os.environ.get("FTP_SERVER_SECRET", "").strip() or "ftp.nicoskolp.com"
+          resolved = host
+          try:
+              socket.getaddrinfo(host, 21)
+              sys.stderr.write(f"✅ Host FTP \"{host}\" risolto con successo via DNS.\n")
+          except Exception as e:
+              resolved = "89.46.104.218"
+              sys.stderr.write(f"⚠️ Impossibile risolvere \"{host}\" via DNS ({e}). Utilizzo fallback IP cluster Aruba: {resolved}\n")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"host={resolved}\n")
+          '
+
       - name: 🧹 Rimuovi file default Aruba (file di cortesia)
         env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_SERVER: ${{ steps.ftp-host.outputs.host }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           TARGET_DIR: ${{ secrets.FTP_SERVER_DIR || 'www.nicoskolp.com/' }}
@@ -68,7 +88,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         continue-on-error: true
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ steps.ftp-host.outputs.host }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR || 'www.nicoskolp.com/' }}
@@ -82,7 +102,7 @@ jobs:
         if: steps.deploy-ftps.outcome == 'failure'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ steps.ftp-host.outputs.host }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR || 'www.nicoskolp.com/' }}
@@ -90,3 +110,4 @@ jobs:
           protocol: ftp
           port: 21
           dangerous-clean-slate: false
+
