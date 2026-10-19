@@ -125,6 +125,36 @@
     "featured": false
   },
   {
+    "id": "quotidiano-puglia-taranto-basket",
+    "title": "Riqualificazione, arriva il primo campo di basket pubblico a Taranto",
+    "titleEn": "Urban Regeneration: The First Public Basketball Court Arrives in Taranto",
+    "outlet": "Quotidiano di Puglia",
+    "date": "31 Dicembre 2022",
+    "year": "2022",
+    "type": "Daily",
+    "project": "Lost & Found Arena • T.R.U.St. Taranto",
+    "city": "Taranto",
+    "quote": "La volontà di donare alla città uno spazio aperto a tutti, un playground votato allo sport e all'aggregazione sociale, ha visto naturale compimento nella collaborazione con Progetto Trust e gli artisti del collettivo Wallness Club.",
+    "quoteEn": "The desire to gift the city a space open to everyone, a playground dedicated to sports and social aggregation, found natural fulfillment in collaboration with Project Trust and the artists of the Wallness Club collective.",
+    "url": "https://www.quotidianodipuglia.it/taranto/riqualificazione_primo_campo_basket_pubblico-7142839.html",
+    "featured": false
+  },
+  {
+    "id": "giornale-rossoblu-taranto-basket",
+    "title": "Taranto, nasce il primo campo di basket gratuito: Lost & Found Arena",
+    "titleEn": "Taranto, The First Free Basketball Court is Born: Lost & Found Arena",
+    "outlet": "Giornale RossoBlu",
+    "date": "31 Dicembre 2022",
+    "year": "2022",
+    "type": "Webzine",
+    "project": "Lost & Found Arena • T.R.U.St. Taranto",
+    "city": "Taranto",
+    "quote": "La Lost & Found Arena nasce dall'impegno di Sneakers Academy insieme a Progetto Trust e agli artisti di Wallness Club per trasformare un'area degradata in un playground d'arte e sport gratuito per la comunità.",
+    "quoteEn": "The Lost & Found Arena was born from the commitment of Sneakers Academy alongside Project Trust and the Wallness Club artists, transforming an abandoned space into a free art and sports playground for the community.",
+    "url": "https://giornalerossoblu.it/nasce-il-primo-campo-di-basket-gratuito/",
+    "featured": false
+  },
+  {
     "id": "collateral-28-rovigo",
     "title": "28 – L'opera d'arte pavimentale di Nico Skolp a Rovigo",
     "titleEn": "28 – Nico Skolp's geometric pavement artwork in Rovigo",
