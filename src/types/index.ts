@@ -84,12 +84,17 @@ export interface PressArticle {
   outlet: string;
   date?: string;
   year: string;
-  type: 'Magazine' | 'Daily' | 'Webzine' | 'Art Review' | 'Interview';
+  type: 'Magazine' | 'Daily' | 'Webzine' | 'Art Review' | 'Interview' | 'TV / Special' | 'TV';
   project?: string;
   city?: string;
   quote: string;
   quoteEn?: string;
   url: string;
   urlEn?: string;
+  primaryLabel?: string;
+  primaryLabelEn?: string;
+  secondaryUrl?: string;
+  secondaryLabel?: string;
+  secondaryLabelEn?: string;
   featured?: boolean;
 }

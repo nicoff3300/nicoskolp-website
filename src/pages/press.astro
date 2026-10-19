@@ -59,22 +59,36 @@ const regularArticles = articles.filter((a) => !a.featured);
                 </blockquote>
               </div>
 
-              <div class="pt-6 mt-6 border-t border-[#e2e2e2] flex items-center justify-between">
+              <div class="pt-6 mt-6 border-t border-[#e2e2e2] flex flex-wrap items-center justify-between gap-3">
                 {article.city && (
                   <span class="font-sans text-xs text-neutral-500 uppercase tracking-wider">
                     {article.city}
                   </span>
                 )}
-                <a
-                  href={article.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="no-underline inline-flex items-center gap-1.5 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 ml-auto focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
-                  aria-label={`Leggi articolo su ${article.outlet}: ${article.title} (apre una nuova scheda)`}
-                >
-                  <span>{t('press.readArticle')}</span>
-                  <span aria-hidden="true" class="text-sm transition-transform duration-150 group-hover:translate-x-0.5">&nearr;</span>
-                </a>
+                <div class="flex flex-wrap items-center gap-3 ml-auto">
+                  {article.secondaryUrl && (
+                    <a
+                      href={article.secondaryUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="no-underline inline-flex items-center gap-1.5 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
+                      aria-label={`${article.secondaryLabel || 'Guarda video'}: ${article.title} (apre una nuova scheda)`}
+                    >
+                      <span>{article.secondaryLabel || 'Guarda video'}</span>
+                      <span aria-hidden="true" class="text-sm transition-transform duration-150 group-hover:translate-x-0.5">&nearr;</span>
+                    </a>
+                  )}
+                  <a
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="no-underline inline-flex items-center gap-1.5 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
+                    aria-label={`${article.primaryLabel || t('press.readArticle')} su ${article.outlet}: ${article.title} (apre una nuova scheda)`}
+                  >
+                    <span>{article.primaryLabel || t('press.readArticle')}</span>
+                    <span aria-hidden="true" class="text-sm transition-transform duration-150 group-hover:translate-x-0.5">&nearr;</span>
+                  </a>
+                </div>
               </div>
             </article>
           ))}
@@ -114,22 +128,36 @@ const regularArticles = articles.filter((a) => !a.featured);
               </p>
             </div>
 
-            <div class="pt-4 mt-5 border-t border-[#e2e2e2]/70 flex items-center justify-between">
+            <div class="pt-4 mt-5 border-t border-[#e2e2e2]/70 flex flex-wrap items-center justify-between gap-2">
               {article.project && (
-                <span class="font-sans text-[11px] text-neutral-400 uppercase tracking-wider truncate max-w-[55%]">
+                <span class="font-sans text-[11px] text-neutral-400 uppercase tracking-wider truncate max-w-[50%]">
                   {article.project}
                 </span>
               )}
-              <a
-                href={article.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="no-underline inline-flex items-center gap-1 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 ml-auto focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
-                aria-label={`Leggi su ${article.outlet}: ${article.title} (apre una nuova scheda)`}
-              >
-                <span>{t('press.readArticle')}</span>
-                <span aria-hidden="true">&nearr;</span>
-              </a>
+              <div class="flex flex-wrap items-center gap-2.5 ml-auto">
+                {article.secondaryUrl && (
+                  <a
+                    href={article.secondaryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="no-underline inline-flex items-center gap-1 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
+                    aria-label={`${article.secondaryLabel || 'Guarda video'}: ${article.title} (apre una nuova scheda)`}
+                  >
+                    <span>{article.secondaryLabel || 'Guarda video'}</span>
+                    <span aria-hidden="true">&nearr;</span>
+                  </a>
+                )}
+                <a
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="no-underline inline-flex items-center gap-1 font-druk font-bold text-xs uppercase tracking-wider text-black hover:underline underline-offset-4 focus:outline-none focus-visible:ring-1 focus-visible:ring-black"
+                  aria-label={`${article.primaryLabel || t('press.readArticle')} su ${article.outlet}: ${article.title} (apre una nuova scheda)`}
+                >
+                  <span>{article.primaryLabel || t('press.readArticle')}</span>
+                  <span aria-hidden="true">&nearr;</span>
+                </a>
+              </div>
             </div>
           </article>
         ))}

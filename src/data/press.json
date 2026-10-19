@@ -1,5 +1,25 @@
 [
   {
+    "id": "rai5-art-night-banca-italia",
+    "title": "RAI 5 – Art Night: 'Storia di una collezione. L'arte in Banca d'Italia'",
+    "titleEn": "RAI 5 – Art Night: 'History of a Collection. Art in the Bank of Italy'",
+    "outlet": "RAI 5 • Art Night (Neri Marcorè)",
+    "date": "Aprile 2023",
+    "year": "2023",
+    "type": "TV / Special",
+    "project": "Collezione d'Arte della Banca d'Italia",
+    "city": "Roma / Nazionale",
+    "quote": "All'interno dello speciale dedicato al patrimonio artistico dell'istituto, vengono presentate le opere di Nico Skolp entrate a far parte della collezione d'arte contemporanea della Banca d'Italia.",
+    "quoteEn": "Inside the television special dedicated to the institution's artistic heritage, artworks by Nico Skolp acquired into the Bank of Italy's contemporary art collection are featured.",
+    "url": "https://www.rai.it/ufficiostampa/assets/template/us-articolo.html?ssiPath=/articoli/2023/04/Art-Night--ec53e1b8-c148-4a5c-9643-c4ad3ed2a12c-ssi.html",
+    "primaryLabel": "Comunicato RAI",
+    "primaryLabelEn": "RAI Press Release",
+    "secondaryUrl": "https://www.raiplay.it/programmi/artnight/puntate/art-night-in-pillole",
+    "secondaryLabel": "RaiPlay Video",
+    "secondaryLabelEn": "Watch on RaiPlay",
+    "featured": true
+  },
+  {
     "id": "sky-arte-matera",
     "title": "Matera: l'incontro fra street art e sport è spettacolare",
     "titleEn": "Matera: The Spectacular Intersection of Street Art and Sports",
