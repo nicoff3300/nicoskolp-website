@@ -84,6 +84,7 @@ export interface PressArticle {
   outlet: string;
   date?: string;
   year: string;
+  dateIso?: string;
   type: 'Magazine' | 'Daily' | 'Webzine' | 'Art Review' | 'Interview' | 'TV / Special' | 'TV';
   project?: string;
   city?: string;
