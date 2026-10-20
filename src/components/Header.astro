@@ -14,12 +14,14 @@ const aboutHref = currentLang === 'en' ? '/en/about-me' : '/about-me';
 const pressHref = currentLang === 'en' ? '/en/press' : '/press';
 const graffitiHref = currentLang === 'en' ? '/en/graffiti' : '/graffiti';
 const archiveHref = currentLang === 'en' ? '/en/skolp-archive' : '/skolp-archive';
+const labHref = '/lab';
 
 const isActivePublicArt = currentPath === publicArtHref || currentPath.startsWith(`${publicArtHref}/`);
 const isActiveAbout = currentPath === aboutHref;
 const isActivePress = currentPath === pressHref;
 const isActiveGraffiti = currentPath === graffitiHref || currentPath.startsWith(`${graffitiHref}/`);
 const isActiveArchive = currentPath === archiveHref;
+const isActiveLab = currentPath === labHref || currentPath.startsWith(`${labHref}/`);
 ---
 
 <header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-brand-gray-light">
@@ -49,7 +51,7 @@ const isActiveArchive = currentPath === archiveHref;
     </a>
 
     <!-- Desktop Navigation -->
-    <nav class="hidden md:flex items-center space-x-7 lg:space-x-9" aria-label="Navigazione principale">
+    <nav class="hidden md:flex items-center space-x-6 lg:space-x-8" aria-label="Navigazione principale">
       <a
         href={publicArtHref}
         aria-current={isActivePublicArt ? "page" : undefined}
@@ -73,6 +75,18 @@ const isActiveArchive = currentPath === archiveHref;
         ]}
       >
         {t('nav.graffiti')}
+      </a>
+      <a
+        href={labHref}
+        aria-current={isActiveLab ? "page" : undefined}
+        class:list={[
+          "font-druk text-xs lg:text-sm tracking-wider uppercase transition-colors duration-150",
+          isActiveLab
+            ? "font-bold text-black underline underline-offset-4 decoration-2"
+            : "font-medium text-black hover:underline underline-offset-4 decoration-2"
+        ]}
+      >
+        {t('nav.lab')}
       </a>
       <a
         href={aboutHref}
@@ -216,6 +230,16 @@ const isActiveArchive = currentPath === archiveHref;
         ]}
       >
         {t('nav.graffiti')}
+      </a>
+      <a
+        href={labHref}
+        aria-current={isActiveLab ? "page" : undefined}
+        class:list={[
+          "drawer-link font-druk text-lg uppercase tracking-wider py-2 border-b border-brand-gray-light/50 transition-colors",
+          isActiveLab ? "font-bold text-black underline underline-offset-4 decoration-2" : "font-medium text-black hover:underline"
+        ]}
+      >
+        {t('nav.lab')}
       </a>
       <a
         href={aboutHref}

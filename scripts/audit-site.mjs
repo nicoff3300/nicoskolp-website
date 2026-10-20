@@ -100,6 +100,9 @@ const expectedPages = [
   'lab/letshift/index.html',
   'lab/logic-ribbon/index.html',
   'lab/shared_palettes.json',
+  'lab/admin-auth.js',
+  'lab/api_palettes.php',
+  'lab/custom_palettes.json',
 ];
 
 // Detect legacy redirects configured in astro.config.mjs
