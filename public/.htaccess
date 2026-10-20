@@ -34,12 +34,14 @@ ErrorDocument 404 /404.html
   ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 
-# Disabilita caching dei file HTML per aggiornamenti immediati
-<FilesMatch "\.(html|htm)$">
-  <IfModule mod_headers.c>
+# Disabilita caching dei file HTML e delle directory per aggiornamenti immediati
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|htm)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Pragma "no-cache"
     Header set Expires 0
-  </IfModule>
-</FilesMatch>
+  </FilesMatch>
+  Header set Cache-Control "no-cache, no-store, must-revalidate" "expr=%{CONTENT_TYPE} =~ m#text/html#"
+  Header set Pragma "no-cache" "expr=%{CONTENT_TYPE} =~ m#text/html#"
+</IfModule>
 

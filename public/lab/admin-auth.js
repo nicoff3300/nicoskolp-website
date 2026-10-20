@@ -6,14 +6,22 @@
   const ADMIN_STORAGE_KEY = 'skolp_admin_mode';
   const ADMIN_COOKIE_NAME = 'skolp_admin';
 
-  // 1. Verifica query string per attivazione
+  // 1. Verifica query string per attivazione o disattivazione rapida
   try {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('skolp') === 'admin') {
+    if (urlParams.get('skolp') === 'admin' || urlParams.get('admin') === '1') {
       localStorage.setItem(ADMIN_STORAGE_KEY, 'true');
       document.cookie = `${ADMIN_COOKIE_NAME}=1; path=/; max-age=31536000; SameSite=Lax`;
       
       // Pulisce l'URL senza ricaricare la pagina
+      urlParams.delete('skolp');
+      urlParams.delete('admin');
+      const newQuery = urlParams.toString() ? `?${urlParams.toString()}` : '';
+      const cleanUrl = `${window.location.pathname}${newQuery}${window.location.hash}`;
+      window.history.replaceState({}, document.title, cleanUrl);
+    } else if (urlParams.get('skolp') === 'exit' || urlParams.get('skolp') === 'logout') {
+      localStorage.removeItem(ADMIN_STORAGE_KEY);
+      document.cookie = `${ADMIN_COOKIE_NAME}=; path=/; max-age=0; SameSite=Lax`;
       urlParams.delete('skolp');
       const newQuery = urlParams.toString() ? `?${urlParams.toString()}` : '';
       const cleanUrl = `${window.location.pathname}${newQuery}${window.location.hash}`;
@@ -34,6 +42,14 @@
     }
   }
 
+  function enableAdmin() {
+    try {
+      localStorage.setItem(ADMIN_STORAGE_KEY, 'true');
+      document.cookie = `${ADMIN_COOKIE_NAME}=1; path=/; max-age=31536000; SameSite=Lax`;
+    } catch (e) {}
+    window.location.reload();
+  }
+
   function disableAdmin() {
     try {
       localStorage.removeItem(ADMIN_STORAGE_KEY);
@@ -43,9 +59,27 @@
   }
 
   window.isSkolpAdmin = checkIsAdmin;
+  window.enableSkolpAdmin = enableAdmin;
   window.disableSkolpAdmin = disableAdmin;
 
-  // 3. Se admin attivo, applica la classe e inietta la topbar di stato
+  // Scorciatoia rapida da tastiera: Shift + Option + A oppure Ctrl + Shift + S
+  window.addEventListener('keydown', function(e) {
+    if ((e.shiftKey && e.altKey && (e.key === 'A' || e.key === 'a')) ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'S' || e.key === 's'))) {
+      e.preventDefault();
+      if (checkIsAdmin()) {
+        if (confirm('Vuoi uscire dalla modalità Skolp Master Mode?')) {
+          disableAdmin();
+        }
+      } else {
+        if (confirm('Attivare Skolp Master Mode (download e palette sbloccati)?')) {
+          enableAdmin();
+        }
+      }
+    }
+  });
+
+  // 3. Se admin attivo, applica la classe ed inietta la topbar di stato
   if (checkIsAdmin()) {
     document.documentElement.classList.add('admin-mode');
 
@@ -53,6 +87,18 @@
       if (document.body) {
         document.body.classList.add('admin-mode');
       }
+
+      // Propaga sempre ?skolp=admin sui link delle 6 app nell'Hub
+      try {
+        const appLinks = document.querySelectorAll('a[href*="/lab/"]');
+        appLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          if (href && (href.includes('/brio') || href.includes('/capsule') || href.includes('/doomeno') || href.includes('/gridshape') || href.includes('/letshift') || href.includes('/logic-ribbon')) && !href.includes('skolp=')) {
+            const sep = href.includes('?') ? '&' : '?';
+            link.setAttribute('href', `${href}${sep}skolp=admin`);
+          }
+        });
+      } catch (e) {}
 
       // Evita duplicazione topbar
       if (document.getElementById('skolp-master-topbar')) return;
@@ -108,8 +154,11 @@
 
       document.body.prepend(topbar);
       
-      // Sposta leggermente il body verso il basso per fare spazio alla topbar
+      // Sposta il body e corregge l'altezza per evitare che il footer della sidebar venga tagliato
       document.body.style.marginTop = '34px';
+      if (document.querySelector('.app-container')) {
+        document.body.style.height = 'calc(100vh - 34px)';
+      }
     }
 
     if (document.readyState === 'loading') {
