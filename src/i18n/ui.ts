@@ -14,7 +14,7 @@ export const ui = {
     'nav.about': 'About',
     'nav.press': 'Press',
     'nav.graffiti': 'Graffiti',
-    'nav.lab': 'Lab',
+    'nav.lab': 'LAB',
     'nav.archive': 'Archivio',
     'nav.linktree': 'Linktree',
 
@@ -104,7 +104,7 @@ export const ui = {
     'nav.about': 'About',
     'nav.press': 'Press',
     'nav.graffiti': 'Graffiti',
-    'nav.lab': 'Lab',
+    'nav.lab': 'LAB',
     'nav.archive': 'Archive',
     'nav.linktree': 'Linktree',
 
