@@ -28,3 +28,6 @@ Thumbs.db
 
 # Strumenti di sviluppo interni
 .superpowers/
+
+# Cartella locale di sviluppo Skolptura App (i file di produzione per hosting sono in public/lab/)
+Skolptura_app/

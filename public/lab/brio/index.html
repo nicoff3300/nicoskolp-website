@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skolptura - Brio Generative Track Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="./assets/index-9XDvIpGO.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/Geometry-BC0Wzmsf.js">
+  <link rel="modulepreload" crossorigin href="./assets/RenderTargetSystem-Rud0amiM.js">
+  <link rel="stylesheet" crossorigin href="./assets/index-BQST5gM7.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Area del Canvas Preview -->
+    <main class="canvas-area">
+      <button id="immersive-preview-btn" class="immersive-btn" title="Anteprima Sfondo Esteso">
+        👁 Sfondo Esteso
+      </button>
+      <div id="canvas-wrapper">
+        <!-- Il canvas di PixiJS verrà inserito qui dinamicamente -->
+      </div>
+    </main>
+
+    <!-- Barra Laterale dei Controlli (Glassmorphism) -->
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <a href="/lab" style="color: #00f2fe; text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.25);">&larr; Skolptura Lab</a>
+          <span style="font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.06em;">Track Builder</span>
+        </div>
+        <h1>SKOLPTURA</h1>
+        <p>Brio Generative Track Builder</p>
+      </header>
+
+      <!-- Formato Tela -->
+      <section class="presets-section">
+        <h3>Formato Tela</h3>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <select id="canvasFormatSelect">
+            <optgroup label="Social (px)">
+              <option value="IG_POST">Instagram Post (1:1)</option>
+              <option value="IG_VERTICAL">Instagram Vertical (1080 x 1350)</option>
+              <option value="POST_1080_1440" selected>Post Verticale (1080 x 1440)</option>
+              <option value="IG_STORY">Instagram Story / Reel (9:16)</option>
+              <option value="FHD">Full HD (16:9)</option>
+            </optgroup>
+            <optgroup label="Stampa (300 DPI)">
+              <option value="A4">A4 (21 x 29.7 cm)</option>
+              <option value="A3">A3 (29.7 x 42 cm)</option>
+              <option value="POSTER_50_70">Poster 50x70 cm</option>
+              <option value="A6_POSTCARD">Cartolina A6 (10.5 x 14.8 cm)</option>
+            </optgroup>
+            <optgroup label="Personalizzato">
+              <option value="CUSTOM_PX">Personalizzato (Pixel)</option>
+              <option value="CUSTOM_CM">Personalizzato (cm)</option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <div class="canvas-dimensions-row" style="display: grid; grid-template-columns: 1fr 1fr 75px; gap: 8px; align-items: flex-end;">
+          <div class="form-group" style="gap: 4px;">
+            <label for="canvasWidthInput" id="canvasWidthLabel" style="font-size: 0.75rem;">Larghezza</label>
+            <input type="number" id="canvasWidthInput" value="1080" min="1" max="10000">
+          </div>
+          <div class="form-group" style="gap: 4px;">
+            <label for="canvasHeightInput" id="canvasHeightLabel" style="font-size: 0.75rem;">Altezza</label>
+            <input type="number" id="canvasHeightInput" value="1440" min="1" max="10000">
+          </div>
+          <div class="form-group" style="gap: 4px;">
+            <label style="font-size: 0.75rem;">Unità</label>
+            <select id="canvasUnitSelect">
+              <option value="px" selected>px</option>
+              <option value="cm">cm</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sezioni Parametri Comprimibili (Accordion) -->
+      <div class="accordion">
+        
+        <!-- 1. Canvas & Margini -->
+        <details class="accordion-item" open>
+          <summary class="accordion-header">
+            <span>Canvas & Margini</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="margin">Margine Esterno (px)</label>
+              <div class="slider-container">
+                <input type="range" id="margin" min="0" max="300" value="50">
+                <span class="slider-value" id="margin-val">50</span>
+              </div>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="autoScale" checked>
+              <label for="autoScale">Auto-Scala Contenuto</label>
+            </div>
+          </div>
+        </details>
+
+        <!-- 2. Parametri Tracciato -->
+        <details class="accordion-item" open>
+          <summary class="accordion-header">
+            <span>Parametri Tracciato</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="targetN">Numero Pezzi (Target)</label>
+              <div class="slider-container">
+                <input type="range" id="targetN" min="10" max="100" value="50">
+                <span class="slider-value" id="targetN-val">50</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="straightPct">Percentuale Rettilinei (0-1)</label>
+              <div class="slider-container">
+                <input type="range" id="straightPct" min="0.0" max="1.0" step="0.05" value="0.0">
+                <span class="slider-value" id="straightPct-val">0.0</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="maxOverlaps">Grado Groviglio / Sovrapposizioni (0-20)</label>
+              <div class="slider-container">
+                <input type="range" id="maxOverlaps" min="0" max="20" value="10">
+                <span class="slider-value" id="maxOverlaps-val">10</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="switchProb">Probabilità Scambi (0-1)</label>
+              <div class="slider-container">
+                <input type="range" id="switchProb" min="0.0" max="1.0" step="0.05" value="0.5">
+                <span class="slider-value" id="switchProb-val">0.5</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="maxSwitches">Max Scambi nel Circuito</label>
+              <div class="slider-container">
+                <input type="range" id="maxSwitches" min="0" max="8" value="3">
+                <span class="slider-value" id="maxSwitches-val">3</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="minSwitchDist">Min Pezzi Biforcazione</label>
+              <div class="slider-container">
+                <input type="range" id="minSwitchDist" min="3" max="11" step="2" value="3">
+                <span class="slider-value" id="minSwitchDist-val">3</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="maxSwitchDist">Max Pezzi Biforcazione</label>
+              <div class="slider-container">
+                <input type="range" id="maxSwitchDist" min="3" max="11" step="2" value="11">
+                <span class="slider-value" id="maxSwitchDist-val">11</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="shapeStyle">Stile Forma</label>
+              <select id="shapeStyle">
+                <option value="dynamic" selected>Dinamico / Organico</option>
+                <option value="circular">Circolare / Regolare</option>
+                <option value="mixed">Misto Casuale</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="maxTimeout">Timeout Generatore (sec)</label>
+              <div class="slider-container">
+                <input type="range" id="maxTimeout" min="5" max="60" value="30">
+                <span class="slider-value" id="maxTimeout-val">30</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 3. Stile & Parametri Grafici -->
+        <details class="accordion-item" open>
+          <summary class="accordion-header">
+            <span>Stile & Parametri Grafici</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="trackWidth">Larghezza Binario (px)</label>
+              <div class="slider-container">
+                <input type="range" id="trackWidth" min="10" max="250" value="100">
+                <span class="slider-value" id="trackWidth-val">40</span>
+              </div>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="showGridStroke">
+              <label for="showGridStroke">Mostra Limiti Canvas Area</label>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="showOutlines" checked>
+              <label for="showOutlines">Mostra Outline Circuito</label>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="showPieceOutlines" checked>
+              <label for="showPieceOutlines">Mostra Outline Pezzi</label>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="showCapsuleCaps">
+              <label for="showCapsuleCaps">Mostra Circonferenze</label>
+            </div>
+            <div class="form-group">
+              <label for="strokeWidth">Spessore Linea Contorni</label>
+              <div class="slider-container">
+                <input type="range" id="strokeWidth" min="0.5" max="5.0" step="0.1" value="1.2">
+                <span class="slider-value" id="strokeWidth-val">1.2</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 4. Palette Colori -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Palette Colori</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="palettePresetSelect">Preset Palette</label>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <select id="palettePresetSelect" style="flex: 1;">
+                  <!-- Popolato da js con P1, P2, P3, P4, M_Logic -->
+                </select>
+                <button id="delete-palette-btn" class="btn btn-secondary" style="padding: 0 12px; margin-top: 0; min-height: unset; height: 38px;" title="Elimina questa palette custom">🗑️</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Colori Palette Corrente (Attiva in Modalità Generativa)</label>
+              <div id="palette-colors-list" class="colors-list">
+                <!-- Swatches generati dinamicamente -->
+              </div>
+              <button id="add-color-btn" class="btn btn-secondary btn-sm" style="margin-top: 8px;">+ Aggiungi Colore</button>
+            </div>
+
+            <div class="color-options-row">
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="useManualBg" checked>
+                <label for="useManualBg">Sfondo Manuale</label>
+              </div>
+              <input type="color" id="manualBgHex" value="#f5f5f0">
+            </div>
+
+            <div class="color-options-row">
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="useManualStroke">
+                <label for="useManualStroke">Tratto Manuale</label>
+              </div>
+              <input type="color" id="manualStrokeHex" value="#4d3319">
+            </div>
+
+            <button id="shuffle-colors-btn" class="btn btn-secondary btn-block">Rimescola Colori</button>
+             
+             <div class="form-group checkbox-group" style="margin-top: 12px;">
+               <input type="checkbox" id="allowBgColorForPieces">
+               <label for="allowBgColorForPieces">Consenti pezzi colore sfondo</label>
+             </div>
+             <div class="form-group checkbox-group">
+               <input type="checkbox" id="monochromePieces">
+               <label for="monochromePieces">Tutti i pezzi dello stesso colore</label>
+             </div>
+             <div class="form-group checkbox-group">
+                <input type="checkbox" id="mergeSameColorPieces" checked>
+                <label for="mergeSameColorPieces">Unisci pezzi stesso colore</label>
+              </div>
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="excludeOutlineColorFromPieces" checked>
+                <label for="excludeOutlineColorFromPieces">Escludi colore outline dai pezzi</label>
+              </div>
+          </div>
+        </details>
+
+        <!-- 5. Seed & Generazione -->
+        <details class="accordion-item" open>
+          <summary class="accordion-header">
+            <span>Seed & Generazione</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="seedInput">Seed Circuito</label>
+              <input type="text" id="seedInput" value="brio_default">
+            </div>
+            
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="seedLockToggle" checked>
+              <label for="seedLockToggle">Blocca Seed Tracciato (Lock)</label>
+            </div>
+
+            <button id="regenerate-btn" class="btn btn-primary btn-block">Genera Nuovo Tracciato</button>
+            <button id="randomize-params-btn" class="btn btn-secondary btn-block" style="margin-top: 8px;">Randomizza Parametri</button>
+          </div>
+        </details>
+
+        <!-- 6. Animazione (Scintilla Cinetica) -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Animazione Video (Treno)</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="animateTrain">
+              <label for="animateTrain">Attiva Animazione Treno</label>
+            </div>
+            
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="trainMultiply" checked>
+              <label for="trainMultiply">Treno in modalità Moltiplica</label>
+            </div>
+            
+            <div class="form-group">
+              <label for="trainSpeed">Velocità del Treno: <span id="trainSpeed-val">3</span></label>
+              <input type="range" id="trainSpeed" min="1" max="10" step="0.5" value="3">
+            </div>
+
+
+
+            <div class="form-group">
+              <label for="trainColor">Colore del Treno</label>
+              <input type="color" id="trainColor" value="#808080">
+            </div>
+
+            <div class="form-group">
+              <label for="trainSize">Dimensione Vagoni: <span id="trainSize-val">60</span> px</label>
+              <input type="range" id="trainSize" min="10" max="60" step="1" value="60">
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Footer & Esportazioni -->
+      <footer class="sidebar-footer">
+        <h3>Esportazione</h3>
+        <div class="export-grid">
+          <button id="export-png-btn" class="btn btn-export">PNG</button>
+          <button id="export-svg-btn" class="btn btn-export">SVG</button>
+        </div>
+        <div class="export-grid" style="margin-top: 8px;">
+          <button id="export-json-btn" class="btn btn-export btn-secondary">Esporta Config</button>
+          <label for="import-json-input" class="btn btn-export btn-secondary" style="display: flex; align-items: center; justify-content: center; margin: 0; cursor: pointer;">
+            Importa Config
+          </label>
+          <input type="file" id="import-json-input" accept=".json" style="display: none;">
+        </div>
+
+        <div class="export-video-container" style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #333; padding-top: 10px;">
+          <div style="font-size: 0.85rem; color: #888; text-align: center; margin-bottom: 2px;">Registra un giro completo del treno</div>
+          <button id="export-video-btn" class="btn btn-export" style="width: 100%;">Esporta Video (MP4)</button>
+        </div>
+
+        <!-- Esportazione Batch -->
+        <div class="export-batch-container" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--panel-border); display: flex; flex-direction: column; gap: 8px;">
+          <h4 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Esportazione Batch</h4>
+          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+            <label for="batchCountInput" style="font-size: 0.72rem; color: var(--text-muted); flex: 1;">Quantità:</label>
+            <input type="number" id="batchCountInput" value="5" min="1" max="100" style="width: 70px; padding: 4px 8px;">
+          </div>
+          <button id="export-batch-btn" class="btn btn-export btn-block" style="font-size: 0.8rem; padding: 8px; text-transform: none;">Esporta Batch (Solo Seed)</button>
+          <button id="export-batch-random-btn" class="btn btn-primary btn-block" style="font-size: 0.8rem; padding: 10px; text-transform: none; margin-top: 4px;">Esporta Batch (Randomizza Tutto)</button>
+        </div>
+      </footer>
+    </aside>
+  </div>
+
+</body>
+</html>

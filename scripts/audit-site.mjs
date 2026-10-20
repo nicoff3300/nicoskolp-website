@@ -91,6 +91,15 @@ const expectedPages = [
   'en/about-me/index.html',
   'en/press/index.html',
   'en/skolp-archive/index.html',
+  // Skolptura Lab Suite (Standalone Generative Art Engines)
+  'lab/index.html',
+  'lab/brio/index.html',
+  'lab/capsule/index.html',
+  'lab/doomeno/index.html',
+  'lab/gridshape/index.html',
+  'lab/letshift/index.html',
+  'lab/logic-ribbon/index.html',
+  'lab/shared_palettes.json',
 ];
 
 // Detect legacy redirects configured in astro.config.mjs
@@ -147,11 +156,13 @@ let totalFontsChecked = 0;
 let totalLinksChecked = 0;
 let primaryPagesChecked = 0;
 let redirectPagesChecked = 0;
+let labPagesChecked = 0;
 
 for (const htmlFile of htmlFiles) {
   const relHtml = path.relative(distDir, htmlFile);
   const content = fs.readFileSync(htmlFile, 'utf8');
   const isRedirect = content.includes('<meta http-equiv="refresh"');
+  const isLabApp = relHtml.startsWith('lab/') || relHtml.startsWith('lab\\');
 
   if (isRedirect) {
     redirectPagesChecked++;
@@ -163,6 +174,13 @@ for (const htmlFile of htmlFiles) {
     const hasCanonical = /<link[^>]+rel=["']canonical["']/i.test(content);
     if (!hasCanonical) {
       addWarning(`Redirect page missing canonical tag: ${relHtml}`);
+    }
+  } else if (isLabApp) {
+    labPagesChecked++;
+    // Verify title tag exists in standalone lab application
+    const titleMatch = content.match(/<title>([^<]+)<\/title>/i);
+    if (!titleMatch || !titleMatch[1].trim()) {
+      addError(`Missing or empty <title> tag in: ${relHtml}`);
     }
   } else {
     primaryPagesChecked++;
@@ -433,7 +451,7 @@ for (const htmlFile of htmlFiles) {
   }
 }
 
-console.log(`   ✓ Audited ${htmlFiles.length} HTML files (${primaryPagesChecked} primary, ${redirectPagesChecked} redirects).`);
+console.log(`   ✓ Audited ${htmlFiles.length} HTML files (${primaryPagesChecked} primary, ${redirectPagesChecked} redirects, ${labPagesChecked} lab apps).`);
 console.log(`   ✓ Checked ${totalImagesChecked} image occurrences (all resolved to existing non-empty files).`);
 console.log(`   ✓ Checked ${totalStylesChecked} stylesheet links and ${totalFontsChecked} font preloads.`);
 console.log(`   ✓ Checked ${totalLinksChecked} internal navigation links (all resolved without broken targets).\n`);
