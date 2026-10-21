@@ -582,8 +582,9 @@ body.immersive-mode #canvas-wrapper canvas {
   .canvas-area {
     flex: 0 0 auto !important;
     width: 100% !important;
-    height: min(100vw, 50dvh) !important;
-    max-height: 50dvh !important;
+    width: 100vw !important;
+    height: 100vw !important;
+    max-height: 100vw !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -595,8 +596,9 @@ body.immersive-mode #canvas-wrapper canvas {
   }
 
   #canvas-wrapper {
-    width: min(100vw, 50dvh) !important;
-    height: min(100vw, 50dvh) !important;
+    width: 100% !important;
+    width: 100vw !important;
+    height: 100vw !important;
     aspect-ratio: 1 / 1 !important;
     position: relative !important;
     overflow: hidden !important;
