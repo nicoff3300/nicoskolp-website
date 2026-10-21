@@ -61,7 +61,7 @@ let state = {
 
   activePaletteName: "Skolp_01",
   palette: [...PALETTES["Skolp_01"]],
-  useManualBg: true,
+  useManualBg: false,
   manualBgHex: "#ffffff",
   useManualStroke: false,
   manualStrokeHex: "#000000",
