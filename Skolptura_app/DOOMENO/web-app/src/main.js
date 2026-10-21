@@ -841,7 +841,10 @@ function setupSteppers() {
       } catch (err) {
         const step = parseFloat(input.step) || 1;
         const current = parseFloat(input.value) || 0;
-        input.value = current + (delta > 0 ? step : -step);
+        const min = input.min !== '' ? parseFloat(input.min) : -Infinity;
+        const max = input.max !== '' ? parseFloat(input.max) : Infinity;
+        const nextVal = current + (delta > 0 ? step : -step);
+        input.value = Math.max(min, Math.min(max, parseFloat(nextVal.toFixed(4))));
       }
       input.dispatchEvent(new Event('input', { bubbles: true }));
     };
@@ -850,19 +853,23 @@ function setupSteppers() {
       let timeoutId = null;
       let intervalId = null;
 
+      const stop = () => {
+        if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+        if (intervalId) { clearInterval(intervalId); intervalId = null; }
+        window.removeEventListener('mouseup', stop);
+        window.removeEventListener('blur', stop);
+      };
+
       const start = (e) => {
         if (e.type === 'touchstart') e.preventDefault();
         changeVal(delta);
+        window.addEventListener('mouseup', stop, { once: true });
+        window.addEventListener('blur', stop, { once: true });
         timeoutId = setTimeout(() => {
           intervalId = setInterval(() => {
             changeVal(delta);
           }, 60);
         }, 300);
-      };
-
-      const stop = () => {
-        if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
-        if (intervalId) { clearInterval(intervalId); intervalId = null; }
       };
 
       btn.addEventListener('mousedown', start);
