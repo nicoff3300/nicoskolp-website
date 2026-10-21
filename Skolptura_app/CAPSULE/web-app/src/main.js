@@ -777,14 +777,25 @@ function setupEvents() {
     runBatchExport(count, true);
   });
 
-  setupSteppers();
+  setupNumberSteppers();
 }
 
-function setupSteppers() {
-  const containers = document.querySelectorAll('.slider-container');
-  containers.forEach(container => {
-    const input = container.querySelector('input[type="range"]');
-    if (!input || container.querySelector('.stepper-controls')) return;
+function setupNumberSteppers() {
+  const numberInputs = document.querySelectorAll('input[type="number"]');
+  numberInputs.forEach(input => {
+    if (input.dataset.stepperInit || input.closest('.number-stepper-wrap')) return;
+    input.dataset.stepperInit = 'true';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'number-stepper-wrap';
+
+    if (input.style.width) {
+      wrapper.style.width = input.style.width;
+      input.style.width = '100%';
+    }
+
+    input.parentNode.insertBefore(wrapper, input);
+    wrapper.appendChild(input);
 
     const controls = document.createElement('div');
     controls.className = 'stepper-controls';
@@ -803,21 +814,18 @@ function setupSteppers() {
 
     controls.appendChild(btnUp);
     controls.appendChild(btnDown);
-    container.appendChild(controls);
+    wrapper.appendChild(controls);
 
     const changeVal = (delta) => {
-      try {
-        if (delta > 0) input.stepUp();
-        else input.stepDown();
-      } catch (err) {
-        const step = parseFloat(input.step) || 1;
-        const current = parseFloat(input.value) || 0;
-        const min = input.min !== '' ? parseFloat(input.min) : -Infinity;
-        const max = input.max !== '' ? parseFloat(input.max) : Infinity;
-        const nextVal = current + (delta > 0 ? step : -step);
-        input.value = Math.max(min, Math.min(max, parseFloat(nextVal.toFixed(4))));
-      }
+      const step = parseFloat(input.step) || 1;
+      const min = input.min !== '' ? parseFloat(input.min) : -Infinity;
+      const max = input.max !== '' ? parseFloat(input.max) : Infinity;
+      const current = parseFloat(input.value) || 0;
+      let nextVal = current + (delta > 0 ? step : -step);
+      nextVal = Math.max(min, Math.min(max, parseFloat(nextVal.toFixed(4))));
+      input.value = nextVal;
       input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
     };
 
     const attachAutoRepeat = (btn, delta) => {

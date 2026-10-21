@@ -750,46 +750,90 @@ select:focus {
   border-color: #ffffff !important;
 }
 
-/* Stepper Numerici Squadrati Verticali ▲ / ▼ */
+/* Slider standard pulito (senza frecce) */
 .slider-container {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
-.stepper-controls {
+/* Stepper Numerici Squadrati Verticali ▲ / ▼ per Campi di Valori Numerici (es. Colonne/Righe Macro Min-Max) */
+.number-stepper-wrap {
   display: inline-flex;
-  flex-direction: column;
-  gap: 1px;
+  position: relative;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.number-stepper-wrap input[type="number"] {
+  width: 100% !important;
+  padding-right: 26px !important;
+  box-sizing: border-box;
+  -moz-appearance: textfield;
+}
+
+.number-stepper-wrap input[type="number"]::-webkit-inner-spin-button,
+.number-stepper-wrap input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.number-stepper-wrap .stepper-controls {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  bottom: 1px;
   width: 22px;
-  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  border-left: 1px solid #333333;
+  background: #111111;
   user-select: none;
   -webkit-user-select: none;
 }
 
-.stepper-btn {
+.number-stepper-wrap .stepper-btn {
+  flex: 1;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 14px;
-  padding: 0;
   background: #111111;
   color: #ffffff;
-  border: 1px solid #333333;
+  border: none;
   border-radius: 0px !important;
   font-size: 7px;
   line-height: 1;
   cursor: pointer;
   touch-action: manipulation;
-  transition: background-color 0.1s, color 0.1s, border-color 0.1s;
+  padding: 0;
+  transition: background 0.1s, color 0.1s;
 }
 
-.stepper-btn:hover,
-.stepper-btn:active {
+.number-stepper-wrap .stepper-btn.stepper-up {
+  border-bottom: 1px solid #333333;
+}
+
+.number-stepper-wrap .stepper-btn:hover,
+.number-stepper-wrap .stepper-btn:active {
   background: #ffffff;
   color: #000000;
-  border-color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .number-stepper-wrap input[type="number"] {
+    padding-right: 32px !important;
+    font-size: 13px;
+  }
+  .number-stepper-wrap .stepper-controls {
+    width: 28px;
+  }
+  .number-stepper-wrap .stepper-btn {
+    font-size: 8px;
+  }
 }
 
 /* MODALITA VISITATORE: EXPORT NASCOSTI */
@@ -883,4 +927,9 @@ body:not(.admin-mode) #canvas-wrapper canvas,
 html:not(.admin-mode) #canvas-wrapper canvas {
   border-radius: 0 !important;
   box-shadow: none !important;
+}
+
+body:not(.admin-mode) .immersive-btn,
+html:not(.admin-mode) .immersive-btn {
+  display: none !important;
 }
