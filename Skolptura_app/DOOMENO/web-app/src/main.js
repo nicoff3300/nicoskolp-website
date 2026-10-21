@@ -410,14 +410,16 @@ function renderScene() {
 
   // Immersive mode
   const canvasArea = document.querySelector('.canvas-area');
-  const canvasEl = app.canvas;
-  
-  if (state.immersiveMode) {
-    canvasArea.style.backgroundColor = scene.backgroundColor;
-    canvasEl.style.boxShadow = 'none';
-  } else {
-    canvasArea.style.backgroundColor = '';
-    canvasEl.style.boxShadow = '';
+  if (canvasArea) {
+    if (state.immersiveMode) {
+      canvasArea.style.setProperty('--canvas-area-bg', scene.backgroundColor);
+      canvasArea.style.backgroundColor = scene.backgroundColor;
+      if (app.canvas) app.canvas.style.boxShadow = 'none';
+    } else {
+      canvasArea.style.removeProperty('--canvas-area-bg');
+      canvasArea.style.backgroundColor = '';
+      if (app.canvas) app.canvas.style.boxShadow = '';
+    }
   }
 }
 
@@ -775,11 +777,15 @@ function setupEvents() {
     randomizeParams();
   });
 
-  document.getElementById('immersive-preview-btn').addEventListener('click', (e) => {
-    state.immersiveMode = !state.immersiveMode;
-    e.target.classList.toggle('active', state.immersiveMode);
-    renderScene();
-  });
+  const immersiveBtn = document.getElementById('immersive-preview-btn');
+  if (immersiveBtn) {
+    immersiveBtn.addEventListener('click', () => {
+      state.immersiveMode = !state.immersiveMode;
+      immersiveBtn.classList.toggle('active', state.immersiveMode);
+      document.body.classList.toggle('immersive-mode', state.immersiveMode);
+      renderScene();
+    });
+  }
 
   document.getElementById('export-png-btn').addEventListener('click', downloadPNG);
   document.getElementById('export-svg-btn').addEventListener('click', downloadSVG);
@@ -798,6 +804,77 @@ function setupEvents() {
   document.getElementById('export-batch-random-btn').addEventListener('click', () => {
     const count = parseInt(document.getElementById('batchCountInput').value) || 5;
     runBatchExport(count, true);
+  });
+
+  setupSteppers();
+}
+
+function setupSteppers() {
+  const containers = document.querySelectorAll('.slider-container');
+  containers.forEach(container => {
+    const input = container.querySelector('input[type="range"]');
+    if (!input || container.querySelector('.stepper-controls')) return;
+
+    const controls = document.createElement('div');
+    controls.className = 'stepper-controls';
+
+    const btnUp = document.createElement('button');
+    btnUp.type = 'button';
+    btnUp.className = 'stepper-btn stepper-up';
+    btnUp.setAttribute('aria-label', 'Aumenta valore');
+    btnUp.textContent = '▲';
+
+    const btnDown = document.createElement('button');
+    btnDown.type = 'button';
+    btnDown.className = 'stepper-btn stepper-down';
+    btnDown.setAttribute('aria-label', 'Diminuisci valore');
+    btnDown.textContent = '▼';
+
+    controls.appendChild(btnUp);
+    controls.appendChild(btnDown);
+    container.appendChild(controls);
+
+    const changeVal = (delta) => {
+      try {
+        if (delta > 0) input.stepUp();
+        else input.stepDown();
+      } catch (err) {
+        const step = parseFloat(input.step) || 1;
+        const current = parseFloat(input.value) || 0;
+        input.value = current + (delta > 0 ? step : -step);
+      }
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+
+    const attachAutoRepeat = (btn, delta) => {
+      let timeoutId = null;
+      let intervalId = null;
+
+      const start = (e) => {
+        if (e.type === 'touchstart') e.preventDefault();
+        changeVal(delta);
+        timeoutId = setTimeout(() => {
+          intervalId = setInterval(() => {
+            changeVal(delta);
+          }, 60);
+        }, 300);
+      };
+
+      const stop = () => {
+        if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+        if (intervalId) { clearInterval(intervalId); intervalId = null; }
+      };
+
+      btn.addEventListener('mousedown', start);
+      btn.addEventListener('mouseup', stop);
+      btn.addEventListener('mouseleave', stop);
+      btn.addEventListener('touchstart', start, { passive: false });
+      btn.addEventListener('touchend', stop);
+      btn.addEventListener('touchcancel', stop);
+    };
+
+    attachAutoRepeat(btnUp, 1);
+    attachAutoRepeat(btnDown, -1);
   });
 }
 
