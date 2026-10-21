@@ -502,29 +502,49 @@ select:focus {
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE (Mobile Layout in Basso & Scorrimento Completo Senza Tagli) */
 @media (max-width: 900px) {
+  html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
   .app-container {
-    flex-direction: column;
-    overflow-y: auto;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow: visible !important;
   }
   
   .canvas-area {
-    height: 60vh;
-    min-height: 400px;
-    flex: none;
+    width: 100% !important;
+    height: 50vh !important;
+    height: 50dvh !important;
+    min-height: 320px !important;
+    max-height: 520px !important;
+    flex: none !important;
   }
   
   .sidebar {
-    width: 100%;
-    height: auto;
-    flex: 1;
-    border-left: none;
-    border-top: 1px solid var(--panel-border);
+    width: 100% !important;
+    min-width: 100% !important;
+    height: auto !important;
+    flex: none !important;
+    overflow: visible !important;
+    border-left: none !important;
+    border-top: 1px solid var(--panel-border) !important;
+    padding-bottom: calc(140px + env(safe-area-inset-bottom, 30px)) !important;
   }
   
   .accordion {
-    max-height: 500px;
+    max-height: none !important;
+    overflow: visible !important;
   }
 }
 
