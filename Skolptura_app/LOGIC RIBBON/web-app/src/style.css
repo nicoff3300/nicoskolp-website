@@ -502,30 +502,42 @@ select:focus {
   color: #fff;
 }
 
-/* Immersive/Extended Background mode button */
+/* Pulsante Anteprima Immersiva (Sfondo Esteso) */
 .immersive-btn {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(15, 16, 21, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 30px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 500;
+  top: 16px;
+  right: 16px;
+  left: auto !important;
+  z-index: 50;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid #333333;
+  border-radius: 0px !important;
+  color: #ffffff;
+  padding: 6px 12px;
+  font-family: 'Open Sans', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
-  z-index: 5;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  transition: all 0.15s ease;
 }
+
 .immersive-btn:hover {
-  background: rgba(99, 102, 241, 0.8);
-  border-color: var(--accent-color);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+}
+
+.immersive-btn.active {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  color: #000000 !important;
 }
 
 /* Modalità Immersiva Attiva */
@@ -542,6 +554,32 @@ body.immersive-mode #canvas-wrapper canvas {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-muted);
+}
+
+/* RESPONSIVE LOGIC RIBBON (Mobile Layout in Basso) */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  
+  .canvas-area {
+    height: 60vh;
+    min-height: 400px;
+    flex: none;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex: 1;
+    border-left: none;
+    border-top: 1px solid var(--panel-border);
+  }
+  
+  .accordion {
+    max-height: 500px;
+  }
 }
 
 
@@ -612,7 +650,8 @@ p, label, span, input, select {
 }
 
 .canvas-area {
-  background-color: #000000 !important;
+  background-color: var(--canvas-area-bg, #000000);
+  transition: background-color 0.3s ease;
 }
 
 .btn-primary {
@@ -685,23 +724,72 @@ select:focus {
   color: #ffffff !important;
 }
 
-.hub-back-btn, .hub-nav-bar a {
+/* Tasto Torna al Lab Unificato Squadrato e Bianco */
+.hub-back-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 4px 10px !important;
   background: #000000 !important;
   color: #ffffff !important;
   border: 1px solid #333333 !important;
   border-radius: 0px !important;
-  font-family: 'Druk Text Wide', sans-serif !important;
-  font-size: 10px !important;
+  font-family: 'Open Sans', system-ui, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
   letter-spacing: 0.06em !important;
   text-transform: uppercase !important;
-  padding: 4px 10px !important;
-  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease !important;
 }
 
-.hub-back-btn:hover, .hub-nav-bar a:hover {
+.hub-back-btn:hover {
   background: #ffffff !important;
   color: #000000 !important;
   border-color: #ffffff !important;
+}
+
+/* Stepper Numerici Squadrati Verticali ▲ / ▼ */
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepper-controls {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 22px;
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.stepper-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 14px;
+  padding: 0;
+  background: #111111;
+  color: #ffffff;
+  border: 1px solid #333333;
+  border-radius: 0px !important;
+  font-size: 7px;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 0.1s, color 0.1s, border-color 0.1s;
+}
+
+.stepper-btn:hover,
+.stepper-btn:active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
 }
 
 /* MODALITA VISITATORE: EXPORT NASCOSTI */
@@ -795,9 +883,4 @@ body:not(.admin-mode) #canvas-wrapper canvas,
 html:not(.admin-mode) #canvas-wrapper canvas {
   border-radius: 0 !important;
   box-shadow: none !important;
-}
-
-body:not(.admin-mode) .immersive-btn,
-html:not(.admin-mode) .immersive-btn {
-  display: none !important;
 }
