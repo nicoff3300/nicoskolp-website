@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skolptura - Generative GridShape Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <link rel="stylesheet" href="/src/style.css">
+  <script src="/lab/admin-auth.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Area del Canvas Preview -->
+    <main class="canvas-area">
+      <button id="immersive-preview-btn" class="immersive-btn" title="Anteprima Sfondo Esteso">
+        👁 Sfondo Esteso
+      </button>
+      <div id="canvas-wrapper">
+        <!-- Il canvas di PixiJS verrà inserito qui dinamicamente -->
+      </div>
+    </main>
+
+    <!-- Barra Laterale dei Controlli (Glassmorphism) -->
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <a href="/lab" style="color: #00f2fe; text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.25);">&larr; Skolptura Lab</a>
+          <span style="font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.06em;">GridShape</span>
+        </div>
+        <h1>SKOLPTURA</h1>
+        <p>Generative GridShape Generator</p>
+      </header>
+
+      <!-- Formato Tela -->
+      <section class="presets-section">
+        <h3>Formato Tela</h3>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <select id="canvasFormatSelect">
+            <optgroup label="Social (px)">
+              <option value="IG_POST">Instagram Post (1:1)</option>
+              <option value="IG_VERTICAL">Instagram Vertical (1080 x 1350)</option>
+              <option value="POST_1080_1440" selected>Post Verticale (1080 x 1440)</option>
+              <option value="IG_STORY">Instagram Story / Reel (9:16)</option>
+              <option value="FHD">Full HD (16:9)</option>
+            </optgroup>
+            <optgroup label="Stampa (300 DPI)">
+              <option value="A4">A4 (21 x 29.7 cm)</option>
+              <option value="A3">A3 (29.7 x 42 cm)</option>
+              <option value="POSTER_50_70">Poster 50x70 cm</option>
+              <option value="A6_POSTCARD">Cartolina A6 (10.5 x 14.8 cm)</option>
+            </optgroup>
+            <optgroup label="Personalizzato">
+              <option value="CUSTOM_PX">Personalizzato (Pixel)</option>
+              <option value="CUSTOM_CM">Personalizzato (cm)</option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <div class="canvas-dimensions-row" style="display: grid; grid-template-columns: 1fr 1fr 75px; gap: 8px; align-items: flex-end;">
+          <div class="form-group" style="gap: 4px;">
+            <label for="canvasWidthInput" id="canvasWidthLabel" style="font-size: 0.75rem;">Larghezza</label>
+            <input type="number" id="canvasWidthInput" value="1417" min="1" max="10000">
+          </div>
+          <div class="form-group" style="gap: 4px;">
+            <label for="canvasHeightInput" id="canvasHeightLabel" style="font-size: 0.75rem;">Altezza</label>
+            <input type="number" id="canvasHeightInput" value="1984" min="1" max="10000">
+          </div>
+          <div class="form-group" style="gap: 4px;">
+            <label style="font-size: 0.75rem;">Unità</label>
+            <select id="canvasUnitSelect">
+              <option value="px" selected>px</option>
+              <option value="cm">cm</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sezioni Parametri Comprimibili (Accordion) -->
+      <div class="accordion">
+        
+        <!-- 1. Canvas & Margini -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Canvas & Margini</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="margin">Margine Esterno (px)</label>
+              <div class="slider-container">
+                <input type="range" id="margin" min="0" max="300" value="50">
+                <span class="slider-value" id="margin-val">50</span>
+              </div>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="autoScale" checked>
+              <label for="autoScale">Auto-Scala Contenuto</label>
+            </div>
+          </div>
+        </details>
+
+        <!-- 2. Macro Layout (Griglie) -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Macro Layout</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="macroLayoutMode">Macro Layout Mode</label>
+              <select id="macroLayoutMode">
+                <option value="RANDOM" selected>Casuale (RANDOM)</option>
+                <option value="CUSTOM">Personalizzato (CUSTOM)</option>
+              </select>
+            </div>
+            <div id="macro-random-controls">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Colonne Macro (Min-Max)</label>
+                  <div style="display: flex; gap: 8px;">
+                    <input type="number" id="macroColsMin" value="2" min="1" max="10" style="width: 50%;">
+                    <input type="number" id="macroColsMax" value="3" min="1" max="10" style="width: 50%;">
+                  </div>
+                </div>
+              </div>
+              <div class="form-row" style="margin-top: 10px;">
+                <div class="form-group">
+                  <label>Righe Macro (Min-Max)</label>
+                  <div style="display: flex; gap: 8px;">
+                    <input type="number" id="macroRowsMin" value="1" min="1" max="10" style="width: 50%;">
+                    <input type="number" id="macroRowsMax" value="1" min="1" max="10" style="width: 50%;">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="macro-custom-controls" style="display: none;">
+              <div class="form-group">
+                <label for="macroColsCustom">Rapporti Colonne (es: 0.5 o 0.3, 0.7)</label>
+                <input type="text" id="macroColsCustom" value="0.5">
+              </div>
+              <div class="form-group" style="margin-top: 10px;">
+                <label for="macroRowsCustom">Rapporti Righe (es: 0.8, 0.5)</label>
+                <input type="text" id="macroRowsCustom" value="0.8, 0.5">
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+              <label for="macroGap">Spazio tra celle (Macro Gap - px)</label>
+              <div class="slider-container">
+                <input type="range" id="macroGap" min="0" max="100" value="0">
+                <span class="slider-value" id="macroGap-val">0</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 3. Micro Griglia (Suddivisione Celle) -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Micro Griglia</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="gridCols">Colonne Griglia</label>
+              <div class="slider-container">
+                <input type="range" id="gridCols" min="1" max="100" value="10">
+                <span class="slider-value" id="gridCols-val">10</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="gridRows">Righe Griglia</label>
+              <div class="slider-container">
+                <input type="range" id="gridRows" min="1" max="100" value="7">
+                <span class="slider-value" id="gridRows-val">7</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 4. Proprietà Forme -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Proprietà Forme</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label>Forme per Griglia (Min-Max)</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="number" id="minShapes" value="1" min="1" max="20" style="width: 50%;">
+                <input type="number" id="maxShapes" value="1" min="1" max="20" style="width: 50%;">
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+              <label for="probComplex">Probabilità Forma Complessa (0 - 1)</label>
+              <div class="slider-container">
+                <input type="range" id="probComplex" min="0" max="1" step="0.05" value="0.2">
+                <span class="slider-value" id="probComplex-val">0.2</span>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+              <label for="probInnerShape">Probabilità Forma Inscritta (0 - 1)</label>
+              <div class="slider-container">
+                <input type="range" id="probInnerShape" min="0" max="1" step="0.05" value="1.0">
+                <span class="slider-value" id="probInnerShape-val">1.0</span>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+              <label for="innerMaxWRatio">Larghezza Max Inscritta (% Box)</label>
+              <div class="slider-container">
+                <input type="range" id="innerMaxWRatio" min="0.1" max="1.0" step="0.05" value="0.5">
+                <span class="slider-value" id="innerMaxWRatio-val">50%</span>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+              <label for="innerMaxHRatio">Altezza Max Inscritta (% Box)</label>
+              <div class="slider-container">
+                <input type="range" id="innerMaxHRatio" min="0.1" max="1.0" step="0.05" value="0.5">
+                <span class="slider-value" id="innerMaxHRatio-val">50%</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 5. Sovrapposizioni (Overlap) -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Sovrapposizioni (Overlap)</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="useOverlap" checked>
+              <label for="useOverlap">Attiva Sovrapposizione</label>
+            </div>
+            <div class="form-group" id="overlap-prob-group">
+              <label for="probOverlap">Probabilità Sovrapposizione (0 - 1)</label>
+              <div class="slider-container">
+                <input type="range" id="probOverlap" min="0" max="1" step="0.05" value="1.0">
+                <span class="slider-value" id="probOverlap-val">1.0</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 6. Tratto & Outline -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Tratto & Outline</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="showGridStroke">
+              <label for="showGridStroke">Mostra Cornici di Verifica</label>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="showIntersectionLines">
+              <label for="showIntersectionLines">Mostra Outline sulle Intersezioni</label>
+            </div>
+            <div class="form-group">
+              <label for="strokeWidth">Spessore Linea Tratto</label>
+              <div class="slider-container">
+                <input type="range" id="strokeWidth" min="0.5" max="10" step="0.1" value="1.2">
+                <span class="slider-value" id="strokeWidth-val">1.2</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 7. Palette Colori -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Palette Colori</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="palettePresetSelect">Preset Palette</label>
+              <select id="palettePresetSelect">
+                <!-- Popolato da js con P1, P2, P3, P4, M -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Colori Palette Corrente</label>
+              <div id="palette-colors-list" class="colors-list">
+                <!-- Swatches generati dinamicamente -->
+              </div>
+              <button id="add-color-btn" class="btn btn-secondary btn-sm" style="margin-top: 8px;">+ Aggiungi Colore</button>
+            </div>
+
+            <div class="color-options-row">
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="useManualBg" checked>
+                <label for="useManualBg">Sfondo Manuale</label>
+              </div>
+              <input type="color" id="manualBgHex" value="#ffffff">
+            </div>
+
+            <div class="color-options-row">
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="useManualStroke">
+                <label for="useManualStroke">Tratto Manuale</label>
+              </div>
+              <input type="color" id="manualStrokeHex" value="#000000">
+            </div>
+
+            <button id="shuffle-colors-btn" class="btn btn-secondary btn-block">Rimescola Colori</button>
+          </div>
+        </details>
+
+        <!-- 8. Seed & Generazione -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Seed & Generazione</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="seedInput">Seed Struttura</label>
+              <input type="text" id="seedInput" value="skolptura_default">
+            </div>
+            
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="seedLockToggle" checked>
+              <label for="seedLockToggle">Blocca Struttura (Lock Seed)</label>
+            </div>
+
+            <button id="regenerate-btn" class="btn btn-primary btn-block">Genera Nuovo Layout</button>
+            <button id="randomize-params-btn" class="btn btn-secondary btn-block" style="margin-top: 8px;">Randomizza Parametri</button>
+          </div>
+        </details>
+      </div>
+
+      <!-- Footer & Esportazioni -->
+      <footer class="sidebar-footer">
+        <h3>Esportazione</h3>
+        <div class="export-grid">
+          <button id="export-png-btn" class="btn btn-export">PNG</button>
+          <button id="export-svg-btn" class="btn btn-export">SVG</button>
+        </div>
+        <div class="export-grid" style="margin-top: 8px;">
+          <button id="export-json-btn" class="btn btn-export btn-secondary">Esporta Config</button>
+          <label for="import-json-input" class="btn btn-export btn-secondary" style="display: flex; align-items: center; justify-content: center; margin: 0; cursor: pointer;">
+            Importa Config
+          </label>
+          <input type="file" id="import-json-input" accept=".json" style="display: none;">
+        </div>
+
+        <!-- Esportazione Batch -->
+        <div class="export-batch-container" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--panel-border); display: flex; flex-direction: column; gap: 8px;">
+          <h4 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Esportazione Batch</h4>
+          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+            <label for="batchCountInput" style="font-size: 0.72rem; color: var(--text-muted); flex: 1;">Quantità:</label>
+            <input type="number" id="batchCountInput" value="5" min="1" max="100" style="width: 70px; padding: 4px 8px;">
+          </div>
+          <button id="export-batch-btn" class="btn btn-export btn-block" style="font-size: 0.8rem; padding: 8px; text-transform: none;">Esporta Batch (Solo Seed)</button>
+          <button id="export-batch-random-btn" class="btn btn-primary btn-block" style="font-size: 0.8rem; padding: 10px; text-transform: none; margin-top: 4px;">Esporta Batch (Randomizza Tutto)</button>
+        </div>
+      </footer>
+    </aside>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

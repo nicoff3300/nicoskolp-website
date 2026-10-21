@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skolptura - Generative Logic Ribbon Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <link rel="stylesheet" href="/src/style.css">
+  <script src="/lab/admin-auth.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Area del Canvas Preview -->
+    <main class="canvas-area">
+      <button id="immersive-preview-btn" class="immersive-btn" title="Anteprima Sfondo Esteso">
+        👁 Sfondo Esteso
+      </button>
+      <div id="canvas-wrapper">
+        <!-- Il canvas di PixiJS verrà inserito qui dinamicamente -->
+      </div>
+    </main>
+
+    <!-- Barra Laterale dei Controlli (Glassmorphism) -->
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <a href="/lab" style="color: #00f2fe; text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.25);">&larr; Skolptura Lab</a>
+          <span style="font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.06em;">Logic Ribbon</span>
+        </div>
+        <h1>SKOLPTURA</h1>
+        <p>Generative Logic Ribbon Generator</p>
+      </header>
+
+      <!-- Formato Tela -->
+      <section class="presets-section">
+        <h3>Formato Tela</h3>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <select id="canvasFormatSelect">
+            <optgroup label="Originale (px)">
+              <option value="LOGICRIBBON_ORIGINAL">Logic Ribbon Originale (1500 x 4000)</option>
+              <option value="LOGICRIBBON_SQUARE">Logic Ribbon Quadrato (1500 x 1500)</option>
+            </optgroup>
+            <optgroup label="Social (px)">
+              <option value="IG_POST">Instagram Post (1:1)</option>
+              <option value="IG_VERTICAL">Instagram Vertical (1080 x 1350)</option>
+              <option value="POST_1080_1440" selected>Post Verticale (1080 x 1440)</option>
+              <option value="IG_STORY">Instagram Story / Reel (9:16)</option>
+              <option value="FHD">Full HD (16:9)</option>
+            </optgroup>
+            <optgroup label="Stampa (300 DPI)">
+              <option value="A4">A4 (21 x 29.7 cm)</option>
+              <option value="A3">A3 (29.7 x 42 cm)</option>
+              <option value="POSTER_50_70">Poster 50x70 cm</option>
+              <option value="A6_POSTCARD">Cartolina A6 (10.5 x 14.8 cm)</option>
+            </optgroup>
+            <optgroup label="Personalizzato">
+              <option value="CUSTOM_PX">Personalizzato (Pixel)</option>
+              <option value="CUSTOM_CM">Personalizzato (cm)</option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <div class="canvas-dimensions-row" style="display: grid; grid-template-columns: 1fr 1fr 75px; gap: 8px; align-items: flex-end;">
+          <div class="form-group" style="gap: 4px;">
+            <label for="canvasWidthInput" id="canvasWidthLabel" style="font-size: 0.75rem;">Larghezza</label>
+            <input type="number" id="canvasWidthInput" value="1080" min="1" max="10000">
+          </div>
+          <div class="form-group" style="gap: 4px;">
+            <label for="canvasHeightInput" id="canvasHeightLabel" style="font-size: 0.75rem;">Altezza</label>
+            <input type="number" id="canvasHeightInput" value="1440" min="1" max="10000">
+          </div>
+          <div class="form-group" style="gap: 4px;">
+            <label style="font-size: 0.75rem;">Unità</label>
+            <select id="canvasUnitSelect">
+              <option value="px" selected>px</option>
+              <option value="cm">cm</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sezioni Parametri Comprimibili (Accordion) -->
+      <div class="accordion">
+        
+        <!-- 1. Canvas & Margini -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Canvas & Margini</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="margin">Margine Esterno (px)</label>
+              <div class="slider-container">
+                <input type="range" id="margin" min="0" max="300" value="50">
+                <span class="slider-value" id="margin-val">50</span>
+              </div>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="autoScale" checked>
+              <label for="autoScale">Auto-Scala Contenuto</label>
+            </div>
+          </div>
+        </details>
+
+        <!-- 2. Struttura & Griglia -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Layout Struttura</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="numRows">Numero Righe (NUM_ROWS)</label>
+              <div class="slider-container">
+                <input type="range" id="numRows" min="1" max="10" value="1">
+                <span class="slider-value" id="numRows-val">1</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="numColumns">Numero Colonne (NUM_COLUMNS)</label>
+              <div class="slider-container">
+                <input type="range" id="numColumns" min="1" max="20" value="3">
+                <span class="slider-value" id="numColumns-val">3</span>
+              </div>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="useRandomRowHeights">
+              <label for="useRandomRowHeights">Altezze Righe Casuali</label>
+            </div>
+            <div class="form-group" id="row-proportions-group">
+              <label for="rowHeightProportions">Proporzioni Manuali Righe (es: 1,6)</label>
+              <input type="text" id="rowHeightProportions" value="1, 6">
+            </div>
+          </div>
+        </details>
+
+        <!-- 3. Parametri Geometria -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Parametri Geometria</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="shearFactor">Inclinazione Centrale (SHEAR_FACTOR)</label>
+              <div class="slider-container">
+                <input type="range" id="shearFactor" min="0" max="200" value="40">
+                <span class="slider-value" id="shearFactor-val">40</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="shiftFactor">Intensità Spostamento Y (SHIFT_FACTOR)</label>
+              <div class="slider-container">
+                <input type="range" id="shiftFactor" min="0" max="10" value="5">
+                <span class="slider-value" id="shiftFactor-val">5</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="shiftRangeLimit">Limite Varianza Spostamento (SHIFT_LIMIT)</label>
+              <div class="slider-container">
+                <input type="range" id="shiftRangeLimit" min="0.0" max="5.0" step="0.1" value="3.0">
+                <span class="slider-value" id="shiftRangeLimit-val">3.0</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="heightRangeLimit">Limite Varianza Altezza (HEIGHT_LIMIT)</label>
+              <div class="slider-container">
+                <input type="range" id="heightRangeLimit" min="0.0" max="5.0" step="0.1" value="0.0">
+                <span class="slider-value" id="heightRangeLimit-val">0.0</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="widthRangeLimit">Limite Varianza Larghezza (WIDTH_LIMIT)</label>
+              <div class="slider-container">
+                <input type="range" id="widthRangeLimit" min="0.0" max="5.0" step="0.1" value="3.0">
+                <span class="slider-value" id="widthRangeLimit-val">3.0</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 4. Uniformità & Ordine -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Uniformità & Ordine</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="heightOrderFactor">Ordine Altezza (HEIGHT_ORDER)</label>
+              <div class="slider-container">
+                <input type="range" id="heightOrderFactor" min="0" max="100" value="20">
+                <span class="slider-value" id="heightOrderFactor-val">20</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="widthOrderFactor">Ordine Larghezza (WIDTH_ORDER)</label>
+              <div class="slider-container">
+                <input type="range" id="widthOrderFactor" min="0" max="100" value="100">
+                <span class="slider-value" id="widthOrderFactor-val">100</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="columnWidthBase">Larghezza Base Colonne (WIDTH_BASE)</label>
+              <div class="slider-container">
+                <input type="range" id="columnWidthBase" min="0" max="100" value="50">
+                <span class="slider-value" id="columnWidthBase-val">50</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="blockRandomFactor">Randomizzazione Blocchi (BLOCK_RAND)</label>
+              <div class="slider-container">
+                <input type="range" id="blockRandomFactor" min="0" max="130" value="50">
+                <span class="slider-value" id="blockRandomFactor-val">50</span>
+              </div>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="adaptiveSplit">
+              <label for="adaptiveSplit">Raccordi Adattivi (ADAPTIVE_SPLIT)</label>
+            </div>
+            <div class="form-group">
+              <label for="splitFactor">Incontro Raccordi (SPLIT_FACTOR)</label>
+              <div class="slider-container">
+                <input type="range" id="splitFactor" min="0" max="100" value="50">
+                <span class="slider-value" id="splitFactor-val">50</span>
+              </div>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="uniformHeights">
+              <label for="uniformHeights">Altezze Uniformi (UNIFORM_HEIGHTS)</label>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="uniformShift">
+              <label for="uniformShift">Spostamento Uniforme (UNIFORM_SHIFT)</label>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="uniformWidths">
+              <label for="uniformWidths">Larghezze Uniformi (UNIFORM_WIDTHS)</label>
+            </div>
+          </div>
+        </details>
+
+        <!-- 6. Contorni & Outline -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Contorni & Outline</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="showGridStroke">
+              <label for="showGridStroke">Mostra Griglia di Verifica</label>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="showIntersectionLines" checked>
+              <label for="showIntersectionLines">Mostra Outline sulle Intersezioni</label>
+            </div>
+            <div class="form-group">
+              <label for="strokeWidth">Spessore Linea Tratto</label>
+              <div class="slider-container">
+                <input type="range" id="strokeWidth" min="0.5" max="10" step="0.1" value="1.2">
+                <span class="slider-value" id="strokeWidth-val">1.2</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 7. Palette Colori -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Palette Colori</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="palettePresetSelect">Preset Palette</label>
+              <select id="palettePresetSelect">
+                <!-- Popolato da JS -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Colori Palette Corrente</label>
+              <div id="palette-colors-list" class="colors-list">
+                <!-- Generato dinamicamente -->
+              </div>
+              <button id="add-color-btn" class="btn btn-secondary btn-sm" style="margin-top: 8px;">+ Aggiungi Colore</button>
+            </div>
+
+            <div class="color-options-row">
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="useManualBg" checked>
+                <label for="useManualBg">Sfondo Manuale</label>
+              </div>
+              <input type="color" id="manualBgHex" value="#ffffff">
+            </div>
+
+            <div class="color-options-row">
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="useManualStroke">
+                <label for="useManualStroke">Tratto Manuale</label>
+              </div>
+              <input type="color" id="manualStrokeHex" value="#000000">
+            </div>
+
+            <button id="shuffle-colors-btn" class="btn btn-secondary btn-block">Rimescola Colori</button>
+          </div>
+        </details>
+
+        <!-- 8. Seed & Generazione -->
+        <details class="accordion-item">
+          <summary class="accordion-header">
+            <span>Seed & Generazione</span>
+            <span class="icon">▾</span>
+          </summary>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="seedInput">Seed Struttura</label>
+              <input type="text" id="seedInput" value="skolptura_logic_ribbon">
+            </div>
+            
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="seedLockToggle" checked>
+              <label for="seedLockToggle">Blocca Struttura (Lock Seed)</label>
+            </div>
+
+            <button id="regenerate-btn" class="btn btn-primary btn-block">Genera Nuovo Layout</button>
+            <button id="randomize-params-btn" class="btn btn-secondary btn-block" style="margin-top: 8px;">Randomizza Parametri</button>
+          </div>
+        </details>
+      </div>
+
+      <!-- Footer & Esportazioni -->
+      <footer class="sidebar-footer">
+        <h3>Esportazione</h3>
+        <div class="export-grid">
+          <button id="export-png-btn" class="btn btn-export">PNG</button>
+          <button id="export-svg-btn" class="btn btn-export">SVG</button>
+        </div>
+        <div class="export-grid" style="margin-top: 8px;">
+          <button id="export-json-btn" class="btn btn-export btn-secondary">Esporta Config</button>
+          <label for="import-json-input" class="btn btn-export btn-secondary" style="display: flex; align-items: center; justify-content: center; margin: 0; cursor: pointer;">
+            Importa Config
+          </label>
+          <input type="file" id="import-json-input" accept=".json" style="display: none;">
+        </div>
+
+        <!-- Esportazione Batch -->
+        <div class="export-batch-container" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--panel-border); display: flex; flex-direction: column; gap: 8px;">
+          <h4 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Esportazione Batch</h4>
+          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+            <label for="batchCountInput" style="font-size: 0.72rem; color: var(--text-muted); flex: 1;">Quantità:</label>
+            <input type="number" id="batchCountInput" value="5" min="1" max="100" style="width: 70px; padding: 4px 8px;">
+          </div>
+          <button id="export-batch-btn" class="btn btn-export btn-block" style="font-size: 0.8rem; padding: 8px; text-transform: none;">Esporta Batch (Solo Seed)</button>
+          <button id="export-batch-random-btn" class="btn btn-primary btn-block" style="font-size: 0.8rem; padding: 10px; text-transform: none; margin-top: 4px;">Esporta Batch (Randomizza Tutto)</button>
+        </div>
+      </footer>
+    </aside>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
