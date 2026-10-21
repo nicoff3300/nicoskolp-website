@@ -91,8 +91,13 @@ let capsulesGraphics;
 let gridGraphics;
 
 function isModeAdmin() {
-  return (typeof window.isSkolpAdmin === 'function' && window.isSkolpAdmin()) ||
-         localStorage.getItem('skolp_admin_mode') === 'true';
+  try {
+    return (typeof window.isSkolpAdmin === 'function' && window.isSkolpAdmin()) ||
+           localStorage.getItem('skolp_admin_mode') === 'true' ||
+           document.documentElement.classList.contains('admin-mode');
+  } catch (e) {
+    return false;
+  }
 }
 
 async function initPixi() {
@@ -137,6 +142,7 @@ async function initPixi() {
       resizeTimer = setTimeout(() => {
         if (!wrapper || !app || !app.renderer) return;
         const rect = wrapper.getBoundingClientRect();
+        if (!rect || rect.width <= 0 || rect.height <= 0) return;
         const newW = Math.max(300, Math.round(rect.width));
         const newH = Math.max(300, Math.round(rect.height));
         if (newW !== state.canvasWidth || newH !== state.canvasHeight) {
