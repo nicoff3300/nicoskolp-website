@@ -1,7 +1,7 @@
 # Piano di Implementazione: Chiusura GUI al Click sull'Area di Rendering & Espansione a Schermo Intero
 
 **Data:** 2026-10-21  
-**Stato:** In corso  
+**Stato:** Completato  
 **Autore:** Antigravity  
 
 ---
