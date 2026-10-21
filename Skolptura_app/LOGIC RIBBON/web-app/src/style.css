@@ -633,6 +633,72 @@ body.immersive-mode #canvas-wrapper canvas {
   }
 }
 
+/* MODALITÀ SCHERMO INTERO (GUI COLLASSATA & CANVAS ESPANSO) */
+.reopen-gui-btn {
+  display: none;
+  position: fixed;
+  bottom: calc(20px + env(safe-area-inset-bottom, 15px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: rgba(10, 10, 10, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #444444;
+  border-radius: 0px !important;
+  color: #ffffff;
+  padding: 8px 18px;
+  font-family: 'Open Sans', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.reopen-gui-btn:hover,
+.reopen-gui-btn:active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+body.gui-collapsed .reopen-gui-btn,
+html.gui-collapsed .reopen-gui-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+body.gui-collapsed .sidebar,
+html.gui-collapsed .sidebar {
+  display: none !important;
+}
+
+body.gui-collapsed .canvas-area,
+html.gui-collapsed .canvas-area {
+  flex: 1 1 100% !important;
+  width: 100% !important;
+  width: 100vw !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  max-height: none !important;
+}
+
+body.gui-collapsed #canvas-wrapper,
+html.gui-collapsed #canvas-wrapper {
+  width: 100% !important;
+  width: 100vw !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  aspect-ratio: unset !important;
+}
+
 
 /* ==========================================================================
    NICO SKOLP - BRAND ALIGNMENT (INVERTED DARK THEME & NO EXPORT)

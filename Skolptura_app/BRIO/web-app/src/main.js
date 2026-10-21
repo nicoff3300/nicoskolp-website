@@ -134,6 +134,7 @@ async function initPixi() {
   app.stage.addChild(gridGraphics);
 
   setupZoomPan(wrapper);
+  setupCanvasClickToggle(wrapper);
   resetView();
 
   if (!isModeAdmin() && wrapper) {
@@ -157,6 +158,68 @@ async function initPixi() {
       }, 150);
     });
     ro.observe(wrapper);
+  }
+}
+
+// --- CLICK SUL CANVAS PER COLLASSARE / RIAPRIRE LA GUI ---
+function setupCanvasClickToggle(wrapper) {
+  if (!wrapper) return;
+  let startPos = { x: 0, y: 0 };
+  let startTime = 0;
+  let isPotentialClick = false;
+
+  wrapper.addEventListener('pointerdown', (e) => {
+    if (e.target && e.target.closest('button, a, input, select, .immersive-btn, .reopen-gui-btn')) {
+      isPotentialClick = false;
+      return;
+    }
+    if (e.pointerType === 'mouse' && e.button !== 0) {
+      isPotentialClick = false;
+      return;
+    }
+    isPotentialClick = true;
+    startPos = { x: e.clientX, y: e.clientY };
+    startTime = Date.now();
+  });
+
+  wrapper.addEventListener('pointerup', (e) => {
+    if (!isPotentialClick) return;
+    isPotentialClick = false;
+    const dx = e.clientX - startPos.x;
+    const dy = e.clientY - startPos.y;
+    const dist = Math.hypot(dx, dy);
+    const elapsed = Date.now() - startTime;
+
+    if (dist < 8 && elapsed < 350) {
+      if (!document.body.classList.contains('gui-collapsed')) {
+        document.body.classList.add('gui-collapsed');
+        triggerResize();
+      }
+    }
+  });
+
+  const reopenBtn = document.getElementById('reopen-gui-btn');
+  if (reopenBtn) {
+    reopenBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.body.classList.remove('gui-collapsed');
+      triggerResize();
+    });
+  }
+
+  function triggerResize() {
+    setTimeout(() => {
+      if (!wrapper || !app || !app.renderer) return;
+      const rect = wrapper.getBoundingClientRect();
+      if (!rect || rect.width <= 0 || rect.height <= 0) return;
+      const newW = Math.max(300, Math.round(rect.width));
+      const newH = Math.max(300, Math.round(rect.height));
+      state.canvasWidth = newW;
+      state.canvasHeight = newH;
+      app.renderer.resize(newW, newH);
+      resetView();
+      renderScene();
+    }, 60);
   }
 }
 
