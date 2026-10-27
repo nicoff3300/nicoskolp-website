@@ -4405,7 +4405,12 @@
         const isMobile = curW <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && curW < 1024);
 
         let targetW, targetH;
+        let targetMargin = 70;
+        let targetDensity = 108;
+
         if (isPortrait || isMobile) {
+          targetMargin = 170;
+          targetDensity = 30;
           if (isPortrait) {
             targetW = 1080;
             targetH = Math.round(targetW * (curH / Math.max(1, curW)));
@@ -4413,23 +4418,37 @@
             targetH = 1080;
             targetW = Math.round(targetH * (curW / Math.max(1, curH)));
           }
-          if (AppState.net.density !== 30) {
-            AppState.net.density = 30;
-            const paramDensityEl = document.getElementById('paramDensity');
-            const valDensityEl = document.getElementById('valDensity');
-            if (paramDensityEl) paramDensityEl.value = 30;
-            if (valDensityEl) valDensityEl.textContent = '30';
-          }
         } else {
           targetW = 1920;
           targetH = 1080;
+          targetMargin = 70;
+          targetDensity = 108;
         }
 
-        if (Math.abs(this.canvas.width - targetW) > 6 || Math.abs(this.canvas.height - targetH) > 6) {
+        const sizeChanged = Math.abs(this.canvas.width - targetW) > 6 || Math.abs(this.canvas.height - targetH) > 6;
+        const marginChanged = AppState.net.margin !== targetMargin;
+        const densityChanged = AppState.net.density !== targetDensity;
+
+        if (sizeChanged || marginChanged || densityChanged) {
           this.canvas.width = targetW;
           this.canvas.height = targetH;
           AppState.canvasWidth = targetW;
           AppState.canvasHeight = targetH;
+          AppState.net.margin = targetMargin;
+          AppState.net.density = targetDensity;
+
+          const paramDensityEl = document.getElementById('paramDensity');
+          const valDensityEl = document.getElementById('valDensity');
+          if (paramDensityEl) paramDensityEl.value = targetDensity;
+          if (valDensityEl) valDensityEl.textContent = `${targetDensity}`;
+
+          const paramMarginEl = document.getElementById('paramMargin');
+          const valMarginEl = document.getElementById('valMargin');
+          if (paramMarginEl) paramMarginEl.value = targetMargin;
+          if (valMarginEl) valMarginEl.textContent = `${targetMargin} px`;
+
+          const hudMarginEl = document.getElementById('hudMargin');
+          if (hudMarginEl) hudMarginEl.textContent = `${targetMargin} px`;
 
           const hudRes = document.getElementById('hudResolution');
           if (hudRes) hudRes.textContent = `${targetW} × ${targetH}`;
