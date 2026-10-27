@@ -2598,6 +2598,8 @@
         irregularity: 1.0,
         borderDynamics: 1.0,
         margin: 70,
+        marginTopBottom: 70,
+        marginLeftRight: 70,
         strokeWeight: 15,
         opacity: 1.0,
         blendMode: 'screen',
@@ -2778,8 +2780,11 @@
         const cols = Math.round(Math.sqrt(count * aspect));
         const rows = Math.round(count / cols);
 
-        const availW = Math.max(100, width - margin * 2);
-        const availH = Math.max(100, height - margin * 2);
+        const marginLR = (typeof margin === 'object' && margin !== null) ? (margin.lr ?? margin.marginLR ?? 70) : margin;
+        const marginTB = (typeof margin === 'object' && margin !== null) ? (margin.tb ?? margin.marginTB ?? 70) : margin;
+
+        const availW = Math.max(100, width - marginLR * 2);
+        const availH = Math.max(100, height - marginTB * 2);
         const stepX = availW / (cols - 1 || 1);
         const stepY = availH / (rows - 1 || 1);
 
@@ -2803,8 +2808,8 @@
         const rawPoints = [];
         for (let r = 0; r < rows; r++) {
           for (let c = 0; c < cols; c++) {
-            let baseX = margin + c * stepX;
-            let baseY = margin + r * stepY;
+            let baseX = marginLR + c * stepX;
+            let baseY = marginTB + r * stepY;
 
             // Distanza normalizzata dal perimetro: 0 sui bordi, 1 al centro
             const normDistX = Math.min(c, cols - 1 - c) / ((cols - 1) / 2 || 1);
@@ -2845,8 +2850,8 @@
             if (r === 0) jy = Math.max(0, jy * (0.2 + borderDynamics * 0.4));
             if (r === rows - 1) jy = Math.min(0, jy * (0.2 + borderDynamics * 0.4));
 
-            const px = Math.max(margin, Math.min(width - margin, baseX + jx));
-            const py = Math.max(margin, Math.min(height - margin, baseY + jy));
+            const px = Math.max(marginLR, Math.min(width - marginLR, baseX + jx));
+            const py = Math.max(marginTB, Math.min(height - marginTB, baseY + jy));
 
             rawPoints.push({ x: px, y: py });
           }
@@ -3016,11 +3021,14 @@
       }
 
       update(time, waveSpeed, mouse, openRadius, openForce, margin, width, height, strokeWeight) {
-        const pad = margin + strokeWeight * 0.5;
-        const boundMinX = pad;
-        const boundMaxX = width - pad;
-        const boundMinY = pad;
-        const boundMaxY = height - pad;
+        const marginLR = (typeof margin === 'object' && margin !== null) ? (margin.lr ?? margin.marginLR ?? 70) : margin;
+        const marginTB = (typeof margin === 'object' && margin !== null) ? (margin.tb ?? margin.marginTB ?? 70) : margin;
+        const padX = marginLR + strokeWeight * 0.5;
+        const padY = marginTB + strokeWeight * 0.5;
+        const boundMinX = padX;
+        const boundMaxX = width - padX;
+        const boundMinY = padY;
+        const boundMaxY = height - padY;
 
         for (let i = 0; i < this.nodes.length; i++) {
           const n = this.nodes[i];
@@ -3427,10 +3435,12 @@
           : (mouse && mouse.isOverCanvas ? [mouse] : []);
 
         // Confini fallback dell'area della rete
-        const netMinX = netBox ? netBox.minX + 30 : netMargin + 30;
-        const netMaxX = netBox ? netBox.maxX - 30 : width - netMargin - 30;
-        const netMinY = netBox ? netBox.minY + 30 : netMargin + 30;
-        const netMaxY = netBox ? netBox.maxY - 30 : height - netMargin - 30;
+        const marginLR = (typeof netMargin === 'object' && netMargin !== null) ? (netMargin.lr ?? netMargin.marginLR ?? 70) : netMargin;
+        const marginTB = (typeof netMargin === 'object' && netMargin !== null) ? (netMargin.tb ?? netMargin.marginTB ?? 70) : netMargin;
+        const netMinX = netBox ? netBox.minX + 30 : marginLR + 30;
+        const netMaxX = netBox ? netBox.maxX - 30 : width - marginLR - 30;
+        const netMinY = netBox ? netBox.minY + 30 : marginTB + 30;
+        const netMaxY = netBox ? netBox.maxY - 30 : height - marginTB - 30;
 
         if (this.isTrapped) {
           // =========================================================================
@@ -3970,14 +3980,29 @@
         }
       }
 
+      getNetMargins() {
+        const isPortrait = window.innerHeight > window.innerWidth;
+        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024);
+        if (isPortrait || isMobile) {
+          const tb = (AppState.net.marginTopBottom !== undefined) ? AppState.net.marginTopBottom : (AppState.net.margin || 170);
+          const lr = (AppState.net.marginLeftRight !== undefined) ? AppState.net.marginLeftRight : Math.round(tb * 0.70);
+          return { lr, tb, marginLR: lr, marginTB: tb };
+        }
+        const m = AppState.net.margin || 70;
+        const tb = (AppState.net.marginTopBottom !== undefined) ? AppState.net.marginTopBottom : m;
+        const lr = (AppState.net.marginLeftRight !== undefined) ? AppState.net.marginLeftRight : m;
+        return { lr, tb, marginLR: lr, marginTB: tb };
+      }
+
       rebuildNetColors() {
         const palette = this.getActivePalette();
+        const margins = this.getNetMargins();
         this.net.generate(
           this.canvas.width,
           this.canvas.height,
           AppState.net.density,
           AppState.net.irregularity,
-          AppState.net.margin,
+          margins,
           AppState.net.borderDynamics,
           AppState.seed,
           palette
@@ -4012,12 +4037,12 @@
           }
         }
 
-        const margin = AppState.net.margin;
+        const margins = this.getNetMargins();
         const netBox = this.net.getBoundingBox();
-        const trapMinX = Math.max(margin + 40, netBox.minX + 40);
-        const trapMaxX = Math.min(this.canvas.width - margin - 40, netBox.maxX - 40);
-        const trapMinY = Math.max(margin + 40, netBox.minY + 40);
-        const trapMaxY = Math.min(this.canvas.height - margin - 40, netBox.maxY - 40);
+        const trapMinX = Math.max(margins.lr + 40, netBox.minX + 40);
+        const trapMaxX = Math.min(this.canvas.width - margins.lr - 40, netBox.maxX - 40);
+        const trapMinY = Math.max(margins.tb + 40, netBox.minY + 40);
+        const trapMaxY = Math.min(this.canvas.height - margins.tb - 40, netBox.maxY - 40);
 
         const randVal = (min, max) => rng ? rng.range(min, max) : min + Math.random() * (max - min);
 
@@ -4093,12 +4118,12 @@
           }
         }
 
-        const margin = AppState.net.margin;
+        const margins = this.getNetMargins();
         const netBox = this.net.getBoundingBox();
-        const netMinX = Math.max(margin + 40, netBox.minX + 40);
-        const netMaxX = Math.min(this.canvas.width - margin - 40, netBox.maxX - 40);
-        const netMinY = Math.max(margin + 40, netBox.minY + 40);
-        const netMaxY = Math.min(this.canvas.height - margin - 40, netBox.maxY - 40);
+        const netMinX = Math.max(margins.lr + 40, netBox.minX + 40);
+        const netMaxX = Math.min(this.canvas.width - margins.lr - 40, netBox.maxX - 40);
+        const netMinY = Math.max(margins.tb + 40, netBox.minY + 40);
+        const netMaxY = Math.min(this.canvas.height - margins.tb - 40, netBox.maxY - 40);
 
         const randVal = (min, max) => rng ? rng.range(min, max) : min + Math.random() * (max - min);
 
@@ -4176,12 +4201,12 @@
           }
         }
 
-        const margin = AppState.net.margin;
+        const margins = this.getNetMargins();
         const netBox = this.net.getBoundingBox();
-        const netMinX = Math.max(margin + 20, netBox.minX + 20);
-        const netMaxX = Math.min(this.canvas.width - margin - 20, netBox.maxX - 20);
-        const netMinY = Math.max(margin + 20, netBox.minY + 20);
-        const netMaxY = Math.min(this.canvas.height - margin - 20, netBox.maxY - 20);
+        const netMinX = Math.max(margins.lr + 20, netBox.minX + 20);
+        const netMaxX = Math.min(this.canvas.width - margins.lr - 20, netBox.maxX - 20);
+        const netMinY = Math.max(margins.tb + 20, netBox.minY + 20);
+        const netMaxY = Math.min(this.canvas.height - margins.tb - 20, netBox.maxY - 20);
 
         const randVal = (min, max) => rng ? rng.range(min, max) : min + Math.random() * (max - min);
 
@@ -4272,12 +4297,12 @@
               const types = ['triangle', 'circle'];
               const chosenType = filter !== 'all' ? filter : types[Math.floor(Math.random() * types.length)];
               const fromLeft = Math.random() > 0.5;
-              const margin = AppState.net.margin;
+              const margins = this.getNetMargins();
               const netBox = this.net.getBoundingBox();
-              const netMinX = Math.max(margin + 40, netBox.minX + 40);
-              const netMaxX = Math.min(this.canvas.width - margin - 40, netBox.maxX - 40);
-              const netMinY = Math.max(margin + 40, netBox.minY + 40);
-              const netMaxY = Math.min(this.canvas.height - margin - 40, netBox.maxY - 40);
+              const netMinX = Math.max(margins.lr + 40, netBox.minX + 40);
+              const netMaxX = Math.min(this.canvas.width - margins.lr - 40, netBox.maxX - 40);
+              const netMinY = Math.max(margins.tb + 40, netBox.minY + 40);
+              const netMaxY = Math.min(this.canvas.height - margins.tb - 40, netBox.maxY - 40);
               const baseY = netMinY + Math.random() * (netMaxY - netMinY);
               let targetX = null, targetY = null;
               for (let attempt = 0; attempt < 25; attempt++) {
@@ -4334,12 +4359,13 @@
         this.syncHudCounts();
 
         const palette = this.getActivePalette();
+        const margins = this.getNetMargins();
         this.net.generate(
           this.canvas.width,
           this.canvas.height,
           AppState.net.density,
           AppState.net.irregularity,
-          AppState.net.margin,
+          margins,
           AppState.net.borderDynamics,
           AppState.seed,
           palette
@@ -4347,7 +4373,13 @@
         this.spawnFauna();
 
         const hudMarginEl = document.getElementById('hudMargin');
-        if (hudMarginEl) hudMarginEl.textContent = `${AppState.net.margin} px`;
+        if (hudMarginEl) {
+          const isPortrait = window.innerHeight > window.innerWidth;
+          const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024);
+          hudMarginEl.textContent = (isPortrait || isMobile)
+            ? `${margins.lr} × ${margins.tb} px`
+            : `${margins.tb} px`;
+        }
         if (!silent) {
           const outsideRatio = AppState.fauna.outsideRatio !== undefined ? AppState.fauna.outsideRatio : 30;
           const outsideCount = Math.round(AppState.fauna.count * (outsideRatio / 100));
@@ -4369,12 +4401,12 @@
         const filter = AppState.fauna.speciesFilter;
         const flockCandidateTypes = ['triangle', 'circle'];
 
-        const margin = AppState.net.margin;
+        const margins = this.getNetMargins();
         const netBox = this.net.getBoundingBox();
-        const trapMinX = Math.max(margin + 40, netBox.minX + 40);
-        const trapMaxX = Math.min(this.canvas.width - margin - 40, netBox.maxX - 40);
-        const trapMinY = Math.max(margin + 40, netBox.minY + 40);
-        const trapMaxY = Math.min(this.canvas.height - margin - 40, netBox.maxY - 40);
+        const trapMinX = Math.max(margins.lr + 40, netBox.minX + 40);
+        const trapMaxX = Math.min(this.canvas.width - margins.lr - 40, netBox.maxX - 40);
+        const trapMinY = Math.max(margins.tb + 40, netBox.minY + 40);
+        const trapMaxY = Math.min(this.canvas.height - margins.tb - 40, netBox.maxY - 40);
 
         // 1. Elementi intrappolati all'interno della rete (Rosso mattone acceso)
         const trappedFlockTarget = Math.round(count * (flockingRatio / 100));
@@ -4499,10 +4531,14 @@
 
         let targetW, targetH;
         let targetMargin = 70;
+        let targetMarginTB = 70;
+        let targetMarginLR = 70;
         let targetDensity = 108;
 
         if (isPortrait || isMobile) {
-          targetMargin = 170;
+          targetMarginTB = 170;
+          targetMarginLR = Math.round(170 * 0.70); // 119px (margini laterali stretti del 30%)
+          targetMargin = targetMarginTB;
           targetDensity = 30;
           if (isPortrait) {
             targetW = 1080;
@@ -4514,12 +4550,14 @@
         } else {
           targetW = 1920;
           targetH = 1080;
+          targetMarginTB = 70;
+          targetMarginLR = 70;
           targetMargin = 70;
           targetDensity = 108;
         }
 
         const sizeChanged = Math.abs(this.canvas.width - targetW) > 6 || Math.abs(this.canvas.height - targetH) > 6;
-        const marginChanged = AppState.net.margin !== targetMargin;
+        const marginChanged = AppState.net.marginTopBottom !== targetMarginTB || AppState.net.marginLeftRight !== targetMarginLR;
         const densityChanged = AppState.net.density !== targetDensity;
 
         if (sizeChanged || marginChanged || densityChanged) {
@@ -4528,6 +4566,8 @@
           AppState.canvasWidth = targetW;
           AppState.canvasHeight = targetH;
           AppState.net.margin = targetMargin;
+          AppState.net.marginTopBottom = targetMarginTB;
+          AppState.net.marginLeftRight = targetMarginLR;
           AppState.net.density = targetDensity;
 
           const paramDensityEl = document.getElementById('paramDensity');
@@ -4537,11 +4577,19 @@
 
           const paramMarginEl = document.getElementById('paramMargin');
           const valMarginEl = document.getElementById('valMargin');
-          if (paramMarginEl) paramMarginEl.value = targetMargin;
-          if (valMarginEl) valMarginEl.textContent = `${targetMargin} px`;
+          if (paramMarginEl) paramMarginEl.value = targetMarginTB;
+          if (valMarginEl) {
+            valMarginEl.textContent = (isPortrait || isMobile)
+              ? `${targetMarginLR} × ${targetMarginTB} px`
+              : `${targetMarginTB} px`;
+          }
 
           const hudMarginEl = document.getElementById('hudMargin');
-          if (hudMarginEl) hudMarginEl.textContent = `${targetMargin} px`;
+          if (hudMarginEl) {
+            hudMarginEl.textContent = (isPortrait || isMobile)
+              ? `${targetMarginLR} × ${targetMarginTB} px`
+              : `${targetMarginTB} px`;
+          }
 
           const hudRes = document.getElementById('hudResolution');
           if (hudRes) hudRes.textContent = `${targetW} × ${targetH}`;
@@ -4621,6 +4669,7 @@
 
         // 2. Fauna Marina: aggiorna posizioni e disegna nel LIVELLO DIETRO LA RETE
         // (le forme sono visivamente imprigionate dietro i tratti della rete)
+        const margins = this.getNetMargins();
         const netBox = this.net.getBoundingBox();
         for (let i = this.fauna.length - 1; i >= 0; i--) {
           const creature = this.fauna[i];
@@ -4630,7 +4679,7 @@
             AppState.fauna.speed,
             interactionPoints,
             AppState.net.openRadius,
-            AppState.net.margin,
+            margins,
             netBox,
             this.fauna,
             this.net
@@ -4662,7 +4711,7 @@
           interactionPoints,
           AppState.net.openRadius,
           AppState.net.openForce,
-          AppState.net.margin,
+          margins,
           this.canvas.width,
           this.canvas.height,
           AppState.net.strokeWeight
@@ -4683,13 +4732,13 @@
 
         const t = (now * 0.00065) * (AppState.ambientDemo.speed || 1.0);
         const netBox = this.net.getBoundingBox();
-        const margin = AppState.net.margin;
+        const margins = this.getNetMargins();
 
         // Limiti sicuri entro l'area utile della rete (rispettando il bounding box e i margini)
-        const minX = Math.max(margin + 70, netBox.minX + 70);
-        const maxX = Math.min(this.canvas.width - margin - 70, netBox.maxX - 70);
-        const minY = Math.max(margin + 70, netBox.minY + 70);
-        const maxY = Math.min(this.canvas.height - margin - 70, netBox.maxY - 70);
+        const minX = Math.max(margins.lr + 70, netBox.minX + 70);
+        const maxX = Math.min(this.canvas.width - margins.lr - 70, netBox.maxX - 70);
+        const minY = Math.max(margins.tb + 70, netBox.minY + 70);
+        const maxY = Math.min(this.canvas.height - margins.tb - 70, netBox.maxY - 70);
 
         const cx = (minX + maxX) * 0.5;
         const cy = (minY + maxY) * 0.5;
@@ -5486,6 +5535,8 @@
             irregularity: AppState.net.irregularity,
             borderDynamics: AppState.net.borderDynamics,
             margin: AppState.net.margin,
+            marginTopBottom: AppState.net.marginTopBottom,
+            marginLeftRight: AppState.net.marginLeftRight,
             strokeWeight: AppState.net.strokeWeight,
             blendMode: AppState.net.blendMode,
             waveSpeed: AppState.net.waveSpeed,
@@ -5535,8 +5586,12 @@
       }
 
       syncControlsFromState() {
-        document.getElementById('paramMargin').value = AppState.net.margin;
-        document.getElementById('valMargin').textContent = `${AppState.net.margin} px`;
+        const isPortrait = window.innerHeight > window.innerWidth;
+        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024);
+        const tb = AppState.net.marginTopBottom || AppState.net.margin || 70;
+        const lr = AppState.net.marginLeftRight || (isPortrait || isMobile ? Math.round(tb * 0.70) : tb);
+        document.getElementById('paramMargin').value = tb;
+        document.getElementById('valMargin').textContent = (isPortrait || isMobile) ? `${lr} × ${tb} px` : `${tb} px`;
 
         document.getElementById('paramStroke').value = AppState.net.strokeWeight;
         document.getElementById('valStroke').textContent = `${AppState.net.strokeWeight} px`;
@@ -5868,12 +5923,28 @@
 
         // Slider Margine Canvas
         this.bindSlider('paramMargin', 'valMargin', (val) => {
-          AppState.net.margin = parseInt(val);
+          const m = parseInt(val);
+          AppState.net.margin = m;
+          const isPortrait = window.innerHeight > window.innerWidth;
+          const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024);
+          if (isPortrait || isMobile) {
+            AppState.net.marginTopBottom = m;
+            AppState.net.marginLeftRight = Math.round(m * 0.70); // Stringe i margini left/right del 30% di default su mobile
+          } else {
+            AppState.net.marginTopBottom = m;
+            AppState.net.marginLeftRight = m;
+          }
           const hudMarginEl = document.getElementById('hudMargin');
-          if (hudMarginEl) hudMarginEl.textContent = `${val} px`;
+          if (hudMarginEl) {
+            hudMarginEl.textContent = (isPortrait || isMobile)
+              ? `${AppState.net.marginLeftRight} × ${AppState.net.marginTopBottom} px`
+              : `${m} px`;
+          }
           this.rebuildNetColors();
           this.spawnFauna();
-          return `${val} px`;
+          return (isPortrait || isMobile)
+            ? `${AppState.net.marginLeftRight} × ${AppState.net.marginTopBottom} px`
+            : `${val} px`;
         });
 
         // Slider Spessore Tratti (Default 45 px)
