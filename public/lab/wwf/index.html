@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#000000">
   <meta name="mobile-web-app-capable" content="yes">
-  <title>WWF GENOVa // Reti Cromatiche & Liberazione Fauna Marina</title>
+  <title>EcoeFISHent // WWF GENOVA - Reti Cromatiche & Liberazione Fauna Marina</title>
   <link rel="stylesheet" href="./fonts/fonts.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -893,6 +893,78 @@
     }
 
     /* =========================================================================
+       Floating Top Brand Title: EcoeFISHent (Desktop & Mobile)
+       ========================================================================= */
+    .project-top-title {
+      position: fixed;
+      top: calc(16px + env(safe-area-inset-top, 0px));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px;
+      background: rgba(0, 0, 0, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .project-top-title:hover {
+      background: rgba(8, 8, 8, 0.92);
+      border-color: #ffffff;
+      transform: translateX(-50%) translateY(-1px);
+    }
+
+    .project-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-druk);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .project-badge .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      box-shadow: 0 0 6px #ffffff;
+    }
+
+    .project-divider {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .project-name {
+      font-family: var(--font-druk);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--text-white);
+      margin: 0;
+      line-height: 1;
+      text-transform: none;
+    }
+
+    body.debug-active .project-top-title {
+      display: none !important;
+    }
+
+    /* =========================================================================
        Modalità Controllo Totale (Attivabile solo da tastiera premendo D)
        ========================================================================= */
     body.debug-active aside.sidebar {
@@ -1613,6 +1685,26 @@
         font-size: 10.5px;
         padding: 14px 16px;
       }
+
+      .project-top-title {
+        top: calc(12px + env(safe-area-inset-top, 0px));
+        padding: 5px 12px;
+        gap: 8px;
+      }
+
+      .project-badge {
+        font-size: 8.5px;
+        gap: 5px;
+      }
+
+      .project-badge .status-dot {
+        width: 5px;
+        height: 5px;
+      }
+
+      .project-name {
+        font-size: 0.92rem;
+      }
     }
   </style>
 </head>
@@ -1626,7 +1718,7 @@
         WWF GENOVA
       </div>
       <div class="brand-title">
-        RETI CROMATICHE <span>// Liberazione Fauna Marina</span>
+        EcoeFISHent <span>// Reti Cromatiche & Fauna Marina</span>
       </div>
     </div>
 
@@ -1651,6 +1743,16 @@
       </button>
     </div>
   </header>
+
+  <!-- Titolo Progetto EcoeFISHent in alto (visibile su Desktop e Mobile) -->
+  <div class="project-top-title" id="projectTopTitle" title="Progetto EcoeFISHent // WWF GENOVA (Clicca per informazioni)">
+    <div class="project-badge">
+      <span class="status-dot"></span>
+      <span class="badge-text">WWF GENOVA</span>
+    </div>
+    <span class="project-divider">//</span>
+    <h1 class="project-name">EcoeFISHent</h1>
+  </div>
 
   <!-- Workspace: Sidebar + Canvas Viewport -->
   <div class="app-workspace">
@@ -4888,6 +4990,14 @@
         this.isEcoeFishModalOpen = false;
       }
 
+      openEcoeFishModal() {
+        const modal = document.getElementById('ecoeFishModal');
+        if (modal) {
+          modal.classList.add('is-open');
+        }
+        this.isEcoeFishModalOpen = true;
+      }
+
       toggleInfoModal(forceOpen) {
         const modal = document.getElementById('infoModal');
         if (!modal) return;
@@ -5302,12 +5412,12 @@
         });
 
         window.addEventListener('touchstart', (e) => {
-          if (e.target.closest('input, select, button, .modal-card, aside.sidebar, header.app-header')) return;
+          if (e.target.closest('input, select, button, .modal-card, aside.sidebar, header.app-header, .project-top-title')) return;
           updateTouches(e);
         }, { passive: true });
 
         window.addEventListener('touchmove', (e) => {
-          if (e.target.closest('input, select, button, .modal-card, aside.sidebar, header.app-header')) return;
+          if (e.target.closest('input, select, button, .modal-card, aside.sidebar, header.app-header, .project-top-title')) return;
           updateTouches(e);
         }, { passive: true });
 
@@ -5386,6 +5496,14 @@
             if (e.target === ecoeModalEl) {
               this.closeEcoeFishModal();
             }
+          });
+        }
+
+        // Click sul titolo fluttuante in alto per riaprire le info/istruzioni EcoeFISHent
+        const topTitleEl = document.getElementById('projectTopTitle');
+        if (topTitleEl) {
+          topTitleEl.addEventListener('click', () => {
+            this.openEcoeFishModal();
           });
         }
 
