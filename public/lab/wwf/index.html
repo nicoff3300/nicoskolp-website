@@ -3197,6 +3197,12 @@
         // Stato fuga e raggiungimento mare aperto
         this.isFleeing = false;
         this.isEscaped = false;
+
+        // Reazione organica allo squarcio: non istantanea al tocco di striscio
+        this.tearContactTimer = 0;
+        this.flockDelay = 0;
+        this.pendingEscapeAngle = null;
+        this.fleeProgress = 0.0;
       }
 
       applyForce(force) {
@@ -3308,22 +3314,30 @@
           this.isIncoming = false;
           this.isFleeing = true; // È stato liberato dall'utente e fugge verso l'esterno
           this.hasLeftNetArea = false;
+          this.tearContactTimer = 0;
+          this.flockDelay = 0;
+
           // Cambia colore alla liberazione (Turchese)
           this.color = this.liberatedColor;
-          // La forma liberata diventa più grande (+55%)
-          this.targetSize = this.baseSize * 1.55;
-          // Aumenta notevolmente la velocità andando via verso il mare aperto
-          this.speedMultiplier = 2.7;
 
-          if (escapeAngle !== undefined) {
-            this.angle = escapeAngle;
-            const fleeSpd = this.maxspeed * 1.7;
-            this.velocity = createVector(Math.cos(this.angle) * fleeSpd, Math.sin(this.angle) * fleeSpd);
+          // La forma liberata diventa MOLTO più grande (+120%, oltre il doppio della taglia intrappolata)
+          this.targetSize = this.baseSize * 2.2;
+
+          // Progressione fluida: parte da velocità naturale e accelera gradualmente durante la fuga
+          this.fleeProgress = 0.0;
+          this.speedMultiplier = 1.15;
+
+          if (escapeAngle !== undefined && escapeAngle !== null) {
+            // Virata morbida verso l'angolo di fuga (senza inversione a scatto a 180°)
+            const curSpd = Math.max(2.0, this.velocity.magnitude());
+            const blendAngle = this.angle * 0.35 + escapeAngle * 0.65;
+            this.angle = blendAngle;
+            this.velocity = createVector(Math.cos(blendAngle) * curSpd, Math.sin(blendAngle) * curSpd);
           }
           this.vx = this.velocity.x;
           this.vy = this.velocity.y;
 
-          // Allerta di branco: se fa parte di un cluster, trasmette l'impulso di fuga ai compagni
+          // Allerta di branco: i compagni reagiscono a cascata in modo organico e scaglionato
           if (this.flockId) {
             this.alertFlock(this.angle);
           }
@@ -3338,12 +3352,14 @@
       alertFlock(escapeAngle) {
         if (!this.flockId || !window.app || !window.app.fauna) return;
         const fauna = window.app.fauna;
+        let delayCount = 0;
         for (let i = 0; i < fauna.length; i++) {
           const mate = fauna[i];
-          if (mate !== this && mate.flockId === this.flockId && mate.isTrapped) {
-            // Reazione collettiva di branco: fuga coordinata a grappolo verso lo squarcio
-            const spread = (Math.random() - 0.5) * 0.45;
-            mate.liberate(escapeAngle + spread);
+          if (mate !== this && mate.flockId === this.flockId && mate.isTrapped && mate.flockDelay === 0) {
+            delayCount++;
+            // Reazione a catena scaglionata di banco (100-350ms): non esplodono tutti insieme
+            mate.flockDelay = 6 + delayCount * 5 + Math.floor(Math.random() * 6);
+            mate.pendingEscapeAngle = escapeAngle + (Math.random() - 0.5) * 0.35;
           }
         }
       }
@@ -3472,30 +3488,64 @@
           this.y = this.position.y;
           this.angle = Math.atan2(this.velocity.y, this.velocity.x);
 
-          // Se un punto d'interazione (mani telecamera o mouse) apre uno squarcio: LIBERAZIONE ISTANTANEA!
+          // Rilevamento dello squarcio aperto da mani o cursore (reazione meno immediata, organica)
+          let inTear = false;
+          let bestDist = Infinity;
+          let bestPoint = null;
+
           if (points.length > 0) {
             for (let p = 0; p < points.length; p++) {
               const pt = points[p];
-              const ptRadius = pt.radius || openRadius;
+              // Zona attiva dello squarcio: 75% del raggio visivo per evitare scatti al solo sfioramento periferico
+              const ptRadius = (pt.radius || openRadius) * 0.75;
               const dx = this.x - pt.x;
               const dy = this.y - pt.y;
               const dist = Math.hypot(dx, dy);
 
-              if (dist < ptRadius * 1.05) {
-                // Calcola l'angolo di spinta allontanandosi dallo squarcio e dal centro verso l'esterno
-                const pushAngle = Math.atan2(dy, dx);
-                const cx = width / 2;
-                const cy = height / 2;
-                const outAngle = Math.atan2(this.y - cy, this.x - cx);
-                const escapeAngle = (Math.cos(pushAngle - outAngle) > 0) ? pushAngle : outAngle;
-
-                this.liberate(escapeAngle);
-                this.syncHudCounts();
-
-                const source = pt.isHand ? 'le mani' : 'il mouse';
-                showToastDebounced(`✦ ${this.getSpeciesName()} è libera e fugge rapida verso il mare aperto!`);
-                break;
+              if (dist < ptRadius) {
+                inTear = true;
+                if (dist < bestDist) {
+                  bestDist = dist;
+                  bestPoint = pt;
+                }
               }
+            }
+          }
+
+          if (inTear && bestPoint) {
+            const ptRadius = (bestPoint.radius || openRadius) * 0.75;
+            const centerRatio = bestDist / Math.max(1, ptRadius);
+            // Più è vicino al centro dello squarcio prima si libera (da 4 a 12 frame, ~70-200ms)
+            const neededFrames = centerRatio < 0.35 ? 4 : Math.round(7 + centerRatio * 6);
+
+            this.tearContactTimer++;
+            if (this.tearContactTimer >= neededFrames) {
+              const dx = this.x - bestPoint.x;
+              const dy = this.y - bestPoint.y;
+              const cx = width / 2;
+              const cy = height / 2;
+              const outAngle = Math.atan2(this.y - cy, this.x - cx);
+              const pushAngle = Math.atan2(dy, dx);
+              // Orientamento armonico verso l'esterno del mare, senza rimbalzo rigido a 180°
+              const escapeAngle = (Math.cos(pushAngle - outAngle) > 0) ? (pushAngle * 0.45 + outAngle * 0.55) : outAngle;
+
+              this.liberate(escapeAngle);
+              this.syncHudCounts();
+
+              const source = bestPoint.isHand ? 'le mani' : 'il mouse';
+              showToastDebounced(`✦ ${this.getSpeciesName()} è libera e nuota verso il mare aperto!`);
+            }
+          } else {
+            this.tearContactTimer = Math.max(0, this.tearContactTimer - 1);
+          }
+
+          // Se un compagno di banco ha dato l'allerta, attende il proprio turno scaglionato
+          if (this.isTrapped && this.flockDelay > 0) {
+            this.flockDelay--;
+            if (this.flockDelay <= 0) {
+              this.liberate(this.pendingEscapeAngle);
+              this.syncHudCounts();
+              showToastDebounced(`✦ ${this.getSpeciesName()} segue il banco verso il mare aperto!`);
             }
           }
 
@@ -3602,17 +3652,22 @@
               showToastDebounced(`🕸 Un pesce libero è entrato nella rete ed è rimasto incastrato!`);
             }
           } else if (this.isFleeing) {
-            // B) PESCE LIBERATO DALLO SQUARCIO: fuga decisa verso l'esterno del canvas tramite seek()
+            // B) PESCE LIBERATO DALLO SQUARCIO: fuga fluida e progressiva verso l'esterno del canvas tramite seek()
+            this.fleeProgress = Math.min(1.0, this.fleeProgress + 0.028); // Crescita progressiva in ~35 frame (~0.55s)
+            this.speedMultiplier = 1.15 + this.fleeProgress * 1.35;      // Accelera da 1.15x fino a 2.5x in modo morbido
+
             const cx = width / 2;
             const cy = height / 2;
             const toOutsideAngle = Math.atan2(this.y - cy, this.x - cx);
             const escapeTarget = createVector(this.x + Math.cos(toOutsideAngle) * 500, this.y + Math.sin(toOutsideAngle) * 500);
 
-            const steer = this.seek(escapeTarget).multiplyScalar(1.35);
+            // Sterzata progressiva: inizia morbida per poi prendere velocità verso l'esterno
+            const steerWeight = 0.85 + this.fleeProgress * 0.70;
+            const steer = this.seek(escapeTarget).multiplyScalar(steerWeight);
             this.applyForce(steer);
 
             this.velocity = this.velocity.add(this.acceleration);
-            this.velocity = limit(this.velocity, this.maxspeed * 1.55);
+            this.velocity = limit(this.velocity, this.maxspeed * (1.1 + this.fleeProgress * 0.45));
             this.position = this.position.add(this.velocity);
             this.acceleration = this.acceleration.multiplyScalar(0);
 
@@ -4179,8 +4234,8 @@
         creature.isIncoming = true;
         creature.hasLeftNetArea = true;
         creature.color = liberated;
-        creature.size = size * 1.45;
-        creature.targetSize = size * 1.45;
+        creature.size = size * 2.2;
+        creature.targetSize = size * 2.2;
         creature.speedMultiplier = 1.9; // Nuoto libero fluido verso la rete
         creature.targetNetX = targetNetX;
         creature.targetNetY = targetNetY;
@@ -4272,8 +4327,8 @@
         creature.isFleeing = false;
         creature.hasLeftNetArea = true;
         creature.color = liberated;
-        creature.size = size * 1.45;
-        creature.targetSize = size * 1.45;
+        creature.size = size * 2.2;
+        creature.targetSize = size * 2.2;
         creature.speedMultiplier = 1.35;
 
         return creature;
