@@ -1869,7 +1869,7 @@
             <span class="collapse-chevron">▾</span>
             <span>2. Rete & Sovrapposizione Tratti</span>
           </div>
-          <span class="badge" id="seedBadge">SEED: 868893</span>
+          <span class="badge" id="seedBadge">SEED</span>
         </div>
 
         <div class="section-body">
@@ -2447,7 +2447,7 @@
 
     // --- 3. Stato Globale dell'Applicazione ---
     const AppState = {
-      seed: 868893,
+      seed: Math.floor(Math.random() * 900000) + 100000,
       isPlaying: true,
       canvasWidth: 1920,
       canvasHeight: 1080,
@@ -3690,6 +3690,14 @@
       }
 
       init() {
+        // Randomizza il seed ad ogni caricamento (a meno che non sia specificato esplicitamente nella query URL ?seed=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('seed')) {
+          AppState.seed = parseInt(urlParams.get('seed'), 10) || AppState.seed;
+        } else {
+          AppState.seed = Math.floor(Math.random() * 900000) + 100000;
+        }
+
         // Su versione mobile (smartphone/tablet o larghezza <= 768px): densità nodi di default impostata a 30
         const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024 && window.innerHeight > window.innerWidth);
         if (isMobile) {
@@ -3705,12 +3713,8 @@
         this.syncSliderProgresses();
         this.updateCanvasDimensions(AppState.canvasWidth, AppState.canvasHeight, true);
 
-        const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('bg') === 'light') {
           this.setBgMode('light');
-        }
-        if (urlParams.get('seed')) {
-          this.regenerate(parseInt(urlParams.get('seed')), true);
         }
 
         this.loop(performance.now());
