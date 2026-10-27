@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#070709">
+  <title>Spray AR — Simulatore Bomboletta Graffiti</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Layer 1: Sfondo video fotocamera reale -->
+  <video id="camera-video" playsinline autoplay muted></video>
+  <div id="camera-fallback" class="camera-fallback"></div>
+
+  <!-- Layer 2: Canvas di disegno ad alta risoluzione -->
+  <canvas id="spray-canvas"></canvas>
+
+  <!-- Layer 3: Mirino / Reticolo dello spray -->
+  <div id="reticle">
+    <div class="reticle-core"></div>
+    <div class="reticle-ring"></div>
+  </div>
+
+  <!-- Layer 4: UI Superiore (Strumenti e Status) -->
+  <header id="top-bar">
+    <div class="status-tag">
+      <span class="status-dot"></span>
+      <span id="tracking-mode-label">AR PASSTHROUGH</span>
+    </div>
+    <div class="top-actions">
+      <button id="recenter-btn" class="tool-btn" title="Riallinea il mirino al centro del muro">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M12 2v4M12 18v4M2 12h4M18 12h4"></path>
+        </svg>
+        <span>Centra</span>
+      </button>
+      <button id="clear-btn" class="tool-btn danger" title="Cancella la vernice dal muro">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2">
+          <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+        </svg>
+        <span>Pulisci</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Layer 5: Area Grilletto Touch (Tutta la zona inferiore) -->
+  <div id="spray-trigger-area">
+    <div class="trigger-hint">
+      <span class="trigger-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="7" y="9" width="10" height="13" rx="3"></rect>
+          <rect x="10" y="4" width="4" height="5" rx="1"></rect>
+          <path d="M12 2v2M8 4h8"></path>
+        </svg>
+      </span>
+      <span class="trigger-text">TIENI PREMUTO PER SPRUZZARE</span>
+    </div>
+  </div>
+
+  <!-- Layer 6: UI Inferiore (Palette Colori e Tipo Cap) -->
+  <footer id="bottom-bar">
+    <div class="cap-toggle-group">
+      <button id="cap-skinny" class="cap-btn" data-cap="skinny">
+        <span class="cap-dot skinny"></span>
+        <span>Skinny</span>
+      </button>
+      <button id="cap-fat" class="cap-btn active" data-cap="fat">
+        <span class="cap-dot fat"></span>
+        <span>Fat Cap</span>
+      </button>
+    </div>
+
+    <div class="palette-scroll" id="palette-bar">
+      <button class="color-chip active" data-color="#0a0a0a" style="--chip-color: #0a0a0a;" title="Nero"></button>
+      <button class="color-chip" data-color="#ffffff" style="--chip-color: #ffffff;" title="Bianco"></button>
+      <button class="color-chip" data-color="#d4d4dc" style="--chip-color: #d4d4dc;" title="Cromo"></button>
+      <button class="color-chip" data-color="#ff2222" style="--chip-color: #ff2222;" title="Rosso"></button>
+      <button class="color-chip" data-color="#ffee00" style="--chip-color: #ffee00;" title="Giallo"></button>
+      <button class="color-chip" data-color="#00f0ff" style="--chip-color: #00f0ff;" title="Ciano"></button>
+      <button class="color-chip" data-color="#a855f7" style="--chip-color: #a855f7;" title="Viola"></button>
+    </div>
+  </footer>
+
+  <!-- Layer 7: Schermata iniziale di sblocco permessi (iOS Safari e Android) -->
+  <div id="start-overlay" class="start-overlay">
+    <div class="start-card">
+      <div class="can-badge">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ff5500" stroke-width="1.8">
+          <rect x="7" y="8" width="10" height="14" rx="2"></rect>
+          <path d="M10 4h4v4h-4z"></path>
+          <path d="M12 2v2"></path>
+          <path d="M7 12h10"></path>
+          <circle cx="12" cy="16" r="2"></circle>
+        </svg>
+      </div>
+      <h1 class="start-title">SPRAY AR</h1>
+      <p class="start-desc">Trasforma il tuo smartphone in una bomboletta spray per graffiti. Inquadra un muro reale e disegna muovendo la mano nello spazio.</p>
+      
+      <div class="start-features">
+        <div class="feature-item">
+          <span class="f-icon">📹</span>
+          <span>Inquadratura del muro reale in trasparenza</span>
+        </div>
+        <div class="feature-item">
+          <span class="f-icon">🎯</span>
+          <span>Tracciamento giroscopico del movimento</span>
+        </div>
+        <div class="feature-item">
+          <span class="f-icon">💨</span>
+          <span>Audio aerosol sintetico e polverizzazione</span>
+        </div>
+      </div>
+
+      <button id="start-btn" class="start-btn">
+        <span>ATTIVA SPRAY AR</span>
+      </button>
+      <p class="start-notice">Richiede accesso alla fotocamera e ai sensori di movimento.</p>
+    </div>
+  </div>
+
+  <script src="spray-app.js"></script>
+</body>
+</html>
