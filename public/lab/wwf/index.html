@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#000000">
   <meta name="mobile-web-app-capable" content="yes">
-  <title>EcoeFISHent // WWF GENOVA - Reti Cromatiche & Liberazione Fauna Marina</title>
+  <title>EcoeFISHent // WWF - Reti Cromatiche & Liberazione Fauna Marina</title>
   <link rel="stylesheet" href="./fonts/fonts.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1840,7 +1840,7 @@
     <div class="brand-group">
       <div class="brand-badge">
         <span class="status-dot"></span>
-        WWF GENOVA
+        WWF
       </div>
       <div class="brand-title">
         EcoeFISHent <span>// Reti Cromatiche & Fauna Marina</span>
@@ -1870,10 +1870,10 @@
   </header>
 
   <!-- Titolo Progetto EcoeFISHent in alto (visibile su Desktop e Mobile) -->
-  <div class="project-top-title" id="projectTopTitle" title="Progetto EcoeFISHent // WWF GENOVA (Clicca per informazioni)">
+  <div class="project-top-title" id="projectTopTitle" title="Progetto EcoeFISHent // WWF (Clicca per informazioni)">
     <div class="project-badge">
       <span class="status-dot"></span>
-      <span class="badge-text">WWF GENOVA</span>
+      <span class="badge-text">WWF</span>
     </div>
     <span class="project-divider">//</span>
     <h1 class="project-name">EcoeFISHent</h1>
@@ -2330,7 +2330,7 @@
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-title-group">
-          <span class="modal-badge">GUIDA RAPIDA // WWF GENOVA</span>
+          <span class="modal-badge">GUIDA RAPIDA // WWF</span>
           <h3 class="modal-title">Scorciatoie da Tastiera & Comandi</h3>
         </div>
         <button class="modal-close-btn" id="btnCloseInfoModal" title="Chiudi finestra (Esc)">✕</button>
@@ -2454,7 +2454,7 @@
   <!-- Application Logic -->
   <script>
     /**
-     * WWF GENOVA // RETI CROMATICHE & LIBERAZIONE FAUNA MARINA
+     * WWF // RETI CROMATICHE & LIBERAZIONE FAUNA MARINA
      * - All'avvio tutti gli organismi marini sono rigorosamente DENTRO la rete (intrappolati nei suoi confini).
      * - Quando passi col mouse e resti nell'area di uno squarcio, la rete si divarica e permette
      *   agli organismi presenti in quell'area di fuggire e liberarsi verso il mare aperto.
@@ -5444,7 +5444,7 @@
       // --- Esportazioni ---
       exportPNG() {
         const link = document.createElement('a');
-        link.download = `WWF-GENOVA-rete-liberazione-${AppState.bgMode}-${AppState.seed}.png`;
+        link.download = `WWF-rete-liberazione-${AppState.bgMode}-${AppState.seed}.png`;
         link.href = this.canvas.toDataURL('image/png', 1.0);
         link.click();
         showToast('Immagine PNG ad alta risoluzione scaricata!');
@@ -5456,7 +5456,7 @@
         const bgColor = this.getBackgroundColor();
 
         let svg = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-        svg += `<!-- Generato con WWF GENOVa Tool: Reti Cromatiche & Liberazione Fauna Marina -->\n`;
+        svg += `<!-- Generato con WWF Reti Cromatiche & Liberazione Fauna Marina -->\n`;
         svg += `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">\n`;
         svg += `  <!-- Background (${AppState.bgMode}) -->\n`;
         svg += `  <rect width="${w}" height="${h}" fill="${bgColor}"/>\n\n`;
@@ -5480,7 +5480,7 @@
         const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.download = `WWF-GENOVA-rete-liberazione-${AppState.bgMode}-${AppState.seed}.svg`;
+        link.download = `WWF-rete-liberazione-${AppState.bgMode}-${AppState.seed}.svg`;
         link.href = url;
         link.click();
         URL.revokeObjectURL(url);
@@ -5543,7 +5543,7 @@
           const blob = new Blob(this.recordedChunks, { type: 'video/mp4' });
           const url = URL.createObjectURL(blob);
           const link = document.createElement('a');
-          link.download = `WWF-GENOVA-animazione-${AppState.seed}.mp4`;
+          link.download = `WWF-animazione-${AppState.seed}.mp4`;
           link.href = url;
           link.click();
           URL.revokeObjectURL(url);
@@ -5585,7 +5585,7 @@
       exportJSON() {
         const exportData = {
           version: '6.0',
-          generator: 'WWF GENOVA // Reti Cromatiche & Liberazione Fauna Marina',
+          generator: 'WWF // Reti Cromatiche & Liberazione Fauna Marina',
           timestamp: new Date().toISOString(),
           seed: AppState.seed,
           bgMode: AppState.bgMode,
