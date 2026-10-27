@@ -2149,6 +2149,8 @@
     <button class="fs-btn" id="btnFsInfo" title="Guida Scorciatoie (Tasto I)">
       <span>ℹ</span> Info
     </button>
+  </div>
+
   <!-- Pulsante Fluttuante di Accesso Controlli Rapidi (Mobile & Touch) -->
   <button class="mobile-toggle-btn" id="btnMobileToggleControls" title="Pannello Controlli">
     <span>⚙ CONTROLLI</span>
@@ -4757,18 +4759,51 @@
       async startCamera() {
         if (AppState.camera.isActive) return;
 
-        showToast('Richiesta accesso telecamera per il tracciamento delle mani...');
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          showToast('⚠️ La fotocamera non è supportata o bloccata su questo browser. Puoi giocare toccando lo schermo!');
+          return;
+        }
 
+        showToast('Richiesta accesso fotocamera frontale per il tracciamento delle mani...');
+
+        let stream = null;
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({
+          // Tentativo 1: Fotocamera frontale con risoluzione ideale
+          stream = await navigator.mediaDevices.getUserMedia({
             video: {
+              facingMode: 'user',
               width: { ideal: 1280 },
-              height: { ideal: 720 },
-              facingMode: 'user'
+              height: { ideal: 720 }
             },
             audio: false
           });
+        } catch (err1) {
+          console.warn('Tentativo 1 fotocamera frontale HD fallito, provo fallback semplice:', err1);
+          try {
+            // Tentativo 2: Fotocamera frontale pura senza vincoli di risoluzione
+            stream = await navigator.mediaDevices.getUserMedia({
+              video: { facingMode: 'user' },
+              audio: false
+            });
+          } catch (err2) {
+            console.warn('Tentativo 2 fotocamera frontale fallito, provo qualsiasi video:', err2);
+            try {
+              // Tentativo 3: Qualsiasi sorgente video disponibile
+              stream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+              });
+            } catch (err3) {
+              console.warn('Errore definitivo accesso telecamera:', err3);
+              showToast('⚠️ Fotocamera non autorizzata o non disponibile. Puoi liberare i pesci toccando lo schermo!');
+              AppState.camera.isActive = false;
+              this.updateCameraUI();
+              return;
+            }
+          }
+        }
 
+        try {
           AppState.camera.stream = stream;
           AppState.camera.isActive = true;
 
@@ -4778,12 +4813,28 @@
           const chipHands = document.getElementById('chipHandsCount');
 
           if (videoEl) {
+            videoEl.setAttribute('playsinline', 'true');
+            videoEl.setAttribute('webkit-playsinline', 'true');
+            videoEl.setAttribute('muted', 'true');
+            videoEl.muted = true;
             videoEl.srcObject = stream;
-            await videoEl.play();
+            try {
+              await videoEl.play();
+            } catch (playErr) {
+              console.warn('video.play() warning:', playErr);
+            }
           }
           if (pipVideoEl) {
+            pipVideoEl.setAttribute('playsinline', 'true');
+            pipVideoEl.setAttribute('webkit-playsinline', 'true');
+            pipVideoEl.setAttribute('muted', 'true');
+            pipVideoEl.muted = true;
             pipVideoEl.srcObject = stream;
-            await pipVideoEl.play();
+            try {
+              await pipVideoEl.play();
+            } catch (pipErr) {
+              console.warn('pipVideo.play() warning:', pipErr);
+            }
           }
           if (pipContainer) {
             pipContainer.style.display = 'block';
@@ -4813,20 +4864,35 @@
                   if (AppState.camera.isActive && AppState.camera.handsInstance) {
                     await AppState.camera.handsInstance.send({ image: videoEl });
                   }
-                },
-                width: 1280,
-                height: 720
+                }
               });
               cam.start();
               AppState.camera.cameraInstance = cam;
+            } else if (videoEl) {
+              // Fallback se Camera utils non è disponibile
+              let isProcessing = false;
+              const loopFrame = async () => {
+                if (!AppState.camera.isActive) return;
+                if (!isProcessing && AppState.camera.handsInstance && videoEl.readyState >= 2) {
+                  isProcessing = true;
+                  try {
+                    await AppState.camera.handsInstance.send({ image: videoEl });
+                  } catch (e) {}
+                  isProcessing = false;
+                }
+                if (AppState.camera.isActive) {
+                  requestAnimationFrame(loopFrame);
+                }
+              };
+              requestAnimationFrame(loopFrame);
             }
           }
 
-          showToast('✓ Telecamera attivata! Muovi le mani nello spazio per aprire la rete.');
+          showToast('✓ Fotocamera frontale attivata! Muovi le mani davanti allo schermo per liberare i pesci.');
           this.updateCameraUI();
-        } catch (err) {
-          console.warn('Errore accesso telecamera:', err);
-          showToast('⚠️ Telecamera non autorizzata o non disponibile. Puoi continuare col mouse.');
+        } catch (setupErr) {
+          console.error('Errore configurazione streaming camera:', setupErr);
+          showToast('⚠️ Errore nell\'avvio della fotocamera. Puoi continuare toccando lo schermo.');
           AppState.camera.isActive = false;
           this.updateCameraUI();
         }
