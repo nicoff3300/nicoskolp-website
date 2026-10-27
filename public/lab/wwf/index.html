@@ -681,7 +681,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: width 0.15s ease-out, height 0.15s ease-out;
       cursor: crosshair;
     }
 
@@ -4377,17 +4376,11 @@
             ? Math.max(window.innerHeight, vvH, vpRect.height, document.documentElement.clientHeight || 0)
             : Math.max(200, vpRect.height - padding);
 
-          let scale;
-          const isPortrait = availW < availH;
-          if (isClean && isPortrait) {
-            // Ottimizzazione mobile full size: riempie l'intera schermata senza bande nere
-            scale = Math.max(availW / this.canvas.width, availH / this.canvas.height);
-          } else {
-            scale = Math.min(availW / this.canvas.width, availH / this.canvas.height, isClean ? Infinity : 1.0);
-          }
+          // Preserva rigorosamente l'aspect ratio (16:9) della composizione: zero deformazioni o stretching
+          const scale = Math.min(availW / this.canvas.width, availH / this.canvas.height, isClean ? Infinity : 1.0);
 
-          const dispW = isClean && isPortrait ? Math.max(availW, Math.round(this.canvas.width * scale)) : Math.round(this.canvas.width * scale);
-          const dispH = isClean && isPortrait ? Math.max(availH, Math.round(this.canvas.height * scale)) : Math.round(this.canvas.height * scale);
+          const dispW = Math.round(this.canvas.width * scale);
+          const dispH = Math.round(this.canvas.height * scale);
 
           this.wrapper.style.width = `${dispW}px`;
           this.wrapper.style.height = `${dispH}px`;
