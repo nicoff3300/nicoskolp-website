@@ -684,6 +684,29 @@
       cursor: crosshair;
     }
 
+    /* Quando la funzione fotocamera/webcam è attiva: elimina il puntatore del mouse dal viewport generativo */
+    body.camera-active,
+    body.camera-active .viewport-container,
+    body.camera-active .canvas-wrapper,
+    body.camera-active #mainCanvas {
+      cursor: none !important;
+    }
+
+    body.camera-active aside.sidebar,
+    body.camera-active .app-header,
+    body.camera-active .floating-controls-cluster,
+    body.camera-active .camera-pip,
+    body.camera-active .modal-overlay,
+    body.camera-active .ecoefishent-modal-overlay {
+      cursor: default;
+    }
+    body.camera-active button,
+    body.camera-active select,
+    body.camera-active input,
+    body.camera-active a {
+      cursor: pointer;
+    }
+
     #mainCanvas {
       display: block;
       background: #000000;
@@ -4891,8 +4914,8 @@
               isTouch: true
             });
           }
-        } else if (AppState.mouse.isOverCanvas) {
-          // 3. Mouse (se non ci sono tocchi attivi)
+        } else if (!AppState.camera.isActive && AppState.mouse.isOverCanvas) {
+          // 3. Mouse (solo se la funzione telecamera/camera non è attiva e non ci sono tocchi)
           points.push({
             x: AppState.mouse.x,
             y: AppState.mouse.y,
@@ -5203,7 +5226,12 @@
       }
 
       updateCameraUI() {
-        const active = AppState.camera.isActive;
+        const active = !!AppState.camera.isActive;
+        document.body.classList.toggle('camera-active', active);
+        if (active) {
+          AppState.mouse.isOverCanvas = false;
+        }
+
         const icon = document.getElementById('camToggleIcon');
         const label = document.getElementById('camToggleLabel');
         const sbIcon = document.getElementById('sbCamIcon');
