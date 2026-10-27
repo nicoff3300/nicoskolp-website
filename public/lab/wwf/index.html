@@ -791,11 +791,15 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      z-index: 999;
+      left: auto;
+      z-index: 99999;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       pointer-events: none;
+      align-items: flex-end;
+      transform: scale(0.5);
+      transform-origin: bottom right;
     }
 
     .toast {
@@ -805,13 +809,15 @@
       padding: 10px 16px;
       border-radius: 0;
       font-family: var(--font-sans);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
       animation: slideInToast 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       display: flex;
       align-items: center;
       gap: 8px;
+      max-width: 600px;
+      white-space: nowrap;
     }
 
     @keyframes slideInToast {
@@ -1585,8 +1591,8 @@
       flex-wrap: wrap;
     }
 
-    /* Floating Touch / Mobile Control Toggle */
-    .mobile-toggle-btn {
+    /* Floating Touch / Mobile Reload Net Button */
+    .mobile-reload-btn {
       display: none;
       position: fixed;
       bottom: calc(16px + env(safe-area-inset-bottom, 0px));
@@ -1609,22 +1615,30 @@
       transition: all 0.2s ease;
       border-radius: 0;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      user-select: none;
     }
 
-    .mobile-toggle-btn:hover,
-    .mobile-toggle-btn:active {
+    .mobile-reload-btn:hover,
+    .mobile-reload-btn:active {
       background: #ffffff;
       color: #000000;
       border-color: #ffffff;
+      transform: translateY(-1px);
     }
 
-    body.debug-active .mobile-toggle-btn {
-      display: none !important;
+    .mobile-reload-btn .reload-icon {
+      font-size: 13px;
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mobile-reload-btn:active .reload-icon {
+      transform: rotate(180deg);
     }
 
     /* Regole Responsive Mobile */
     @media (max-width: 768px), (hover: none) and (pointer: coarse) {
-      .mobile-toggle-btn {
+      .mobile-reload-btn {
         display: flex;
       }
     }
@@ -1672,6 +1686,23 @@
         height: 100dvh !important;
         max-height: 100dvh !important;
         border: none !important;
+      }
+
+      /* Toast allineati a sinistra su mobile e scalati del 50% */
+      .toast-container {
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+        left: calc(16px + env(safe-area-inset-left, 0px)) !important;
+        right: auto !important;
+        align-items: flex-start !important;
+        transform: scale(0.5) !important;
+        transform-origin: bottom left !important;
+        max-width: calc(100vw - 160px) !important;
+      }
+
+      .toast {
+        white-space: normal !important;
+        max-width: 100% !important;
+        line-height: 1.35 !important;
       }
 
       .modal-card {
@@ -2151,9 +2182,10 @@
     </button>
   </div>
 
-  <!-- Pulsante Fluttuante di Accesso Controlli Rapidi (Mobile & Touch) -->
-  <button class="mobile-toggle-btn" id="btnMobileToggleControls" title="Pannello Controlli">
-    <span>⚙ CONTROLLI</span>
+  <!-- Pulsante Fluttuante Mobile per Ricaricare la Rete -->
+  <button class="mobile-reload-btn" id="btnMobileReloadNet" title="Ricarica Nuova Rete">
+    <span class="reload-icon">↻</span>
+    <span>RICARICA RETE</span>
   </button>
 
   <!-- Modal di Avvio // EcoeFISHent -->
@@ -5637,11 +5669,16 @@
           });
         }
 
-        // Pulsante fluttuante mobile per controllo rapido
-        const btnMobileToggle = document.getElementById('btnMobileToggleControls');
-        if (btnMobileToggle) {
-          btnMobileToggle.addEventListener('click', () => {
-            this.toggleDebug();
+        // Pulsante fluttuante mobile per ricaricare la rete
+        const btnMobileReload = document.getElementById('btnMobileReloadNet');
+        if (btnMobileReload) {
+          btnMobileReload.addEventListener('click', () => {
+            const icon = btnMobileReload.querySelector('.reload-icon');
+            if (icon) {
+              icon.style.transform = 'rotate(360deg)';
+              setTimeout(() => { icon.style.transform = ''; }, 450);
+            }
+            this.regenerate();
           });
         }
 
@@ -5952,23 +5989,31 @@
 
     function showToast(message) {
       const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      // Limita a max 3 toast contemporanei per non affollare la visuale
+      while (container.children.length >= 3) {
+        container.firstElementChild.remove();
+      }
+
       const toast = document.createElement('div');
       toast.className = 'toast';
       toast.innerHTML = `<span>✦</span><span>${message}</span>`;
       container.appendChild(toast);
 
+      // Permanenza prolungata (delay a 5.5s) e transizione di dissolvenza morbida (850ms)
       setTimeout(() => {
-        toast.style.transition = 'all 0.3s ease';
+        toast.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
         toast.style.opacity = '0';
-        toast.style.transform = 'translateY(10px)';
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
+        toast.style.transform = 'translateY(14px)';
+        setTimeout(() => toast.remove(), 850);
+      }, 5500);
     }
 
     let lastToastTimestamp = 0;
     function showToastDebounced(message) {
       const now = Date.now();
-      if (now - lastToastTimestamp < 450) return;
+      if (now - lastToastTimestamp < 650) return;
       lastToastTimestamp = now;
       showToast(message);
     }
