@@ -3515,13 +3515,13 @@
             const steerToCenter = this.seek(targetCenter).multiplyScalar(1.4);
             this.applyForce(steerToCenter);
 
-            // Condizione tassativa: prima di liberarsi, l'organismo DEVE arrivare in prossimità del centro
+            // Condizione: l'area del nucleo centrale dove si libera il pesce non deve arrivare fino al centro esatto ma si estende del 20% del raggio dello squarcio
             const ptRadius = bestPoint.radius || openRadius;
-            const centerThreshold = Math.max(28, Math.min(48, ptRadius * 0.16));
+            const centerThreshold = Math.max(30, ptRadius * 0.20);
 
             if (bestDist <= centerThreshold) {
               this.tearContactTimer++;
-              if (this.tearContactTimer >= 2) {
+              if (this.tearContactTimer >= 1) {
                 const dx = this.x - bestPoint.x;
                 const dy = this.y - bestPoint.y;
                 const cx = width / 2;
@@ -3535,10 +3535,10 @@
                 this.syncHudCounts();
 
                 const source = bestPoint.isHand ? 'le mani' : 'il mouse';
-                showToastDebounced(`✦ ${this.getSpeciesName()} ha raggiunto il centro del varco ed è libera!`);
+                showToastDebounced(`✦ ${this.getSpeciesName()} ha raggiunto il varco ed è libera!`);
               }
             } else {
-              // Non è ancora arrivato in prossimità del centro: non può liberarsi
+              // Non è ancora entrato nel nucleo centrale del 20%: continua la nuotata verso il varco
               this.tearContactTimer = 0;
             }
           } else {
@@ -3555,15 +3555,15 @@
             }
           }
 
-          // Se un compagno di banco ha dato l'allerta, attende di essere in prossimità del centro
+          // Se un compagno di banco ha dato l'allerta, attende di entrare nel nucleo del 20% del varco
           if (this.isTrapped && this.flockDelay > 0) {
             this.flockDelay--;
             const ptRadius = bestPoint ? (bestPoint.radius || openRadius) : openRadius;
-            const centerThreshold = Math.max(30, Math.min(52, ptRadius * 0.20));
+            const centerThreshold = Math.max(30, ptRadius * 0.20);
             if (this.flockDelay <= 0 && inTear && bestPoint && bestDist <= centerThreshold) {
               this.liberate(this.pendingEscapeAngle);
               this.syncHudCounts();
-              showToastDebounced(`✦ ${this.getSpeciesName()} ha raggiunto il centro del varco con il banco ed è libera!`);
+              showToastDebounced(`✦ ${this.getSpeciesName()} ha raggiunto il varco con il banco ed è libera!`);
             }
           }
 
