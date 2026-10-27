@@ -1204,6 +1204,7 @@
     }
 
     .modal-card {
+      position: relative;
       background: #080808;
       border: 1px solid #333333;
       border-radius: 0;
@@ -1226,6 +1227,7 @@
 
     .modal-header {
       padding: 16px 20px;
+      padding-right: 56px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1268,19 +1270,25 @@
     }
 
     .modal-close-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 44px;
+      height: 44px;
       background: #000000;
       border: 1px solid #333333;
+      border-top: none;
+      border-right: none;
       color: var(--text-muted);
-      width: 32px;
-      height: 32px;
       border-radius: 0;
       font-family: var(--font-druk);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       transition: all 0.2s ease;
+      z-index: 10;
     }
 
     .modal-close-btn:hover {
@@ -2209,7 +2217,6 @@
 
         <div class="ecoefishent-actions">
           <button class="ecoefishent-btn-primary" id="btnStartWithCamera">
-            <span class="btn-cam-icon">📹</span>
             <span class="btn-cam-text">Attiva la telecamera per Liberare i pesci, usa le tue mani poste davanti allo schermo</span>
           </button>
 
