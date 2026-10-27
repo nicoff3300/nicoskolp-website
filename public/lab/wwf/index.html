@@ -1368,6 +1368,197 @@
       background-color: #ffffff;
       box-shadow: 0 0 6px #ffffff;
     }
+
+    /* =========================================================================
+       Modal di Avvio // EcoeFISHent & Mobile Optimization
+       ========================================================================= */
+    .ecoefishent-card {
+      max-width: 600px;
+      width: calc(100vw - 32px);
+      background: #080808;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95);
+      border-radius: 0;
+    }
+
+    .ecoefishent-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ecoefishent-lead {
+      font-size: 0.92rem;
+      color: #cccccc;
+      line-height: 1.6;
+    }
+
+    .ecoefishent-lead em {
+      color: var(--accent-cyan);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .ecoefishent-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .ecoefishent-btn-primary {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #ffffff;
+      padding: 16px 20px;
+      font-family: var(--font-druk);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1.45;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      border-radius: 0;
+      transition: all 0.2s ease;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .ecoefishent-btn-primary:hover,
+    .ecoefishent-btn-primary:active {
+      background: #000000;
+      color: #ffffff;
+      border-color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .ecoefishent-btn-primary .btn-cam-icon {
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+
+    .ecoefishent-btn-secondary {
+      background: #000000;
+      color: var(--text-muted);
+      border: 1px solid #333333;
+      padding: 12px 16px;
+      font-family: var(--font-druk);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      border-radius: 0;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .ecoefishent-btn-secondary:hover,
+    .ecoefishent-btn-secondary:active {
+      background: #111111;
+      color: #ffffff;
+      border-color: #666666;
+    }
+
+    .ecoefishent-hint {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 12px;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Floating Touch / Mobile Control Toggle */
+    .mobile-toggle-btn {
+      display: none;
+      position: fixed;
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+      right: calc(16px + env(safe-area-inset-right, 0px));
+      z-index: 8000;
+      background: rgba(8, 8, 8, 0.88);
+      border: 1px solid #333333;
+      color: #ffffff;
+      padding: 9px 13px;
+      font-family: var(--font-druk);
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      align-items: center;
+      gap: 7px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    .mobile-toggle-btn:hover,
+    .mobile-toggle-btn:active {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+    }
+
+    body.debug-active .mobile-toggle-btn {
+      display: none !important;
+    }
+
+    /* Regole Responsive Mobile */
+    @media (max-width: 768px), (hover: none) and (pointer: coarse) {
+      .mobile-toggle-btn {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --sidebar-width: 100vw;
+      }
+
+      body.clean-mode:not(.debug-active) .viewport-container,
+      body.is-fullscreen .viewport-container,
+      main.viewport-container {
+        height: 100vh;
+        height: 100dvh;
+        width: 100vw;
+      }
+
+      body.debug-active aside.sidebar {
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        border: none !important;
+      }
+
+      .modal-card {
+        width: calc(100vw - 24px) !important;
+        max-width: 520px !important;
+        max-height: 90dvh !important;
+      }
+
+      .ecoefishent-btn-primary {
+        font-size: 10.5px;
+        padding: 14px 16px;
+      }
+    }
   </style>
 </head>
 <body class="clean-mode">
@@ -1521,42 +1712,42 @@
             <span class="collapse-chevron">▾</span>
             <span>2. Rete & Sovrapposizione Tratti</span>
           </div>
-          <span class="badge" id="seedBadge">SEED: 48192</span>
+          <span class="badge" id="seedBadge">SEED: 868893</span>
         </div>
 
         <div class="section-body">
-          <!-- Spessore Tratti (Default 45 px) -->
+          <!-- Spessore Tratti (Default 15 px da preset 868893) -->
           <div class="control-group">
             <div class="control-label-row">
               <span>Spessore Tratti (Linee Rete)</span>
-              <span class="control-value-badge" id="valStroke">45 px</span>
+              <span class="control-value-badge" id="valStroke">15 px</span>
             </div>
-            <input type="range" id="paramStroke" min="15" max="95" value="45" step="1">
+            <input type="range" id="paramStroke" min="15" max="95" value="15" step="1">
           </div>
 
           <div class="control-group">
             <div class="control-label-row">
               <span>Densità Nodi della Rete</span>
-              <span class="control-value-badge" id="valDensity">48</span>
+              <span class="control-value-badge" id="valDensity">108</span>
             </div>
-            <input type="range" id="paramDensity" min="16" max="110" value="48" step="2">
+            <input type="range" id="paramDensity" min="16" max="110" value="108" step="2">
           </div>
 
           <div class="control-group">
             <div class="control-label-row">
               <span>Irregolarità Organica Forma</span>
-              <span class="control-value-badge" id="valIrregularity">0.65</span>
+              <span class="control-value-badge" id="valIrregularity">1.00</span>
             </div>
-            <input type="range" id="paramIrregularity" min="0.1" max="1.0" value="0.65" step="0.05">
+            <input type="range" id="paramIrregularity" min="0.1" max="1.0" value="1.0" step="0.05">
           </div>
 
           <!-- Dinamismo Perimetro Margini (Forma Dinamica vs Rettangolare) -->
           <div class="control-group">
             <div class="control-label-row">
               <span>Dinamismo Perimetro Margini</span>
-              <span class="control-value-badge" id="valBorderDynamics">0.50</span>
+              <span class="control-value-badge" id="valBorderDynamics">1.00</span>
             </div>
-            <input type="range" id="paramBorderDynamics" min="0.0" max="1.0" value="0.50" step="0.05">
+            <input type="range" id="paramBorderDynamics" min="0.0" max="1.0" value="1.0" step="0.05">
           </div>
 
           <div class="control-group">
@@ -1642,17 +1833,17 @@
           <div class="control-group">
             <div class="control-label-row">
               <span>% Elementi Fuori dalla Rete</span>
-              <span class="control-value-badge" id="valFaunaOutside">30% (4)</span>
+              <span class="control-value-badge" id="valFaunaOutside">150% (18)</span>
             </div>
-            <input type="range" id="paramFaunaOutside" min="0" max="150" value="30" step="5">
+            <input type="range" id="paramFaunaOutside" min="0" max="150" value="150" step="5">
           </div>
 
           <div class="control-group">
             <div class="control-label-row">
               <span>Composizione Banchi (Cluster)</span>
-              <span class="control-value-badge" id="valFaunaFlocking">50% (Misto)</span>
+              <span class="control-value-badge" id="valFaunaFlocking">80% (Prevalenza Banchi)</span>
             </div>
-            <input type="range" id="paramFaunaFlocking" min="0" max="100" value="50" step="10">
+            <input type="range" id="paramFaunaFlocking" min="0" max="100" value="80" step="10">
           </div>
 
           <div class="control-group">
@@ -1802,6 +1993,42 @@
     <button class="fs-btn" id="btnFsInfo" title="Guida Scorciatoie (Tasto I)">
       <span>ℹ</span> Info
     </button>
+  <!-- Pulsante Fluttuante di Accesso Controlli Rapidi (Mobile & Touch) -->
+  <button class="mobile-toggle-btn" id="btnMobileToggleControls" title="Pannello Controlli">
+    <span>⚙ CONTROLLI</span>
+  </button>
+
+  <!-- Modal di Avvio // EcoeFISHent -->
+  <div id="ecoeFishModal" class="modal-backdrop is-open">
+    <div class="modal-card ecoefishent-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-badge">WWF GENOVA // PROGETTO ECOEFISHENT</span>
+          <h3 class="modal-title">EcoeFISHent</h3>
+        </div>
+        <button class="modal-close-btn" id="btnCloseEcoeFishModal" title="Chiudi finestra (Esc)">✕</button>
+      </div>
+      <div class="modal-body ecoefishent-body">
+        <p class="ecoefishent-lead">
+          Un'installazione generativa e interattiva sull'impatto ecologico delle reti da pesca fantasma (<em>ghost nets</em>) e sulla tutela della biodiversità marina.
+        </p>
+
+        <div class="ecoefishent-actions">
+          <button class="ecoefishent-btn-primary" id="btnStartWithCamera">
+            <span class="btn-cam-icon">📹</span>
+            <span class="btn-cam-text">Attiva la telecamera per Liberare i pesci, usa le tue mani poste davanti allo schermo</span>
+          </button>
+
+          <button class="ecoefishent-btn-secondary" id="btnStartWithMouse">
+            <span>Esplora con tocco / mouse</span>
+          </button>
+        </div>
+
+        <div class="ecoefishent-hint">
+          <span>Premi <kbd class="key-badge">D</kbd> per il pannello controlli completo • <kbd class="key-badge">F</kbd> schermo intero</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Modal Guida Scorciatoie & Info -->
@@ -2063,7 +2290,7 @@
 
     // --- 3. Stato Globale dell'Applicazione ---
     const AppState = {
-      seed: Math.floor(Math.random() * 900000) + 100000,
+      seed: 868893,
       isPlaying: true,
       canvasWidth: 1920,
       canvasHeight: 1080,
@@ -2073,11 +2300,11 @@
       liberatedCount: 0,
       totalSavedCount: 0,
       net: {
-        density: 48,
-        irregularity: 0.65,
-        borderDynamics: 0.50,
+        density: 108,
+        irregularity: 1.0,
+        borderDynamics: 1.0,
         margin: 70,
-        strokeWeight: 45,
+        strokeWeight: 15,
         opacity: 1.0,
         blendMode: 'screen',
         waveSpeed: 0.45,
@@ -2087,12 +2314,13 @@
       },
       fauna: {
         count: 12,
-        outsideRatio: 30,
-        flockingRatio: 50,
+        outsideRatio: 150,
+        flockingRatio: 80,
         speed: 0.50,
         speciesFilter: 'all',
         colorTone: 'coral_turquoise'
       },
+      touches: [],
       mouse: {
         x: -9999,
         y: -9999,
@@ -3299,6 +3527,7 @@
         this.isRecording = false;
 
         this.isInfoModalOpen = false;
+        this.isEcoeFishModalOpen = true;
 
         this.init();
       }
@@ -3971,7 +4200,15 @@
           const availW = isClean ? window.innerWidth : Math.max(200, vpRect.width - padding);
           const availH = isClean ? window.innerHeight : Math.max(200, vpRect.height - padding);
 
-          const scale = Math.min(availW / this.canvas.width, availH / this.canvas.height, isClean ? Infinity : 1.0);
+          let scale;
+          const isPortrait = availW < availH;
+          if (isClean && isPortrait) {
+            // Ottimizzazione mobile full size: riempie l'intera schermata senza bande nere
+            scale = Math.max(availW / this.canvas.width, availH / this.canvas.height);
+          } else {
+            scale = Math.min(availW / this.canvas.width, availH / this.canvas.height, isClean ? Infinity : 1.0);
+          }
+
           const dispW = Math.round(this.canvas.width * scale);
           const dispH = Math.round(this.canvas.height * scale);
 
@@ -4137,8 +4374,21 @@
           }
         }
 
-        // 2. Mouse (se presente e mosso sul canvas)
-        if (AppState.mouse.isOverCanvas) {
+        // 2. Multi-Touch su schermi touch e smartphone
+        if (AppState.touches && AppState.touches.length > 0) {
+          for (let t = 0; t < AppState.touches.length; t++) {
+            const tch = AppState.touches[t];
+            points.push({
+              x: tch.x,
+              y: tch.y,
+              radius: AppState.net.openRadius * 0.95,
+              force: AppState.net.openForce * 1.05,
+              isHand: false,
+              isTouch: true
+            });
+          }
+        } else if (AppState.mouse.isOverCanvas) {
+          // 3. Mouse (se non ci sono tocchi attivi)
           points.push({
             x: AppState.mouse.x,
             y: AppState.mouse.y,
@@ -4559,6 +4809,14 @@
         showToast(newState ? '🌊 Modalità Ambient Demo ATTIVATA (Corrente armonica in corso)' : '🌊 Modalità Ambient Demo DISATTIVATA');
       }
 
+      closeEcoeFishModal() {
+        const modal = document.getElementById('ecoeFishModal');
+        if (modal) {
+          modal.classList.remove('is-open');
+        }
+        this.isEcoeFishModalOpen = false;
+      }
+
       toggleInfoModal(forceOpen) {
         const modal = document.getElementById('infoModal');
         if (!modal) return;
@@ -4914,6 +5172,9 @@
 
       bindEvents() {
         window.addEventListener('resize', () => this.applyViewportScale());
+        window.addEventListener('orientationchange', () => {
+          setTimeout(() => this.applyViewportScale(), 150);
+        });
 
         // Gestione sezioni GUI richiudibili (Accordion / Collapsible)
         document.querySelectorAll('.panel-section .section-title').forEach(title => {
@@ -4939,14 +5200,48 @@
           }
         };
 
+        const updateTouches = (e) => {
+          const rect = this.canvas.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0) {
+            const list = [];
+            for (let i = 0; i < e.touches.length; i++) {
+              const t = e.touches[i];
+              list.push({
+                x: (t.clientX - rect.left) * (this.canvas.width / rect.width),
+                y: (t.clientY - rect.top) * (this.canvas.height / rect.height)
+              });
+            }
+            AppState.touches = list;
+            if (list.length > 0) {
+              AppState.mouse.x = list[0].x;
+              AppState.mouse.y = list[0].y;
+              AppState.mouse.isOverCanvas = true;
+            } else {
+              AppState.mouse.isOverCanvas = false;
+            }
+          }
+        };
+
         window.addEventListener('mousemove', (e) => {
           updateMousePosition(e.clientX, e.clientY);
         });
 
+        window.addEventListener('touchstart', (e) => {
+          if (e.target.closest('input, select, button, .modal-card, aside.sidebar, header.app-header')) return;
+          updateTouches(e);
+        }, { passive: true });
+
         window.addEventListener('touchmove', (e) => {
-          if (e.touches && e.touches[0]) {
-            updateMousePosition(e.touches[0].clientX, e.touches[0].clientY);
-          }
+          if (e.target.closest('input, select, button, .modal-card, aside.sidebar, header.app-header')) return;
+          updateTouches(e);
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+          updateTouches(e);
+        }, { passive: true });
+
+        window.addEventListener('touchcancel', (e) => {
+          updateTouches(e);
         }, { passive: true });
 
         document.addEventListener('mouseleave', () => {
@@ -4984,6 +5279,46 @@
         if (infoModal) {
           infoModal.addEventListener('click', (e) => {
             if (e.target === infoModal) this.toggleInfoModal(false);
+          });
+        }
+
+        // Gestione Modal di Benvenuto EcoeFISHent
+        const btnStartCamera = document.getElementById('btnStartWithCamera');
+        if (btnStartCamera) {
+          btnStartCamera.addEventListener('click', async () => {
+            this.closeEcoeFishModal();
+            await this.startCamera();
+          });
+        }
+
+        const btnStartMouse = document.getElementById('btnStartWithMouse');
+        if (btnStartMouse) {
+          btnStartMouse.addEventListener('click', () => {
+            this.closeEcoeFishModal();
+          });
+        }
+
+        const btnCloseEcoeFish = document.getElementById('btnCloseEcoeFishModal');
+        if (btnCloseEcoeFish) {
+          btnCloseEcoeFish.addEventListener('click', () => {
+            this.closeEcoeFishModal();
+          });
+        }
+
+        const ecoeModalEl = document.getElementById('ecoeFishModal');
+        if (ecoeModalEl) {
+          ecoeModalEl.addEventListener('click', (e) => {
+            if (e.target === ecoeModalEl) {
+              this.closeEcoeFishModal();
+            }
+          });
+        }
+
+        // Pulsante fluttuante mobile per controllo rapido
+        const btnMobileToggle = document.getElementById('btnMobileToggleControls');
+        if (btnMobileToggle) {
+          btnMobileToggle.addEventListener('click', () => {
+            this.toggleDebug();
           });
         }
 
@@ -5227,6 +5562,11 @@
 
           // Chiusura del modal con Esc o uscita dalla modalità controllo totale
           if (e.key === 'Escape') {
+            if (this.isEcoeFishModalOpen) {
+              e.preventDefault();
+              this.closeEcoeFishModal();
+              return;
+            }
             if (this.isInfoModalOpen) {
               e.preventDefault();
               this.toggleInfoModal(false);
