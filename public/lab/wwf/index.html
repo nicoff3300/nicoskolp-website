@@ -3697,15 +3697,7 @@
           AppState.seed = Math.floor(Math.random() * 900000) + 100000;
         }
 
-        // Su versione mobile (smartphone/tablet o larghezza <= 768px): densità nodi di default impostata a 30
-        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024 && window.innerHeight > window.innerWidth);
-        if (isMobile) {
-          AppState.net.density = 30;
-          const paramDensityEl = document.getElementById('paramDensity');
-          const valDensityEl = document.getElementById('valDensity');
-          if (paramDensityEl) paramDensityEl.value = 30;
-          if (valDensityEl) valDensityEl.textContent = '30';
-        }
+        this.checkResponsiveDimensions();
 
         this.bindEvents();
         this.buildPaletteGrid();
@@ -4343,6 +4335,70 @@
         }
 
         this.syncHudCounts();
+      }
+
+      checkResponsiveDimensions() {
+        const isClean = document.body.classList.contains('clean-mode') || document.body.classList.contains('is-fullscreen') || !!document.fullscreenElement;
+        if (!isClean && AppState.preset !== 'custom' && AppState.preset !== '1920x1080' && AppState.preset !== '1080x1920') {
+          return false;
+        }
+
+        const vpRect = this.viewport ? this.viewport.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
+        const padding = isClean ? 0 : 60;
+        const vvW = window.visualViewport ? window.visualViewport.width : 0;
+        const vvH = window.visualViewport ? window.visualViewport.height : 0;
+        const availW = isClean
+          ? Math.max(window.innerWidth, vvW, vpRect.width, document.documentElement.clientWidth || 0)
+          : Math.max(200, vpRect.width - padding);
+        const availH = isClean
+          ? Math.max(window.innerHeight, vvH, vpRect.height, document.documentElement.clientHeight || 0)
+          : Math.max(200, vpRect.height - padding);
+
+        const curW = availW;
+        const curH = availH;
+        const isPortrait = curH > curW;
+        const isMobile = curW <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && curW < 1024);
+
+        let targetW, targetH;
+        if (isPortrait || isMobile) {
+          if (isPortrait) {
+            targetW = 1080;
+            targetH = Math.round(targetW * (curH / Math.max(1, curW)));
+          } else {
+            targetH = 1080;
+            targetW = Math.round(targetH * (curW / Math.max(1, curH)));
+          }
+          if (AppState.net.density !== 30) {
+            AppState.net.density = 30;
+            const paramDensityEl = document.getElementById('paramDensity');
+            const valDensityEl = document.getElementById('valDensity');
+            if (paramDensityEl) paramDensityEl.value = 30;
+            if (valDensityEl) valDensityEl.textContent = '30';
+          }
+        } else {
+          targetW = 1920;
+          targetH = 1080;
+        }
+
+        if (Math.abs(this.canvas.width - targetW) > 6 || Math.abs(this.canvas.height - targetH) > 6) {
+          this.canvas.width = targetW;
+          this.canvas.height = targetH;
+          AppState.canvasWidth = targetW;
+          AppState.canvasHeight = targetH;
+
+          const hudRes = document.getElementById('hudResolution');
+          if (hudRes) hudRes.textContent = `${targetW} × ${targetH}`;
+          const cW = document.getElementById('canvasWidth');
+          if (cW) cW.value = targetW;
+          const cH = document.getElementById('canvasHeight');
+          if (cH) cH.value = targetH;
+
+          if (this.net && this.net.nodes && this.net.nodes.length > 0) {
+            this.regenerate(AppState.seed, true);
+          }
+          return true;
+        }
+        return false;
       }
 
       updateCanvasDimensions(w, h, silent = false) {
@@ -5042,6 +5098,7 @@
         if (fsCamLabel) fsCamLabel.textContent = isFs ? 'Esci Schermo Intero' : 'Schermo Intero & Camera';
 
         setTimeout(() => {
+          this.checkResponsiveDimensions();
           this.applyViewportScale();
         }, 120);
 
@@ -5349,12 +5406,22 @@
       }
 
       bindEvents() {
-        window.addEventListener('resize', () => this.applyViewportScale());
+        let resizeDebounceTimer = null;
+        const handleResize = () => {
+          this.applyViewportScale();
+          clearTimeout(resizeDebounceTimer);
+          resizeDebounceTimer = setTimeout(() => {
+            const changed = this.checkResponsiveDimensions();
+            this.applyViewportScale();
+          }, 100);
+        };
+
+        window.addEventListener('resize', handleResize);
         window.addEventListener('orientationchange', () => {
-          setTimeout(() => this.applyViewportScale(), 150);
+          setTimeout(handleResize, 150);
         });
         if (window.visualViewport) {
-          window.visualViewport.addEventListener('resize', () => this.applyViewportScale());
+          window.visualViewport.addEventListener('resize', handleResize);
           window.visualViewport.addEventListener('scroll', () => this.applyViewportScale());
         }
 
