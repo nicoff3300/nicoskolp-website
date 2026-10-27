@@ -3463,32 +3463,7 @@
           // 1. FORME INCASTRATE NELLA RETE: VELOCI, DARTING DA UN LATO ALL'ALTRO,
           //    CAMBI DI DIREZIONE REPENTINI (NESSUN TREMOLIO O JITTER)
           // =========================================================================
-          this.dashTimer--;
-
-          // CAMBIO DI DIREZIONE REPENTINO: virata secca e scatto veloce
-          if (this.dashTimer <= 0) {
-            const burstAngle = this.angle + (Math.random() > 0.5 ? 1 : -1) * (0.85 + Math.random() * 1.35);
-            const burstDir = createVector(Math.cos(burstAngle), Math.sin(burstAngle)).multiplyScalar(this.maxspeed * 1.8);
-            this.applyForce(limit(burstDir.subtract(this.velocity), this.maxSteeringforce * 2.8));
-            this.dashBoost = 0.6 + Math.random() * 0.9;
-            this.dashTimer = 14 + Math.floor(Math.random() * 26);
-          }
-
-          // Decadimento graduale del boost di scatto
-          this.dashBoost += (0.2 - this.dashBoost) * 0.05;
-
-          // Aggiornamento velocità e posizione secondo il modello Boid.js
-          const currentMaxSpeed = this.maxspeed * (1 + this.dashBoost * 0.5);
-          this.velocity = this.velocity.add(this.acceleration);
-          this.velocity = limit(this.velocity, currentMaxSpeed);
-          this.position = this.position.add(this.velocity);
-          this.acceleration = this.acceleration.multiplyScalar(0);
-
-          this.x = this.position.x;
-          this.y = this.position.y;
-          this.angle = Math.atan2(this.velocity.y, this.velocity.x);
-
-          // Rilevamento dello squarcio aperto da mani o cursore (reazione meno immediata, organica)
+          // 1. Rileva se ci sono squarci aperti (mani o cursore) nelle vicinanze
           let inTear = false;
           let bestDist = Infinity;
           let bestPoint = null;
@@ -3496,8 +3471,7 @@
           if (points.length > 0) {
             for (let p = 0; p < points.length; p++) {
               const pt = points[p];
-              // Zona attiva dello squarcio: 40% del raggio visivo per concentrare l'apertura effettiva
-              const ptRadius = (pt.radius || openRadius) * 0.40;
+              const ptRadius = pt.radius || openRadius;
               const dx = this.x - pt.x;
               const dy = this.y - pt.y;
               const dist = Math.hypot(dx, dy);
@@ -3513,41 +3487,76 @@
           }
 
           if (inTear && bestPoint) {
-            const ptRadius = (bestPoint.radius || openRadius) * 0.40;
-            const centerRatio = bestDist / Math.max(1, ptRadius);
-            // Più è vicino al centro dello squarcio prima si libera (da 4 a 12 frame, ~70-200ms)
-            const neededFrames = centerRatio < 0.35 ? 4 : Math.round(7 + centerRatio * 6);
+            // L'organismo percepisce l'apertura delle maglie e nuota verso il centro dello squarcio
+            const targetCenter = createVector(bestPoint.x, bestPoint.y);
+            const steerToCenter = this.seek(targetCenter).multiplyScalar(1.4);
+            this.applyForce(steerToCenter);
 
-            this.tearContactTimer++;
-            if (this.tearContactTimer >= neededFrames) {
-              const dx = this.x - bestPoint.x;
-              const dy = this.y - bestPoint.y;
-              const cx = width / 2;
-              const cy = height / 2;
-              const outAngle = Math.atan2(this.y - cy, this.x - cx);
-              const pushAngle = Math.atan2(dy, dx);
-              // Orientamento armonico verso l'esterno del mare, senza rimbalzo rigido a 180°
-              const escapeAngle = (Math.cos(pushAngle - outAngle) > 0) ? (pushAngle * 0.45 + outAngle * 0.55) : outAngle;
+            // Condizione tassativa: prima di liberarsi, l'organismo DEVE arrivare in prossimità del centro
+            const ptRadius = bestPoint.radius || openRadius;
+            const centerThreshold = Math.max(28, Math.min(48, ptRadius * 0.16));
 
-              this.liberate(escapeAngle);
-              this.syncHudCounts();
+            if (bestDist <= centerThreshold) {
+              this.tearContactTimer++;
+              if (this.tearContactTimer >= 2) {
+                const dx = this.x - bestPoint.x;
+                const dy = this.y - bestPoint.y;
+                const cx = width / 2;
+                const cy = height / 2;
+                const outAngle = Math.atan2(this.y - cy, this.x - cx);
+                const pushAngle = Math.atan2(dy, dx);
+                // Orientamento armonico verso l'esterno del mare, senza rimbalzo rigido a 180°
+                const escapeAngle = (Math.cos(pushAngle - outAngle) > 0) ? (pushAngle * 0.35 + outAngle * 0.65) : outAngle;
 
-              const source = bestPoint.isHand ? 'le mani' : 'il mouse';
-              showToastDebounced(`✦ ${this.getSpeciesName()} è libera e nuota verso il mare aperto!`);
+                this.liberate(escapeAngle);
+                this.syncHudCounts();
+
+                const source = bestPoint.isHand ? 'le mani' : 'il mouse';
+                showToastDebounced(`✦ ${this.getSpeciesName()} ha raggiunto il centro del varco ed è libera!`);
+              }
+            } else {
+              // Non è ancora arrivato in prossimità del centro: non può liberarsi
+              this.tearContactTimer = 0;
             }
           } else {
-            this.tearContactTimer = Math.max(0, this.tearContactTimer - 1);
-          }
+            this.tearContactTimer = 0;
 
-          // Se un compagno di banco ha dato l'allerta, attende il proprio turno scaglionato
-          if (this.isTrapped && this.flockDelay > 0) {
-            this.flockDelay--;
-            if (this.flockDelay <= 0) {
-              this.liberate(this.pendingEscapeAngle);
-              this.syncHudCounts();
-              showToastDebounced(`✦ ${this.getSpeciesName()} segue il banco verso il mare aperto!`);
+            // Se non è nello squarcio, continua il normale moto sfrecciante nella rete
+            this.dashTimer--;
+            if (this.dashTimer <= 0) {
+              const burstAngle = this.angle + (Math.random() > 0.5 ? 1 : -1) * (0.85 + Math.random() * 1.35);
+              const burstDir = createVector(Math.cos(burstAngle), Math.sin(burstAngle)).multiplyScalar(this.maxspeed * 1.8);
+              this.applyForce(limit(burstDir.subtract(this.velocity), this.maxSteeringforce * 2.8));
+              this.dashBoost = 0.6 + Math.random() * 0.9;
+              this.dashTimer = 14 + Math.floor(Math.random() * 26);
             }
           }
+
+          // Se un compagno di banco ha dato l'allerta, attende di essere in prossimità del centro
+          if (this.isTrapped && this.flockDelay > 0) {
+            this.flockDelay--;
+            const ptRadius = bestPoint ? (bestPoint.radius || openRadius) : openRadius;
+            const centerThreshold = Math.max(30, Math.min(52, ptRadius * 0.20));
+            if (this.flockDelay <= 0 && inTear && bestPoint && bestDist <= centerThreshold) {
+              this.liberate(this.pendingEscapeAngle);
+              this.syncHudCounts();
+              showToastDebounced(`✦ ${this.getSpeciesName()} ha raggiunto il centro del varco con il banco ed è libera!`);
+            }
+          }
+
+          // Decadimento graduale del boost di scatto
+          this.dashBoost += (0.2 - this.dashBoost) * 0.05;
+
+          // Aggiornamento velocità e posizione secondo il modello Boid.js
+          const currentMaxSpeed = this.maxspeed * (1 + this.dashBoost * 0.5);
+          this.velocity = this.velocity.add(this.acceleration);
+          this.velocity = limit(this.velocity, currentMaxSpeed);
+          this.position = this.position.add(this.velocity);
+          this.acceleration = this.acceleration.multiplyScalar(0);
+
+          this.x = this.position.x;
+          this.y = this.position.y;
+          this.angle = Math.atan2(this.velocity.y, this.velocity.x);
 
           // CONFINAMENTO ORGANICO NELLA RETE:
           // Con dinamismo margini elevato, i pesci rimangono rigorosamente dentro il perimetro reale delle maglie
