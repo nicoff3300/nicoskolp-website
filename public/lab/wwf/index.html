@@ -2,7 +2,11 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>WWF GENOVa // Reti Cromatiche & Liberazione Fauna Marina</title>
   <link rel="stylesheet" href="./fonts/fonts.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,15 +72,31 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
+    html {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      background-color: #000000;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
     body {
       background-color: var(--bg-black);
       color: var(--text-white);
       font-family: var(--font-sans);
-      height: 100vh;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      min-height: 100%;
+      min-height: 100dvh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       line-height: 1.5;
+      margin: 0;
+      padding: 0;
     }
 
     /* Top Navigation Header (Skolptura Lab Style) */
@@ -806,19 +826,31 @@
     body.clean-mode,
     body.is-fullscreen {
       overflow: hidden;
+      margin: 0 !important;
+      padding: 0 !important;
     }
     body.clean-mode:not(.debug-active) .app-header,
     body.is-fullscreen .app-header {
       display: none !important;
+      height: 0 !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
     }
     body.clean-mode:not(.debug-active) .app-workspace,
     body.is-fullscreen .app-workspace {
       position: fixed !important;
       top: 0 !important;
       left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100% !important;
       width: 100vw !important;
-      height: 100vh !important;
-      max-height: 100vh !important;
+      height: 100% !important;
+      height: 100dvh !important;
+      max-height: 100% !important;
+      max-height: 100dvh !important;
       margin: 0 !important;
       padding: 0 !important;
       overflow: hidden !important;
@@ -828,11 +860,15 @@
       position: absolute !important;
       top: 0 !important;
       left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100% !important;
       width: 100vw !important;
-      height: 100vh !important;
+      height: 100% !important;
+      height: 100dvh !important;
       margin: 0 !important;
       padding: 0 !important;
-      background: #000 !important;
+      background: #000000 !important;
       z-index: 10 !important;
     }
     body.clean-mode:not(.debug-active) .canvas-wrapper,
@@ -1527,12 +1563,31 @@
         --sidebar-width: 100vw;
       }
 
+      header.app-header {
+        display: none !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+      }
+
+      body.clean-mode:not(.debug-active) .app-workspace,
       body.clean-mode:not(.debug-active) .viewport-container,
       body.is-fullscreen .viewport-container,
       main.viewport-container {
-        height: 100vh;
-        height: 100dvh;
-        width: 100vw;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        height: 100% !important;
+        height: 100dvh !important;
+        width: 100% !important;
+        width: 100vw !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
       }
 
       body.debug-active aside.sidebar {
@@ -4207,8 +4262,14 @@
           const isClean = document.body.classList.contains('clean-mode') || document.body.classList.contains('is-fullscreen') || !!document.fullscreenElement;
           const vpRect = this.viewport.getBoundingClientRect();
           const padding = isClean ? 0 : 60;
-          const availW = isClean ? window.innerWidth : Math.max(200, vpRect.width - padding);
-          const availH = isClean ? window.innerHeight : Math.max(200, vpRect.height - padding);
+          const vvW = window.visualViewport ? window.visualViewport.width : 0;
+          const vvH = window.visualViewport ? window.visualViewport.height : 0;
+          const availW = isClean
+            ? Math.max(window.innerWidth, vvW, vpRect.width, document.documentElement.clientWidth || 0)
+            : Math.max(200, vpRect.width - padding);
+          const availH = isClean
+            ? Math.max(window.innerHeight, vvH, vpRect.height, document.documentElement.clientHeight || 0)
+            : Math.max(200, vpRect.height - padding);
 
           let scale;
           const isPortrait = availW < availH;
@@ -4219,8 +4280,8 @@
             scale = Math.min(availW / this.canvas.width, availH / this.canvas.height, isClean ? Infinity : 1.0);
           }
 
-          const dispW = Math.round(this.canvas.width * scale);
-          const dispH = Math.round(this.canvas.height * scale);
+          const dispW = isClean && isPortrait ? Math.max(availW, Math.round(this.canvas.width * scale)) : Math.round(this.canvas.width * scale);
+          const dispH = isClean && isPortrait ? Math.max(availH, Math.round(this.canvas.height * scale)) : Math.round(this.canvas.height * scale);
 
           this.wrapper.style.width = `${dispW}px`;
           this.wrapper.style.height = `${dispH}px`;
@@ -5185,6 +5246,10 @@
         window.addEventListener('orientationchange', () => {
           setTimeout(() => this.applyViewportScale(), 150);
         });
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener('resize', () => this.applyViewportScale());
+          window.visualViewport.addEventListener('scroll', () => this.applyViewportScale());
+        }
 
         // Gestione sezioni GUI richiudibili (Accordion / Collapsible)
         document.querySelectorAll('.panel-section .section-title').forEach(title => {
