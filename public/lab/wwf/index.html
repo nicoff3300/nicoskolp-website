@@ -3533,6 +3533,16 @@
       }
 
       init() {
+        // Su versione mobile (smartphone/tablet o larghezza <= 768px): densità nodi di default impostata a 30
+        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024 && window.innerHeight > window.innerWidth);
+        if (isMobile) {
+          AppState.net.density = 30;
+          const paramDensityEl = document.getElementById('paramDensity');
+          const valDensityEl = document.getElementById('valDensity');
+          if (paramDensityEl) paramDensityEl.value = 30;
+          if (valDensityEl) valDensityEl.textContent = '30';
+        }
+
         this.bindEvents();
         this.buildPaletteGrid();
         this.syncSliderProgresses();
