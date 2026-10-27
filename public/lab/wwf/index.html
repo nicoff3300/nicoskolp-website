@@ -2606,7 +2606,7 @@
         waveSpeed: 1.50,
         openRadius: 260,
         openForce: 42,
-        paletteId: 'mediterraneo'
+        paletteId: PALETTES[Math.floor(Math.random() * PALETTES.length)].id
       },
       fauna: {
         count: 12,
@@ -3907,6 +3907,14 @@
           AppState.seed = parseInt(urlParams.get('seed'), 10) || AppState.seed;
         } else {
           AppState.seed = Math.floor(Math.random() * 900000) + 100000;
+        }
+
+        // Randomizza anche le 4 palette colori della GUI ad ogni caricamento (a meno che non specificata via URL ?palette=...)
+        if (urlParams.get('palette') && PALETTES.some(p => p.id === urlParams.get('palette'))) {
+          AppState.net.paletteId = urlParams.get('palette');
+        } else {
+          const randomPal = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+          AppState.net.paletteId = randomPal.id;
         }
 
         this.checkResponsiveDimensions();
@@ -5920,6 +5928,12 @@
               icon.style.transform = 'rotate(360deg)';
               setTimeout(() => { icon.style.transform = ''; }, 450);
             }
+            // Su mobile randomizza anche la palette tra le 4 della GUI ad ogni ricarica
+            const randomPal = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+            AppState.net.paletteId = randomPal.id;
+            document.querySelectorAll('.palette-card').forEach(c => {
+              c.classList.toggle('active', c.dataset.id === AppState.net.paletteId);
+            });
             this.regenerate();
           });
         }
