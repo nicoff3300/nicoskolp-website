@@ -3496,8 +3496,8 @@
           if (points.length > 0) {
             for (let p = 0; p < points.length; p++) {
               const pt = points[p];
-              // Zona attiva dello squarcio: 75% del raggio visivo per evitare scatti al solo sfioramento periferico
-              const ptRadius = (pt.radius || openRadius) * 0.75;
+              // Zona attiva dello squarcio: 40% del raggio visivo per concentrare l'apertura effettiva
+              const ptRadius = (pt.radius || openRadius) * 0.40;
               const dx = this.x - pt.x;
               const dy = this.y - pt.y;
               const dist = Math.hypot(dx, dy);
@@ -3513,7 +3513,7 @@
           }
 
           if (inTear && bestPoint) {
-            const ptRadius = (bestPoint.radius || openRadius) * 0.75;
+            const ptRadius = (bestPoint.radius || openRadius) * 0.40;
             const centerRatio = bestDist / Math.max(1, ptRadius);
             // Più è vicino al centro dello squarcio prima si libera (da 4 a 12 frame, ~70-200ms)
             const neededFrames = centerRatio < 0.35 ? 4 : Math.round(7 + centerRatio * 6);
