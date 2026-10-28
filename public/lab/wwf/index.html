@@ -4553,7 +4553,7 @@
         }
         if (this.backgroundFauna && this.backgroundFauna.length > 0) {
           const isLight = AppState.bgMode === 'light';
-          const bgCol = isLight ? '#00838F' : '#4DD0E1';
+          const bgCol = isLight ? '#00796B' : '#80DEEA';
           for (let i = 0; i < this.backgroundFauna.length; i++) {
             this.backgroundFauna[i].color = bgCol;
           }
@@ -5035,26 +5035,26 @@
       spawnBackgroundFauna() {
         this.backgroundFauna = [];
         const rng = new PRNG(AppState.seed + 888);
-        const numSchools = 3;
+        const numSchools = 4;
         const fishPerSchool = 7;
         const types = ['triangle', 'diamond', 'ellipse', 'circle'];
         const isLight = AppState.bgMode === 'light';
-        // Tonalità marina desaturata e semi-trasparente
-        const baseColor = isLight ? '#00838F' : '#4DD0E1';
+        // Tonalità marina molto più chiara, brillante e contrastata
+        const baseColor = isLight ? '#00796B' : '#80DEEA';
 
         for (let s = 0; s < numSchools; s++) {
           const flockId = `bg_school_${s + 1}`;
-          const startX = rng.range(120, this.canvas.width - 120);
-          const startY = rng.range(120, this.canvas.height - 120);
+          const startX = rng.range(100, this.canvas.width - 100);
+          const startY = rng.range(100, this.canvas.height - 100);
           const baseAngle = rng.range(0, Math.PI * 2);
 
           for (let i = 0; i < fishPerSchool; i++) {
             const type = types[Math.floor(rng.next() * types.length)];
-            const offsetX = rng.range(-130, 130);
-            const offsetY = rng.range(-130, 130);
+            const offsetX = rng.range(-140, 140);
+            const offsetY = rng.range(-140, 140);
             const angle = baseAngle + rng.range(-0.35, 0.35);
-            // Stessa dimensione dei pesci attuali (18 - 24 px)
-            const size = rng.range(18, 24);
+            // Taglia corposa e solida (22 - 30 px) che mantiene consistenza con la sfocatura
+            const size = rng.range(22, 30);
 
             const fish = new BackgroundCreature(
               type,
@@ -5369,8 +5369,8 @@
         // =========================================================================
         if (this.backgroundFauna && this.backgroundFauna.length > 0) {
           this.ctx.save();
-          this.ctx.filter = 'blur(10px)';
-          this.ctx.globalAlpha = 0.40;
+          this.ctx.filter = 'blur(5px)';
+          this.ctx.globalAlpha = 0.80;
           for (let b = 0; b < this.backgroundFauna.length; b++) {
             const bgFish = this.backgroundFauna[b];
             bgFish.update(this.canvas.width, this.canvas.height, 0.45, this.backgroundFauna);
@@ -6142,11 +6142,11 @@
         if (this.backgroundFauna && this.backgroundFauna.length > 0) {
           svg += `  <defs>\n`;
           svg += `    <filter id="bgFishBlur" x="-30%" y="-30%" width="160%" height="160%">\n`;
-          svg += `      <feGaussianBlur stdDeviation="6" />\n`;
+          svg += `      <feGaussianBlur stdDeviation="4" />\n`;
           svg += `    </filter>\n`;
           svg += `  </defs>\n`;
           svg += `  <!-- Livello Scenografico di Sfondo (Banchi Liberi & Sfocati) -->\n`;
-          svg += `  <g id="background-fauna" opacity="0.40" filter="url(#bgFishBlur)">\n`;
+          svg += `  <g id="background-fauna" opacity="0.80" filter="url(#bgFishBlur)">\n`;
           for (let bf of this.backgroundFauna) {
             svg += bf.toSVGString();
           }
