@@ -2160,6 +2160,14 @@
           </div>
 
           <div class="control-group">
+            <div class="control-label-row">
+              <span>Tempo Sopravvivenza nella Rete</span>
+              <span class="control-value-badge" id="valFaunaDecay">35 s</span>
+            </div>
+            <input type="range" id="paramFaunaDecay" min="10" max="90" value="35" step="5">
+          </div>
+
+          <div class="control-group">
             <label class="field-desc" for="paramFaunaFilter">Filtro Forme Geometriche</label>
             <select id="paramFaunaFilter">
               <option value="all" selected>Tutte le forme (Cerchi, Triangoli, Rombi, Ellissi)</option>
@@ -2240,6 +2248,9 @@
         </div>
         <div class="hud-chip highlight" id="chipTotalSaved" style="border-color: #ffffff; background: #000000;">
           <span>🏆 Salvati:</span> <b id="hudSavedCount" style="color: #ffffff; font-weight: 700;">0</b>
+        </div>
+        <div class="hud-chip highlight" id="chipTotalDead" style="border-color: rgba(255, 255, 255, 0.2); background: #000000;">
+          <span>💀 Periti:</span> <b id="hudDeadCount" style="color: #888888; font-weight: 700;">0</b>
         </div>
         <div class="hud-chip highlight" id="chipHandsCount" style="display:none;">
           <span>Mani Rilevate:</span> <b id="hudHandsCount">0</b>
@@ -2559,6 +2570,11 @@
       return v.copy();
     }
 
+    // Funzione map identica a Tool_2022/pescetti-main/src/Boid.js (riga 278)
+    function map(value, inputMin, inputMax, outputMin, outputMax) {
+      return ((value - inputMin) / (inputMax - inputMin)) * (outputMax - outputMin) + outputMin;
+    }
+
     function distToSegmentSquared(p, v, w) {
       const l2 = (v.x - w.x) * (v.x - w.x) + (v.y - w.y) * (v.y - w.y);
       if (l2 === 0) return (p.x - v.x) * (p.x - v.x) + (p.y - v.y) * (p.y - v.y);
@@ -2616,6 +2632,7 @@
       bgMode: 'dark', // 'dark' | 'light'
       liberatedCount: 0,
       totalSavedCount: 0,
+      deadCount: 0,
       net: {
         density: 108,
         irregularity: 1.0,
@@ -2636,6 +2653,7 @@
         outsideRatio: 150,
         flockingRatio: 80,
         speed: 0.50,
+        decayTime: 35,
         speciesFilter: 'all',
         colorTone: 'coral_turquoise'
       },
@@ -3226,6 +3244,16 @@
         this.flockDelay = 0;
         this.pendingEscapeAngle = null;
         this.fleeProgress = 0.0;
+
+        // Vitalità e gamification del deperimento biologico
+        this.vitality = 1.0;          // 1.0 = piena salute, 0.0 = deperito/morto
+        const baseDecay = (AppState.fauna && AppState.fauna.decayTime) ? AppState.fauna.decayTime : 35;
+        // Variazione naturale individuale (+/- 25%) cosicché non muoiano tutti nello stesso istante
+        this.maxLifeTime = baseDecay * (0.75 + Math.random() * 0.50);
+        this.isDead = false;
+        this.restY = null;            // Quota di arresto finale sul fondale (stacking)
+        this.deadAlpha = 1.0;         // Trasparenza per eventuale dissolvenza dopo inattività
+        this.baseTrappedColor = trappedColor;
       }
 
       applyForce(force) {
@@ -3343,6 +3371,9 @@
           // Cambia colore alla liberazione (Turchese)
           this.color = this.liberatedColor;
 
+          // Ripristino vitale immediato: rifiorisce e fugge verso il largo
+          this.vitality = 1.0;
+
           // La forma liberata diventa MOLTO più grande (+120%, oltre il doppio della taglia intrappolata)
           this.targetSize = this.baseSize * 2.2;
 
@@ -3403,6 +3434,50 @@
           // Smorza la velocità per rimanere impigliato
           this.velocity = this.velocity.multiplyScalar(0.4);
         }
+      }
+
+      computeDecayedColor() {
+        if (this.isDead) {
+          return AppState.bgMode === 'light' ? '#777777' : '#555555';
+        }
+        if (this.vitality >= 0.99) {
+          return this.baseTrappedColor || this.trappedColor;
+        }
+
+        // Estrai RGB dal colore base esadecimale (#RRGGBB)
+        const baseHex = (this.baseTrappedColor || this.trappedColor || '#E03E2D').replace('#', '');
+        const r1 = parseInt(baseHex.substring(0, 2), 16) || 224;
+        const g1 = parseInt(baseHex.substring(2, 4), 16) || 62;
+        const b1 = parseInt(baseHex.substring(4, 6), 16) || 45;
+
+        // Colore grigio cenere di deperimento
+        const isLight = AppState.bgMode === 'light';
+        const r2 = isLight ? 119 : 85;
+        const g2 = isLight ? 119 : 85;
+        const b2 = isLight ? 119 : 85;
+
+        const v = Math.max(0, Math.min(1, this.vitality));
+        const r = Math.round(r2 + (r1 - r2) * v);
+        const g = Math.round(g2 + (g1 - g2) * v);
+        const b = Math.round(b2 + (b1 - b2) * v);
+
+        return `rgb(${r}, ${g}, ${b})`;
+      }
+
+      die() {
+        if (this.isDead) return;
+        this.isDead = true;
+        this.isTrapped = false;
+        this.isFleeing = false;
+        this.isIncoming = false;
+        this.vitality = 0;
+        this.color = AppState.bgMode === 'light' ? '#777777' : '#555555';
+        this.dashBoost = 0;
+        this.acceleration = createVector(0, 0);
+
+        AppState.deadCount = (AppState.deadCount || 0) + 1;
+        this.syncHudCounts();
+        showToastDebounced(`⚠️ ${this.getSpeciesName()} ha esaurito le forze nella rete ed è perita.`);
       }
 
       syncHudCounts() {
@@ -3481,11 +3556,66 @@
         const netMinY = netBox ? netBox.minY + 30 : marginTB + 30;
         const netMaxY = netBox ? netBox.maxY - 30 : height - marginTB - 30;
 
+        // =========================================================================
+        // 0. FORME PERITE / MORTE: AFFONDAMENTO MORBIDO E DEPOSITO SUL FONDALE
+        // =========================================================================
+        if (this.isDead) {
+          const padBottom = (typeof netMargin === 'object' && netMargin !== null) ? (netMargin.tb ?? netMargin.marginTB ?? 70) : (netMargin || 70);
+          const floorY = height - padBottom * 0.45 - this.size * 0.45;
+
+          // Se non ha ancora calcolato la quota finale d'arresto restY, calcola l'accumulo piramidale sopra altri pesci morti
+          if (this.restY === null) {
+            let targetY = floorY;
+            if (Array.isArray(allFauna)) {
+              for (let i = 0; i < allFauna.length; i++) {
+                const other = allFauna[i];
+                if (other === this || !other.isDead || other.restY === null) continue;
+                const distH = Math.abs(this.x - other.x);
+                if (distH < this.size * 1.05 && other.restY <= targetY) {
+                  // Si deposita dolcemente sopra al compagno già adagiato sul fondo
+                  targetY = Math.min(targetY, other.restY - this.size * 0.65);
+                }
+              }
+            }
+            this.restY = targetY;
+          }
+
+          // Discesa gravitazionale morbida verso il fondale
+          if (this.y < this.restY) {
+            this.velocity.y = Math.min(1.15, this.velocity.y + 0.035);
+            this.velocity.x *= 0.94;
+            this.position = this.position.add(this.velocity);
+            this.y = this.position.y;
+            this.x = this.position.x;
+          } else {
+            this.y = this.restY;
+            this.position.y = this.restY;
+            this.velocity = createVector(0, 0);
+          }
+
+          // Raddrizzamento inerte orizzontale a pancia in su
+          this.angle += (0 - this.angle) * 0.05;
+          return;
+        }
+
         if (this.isTrapped) {
           // =========================================================================
-          // 1. FORME INCASTRATE NELLA RETE: VELOCI, DARTING DA UN LATO ALL'ALTRO,
-          //    CAMBI DI DIREZIONE REPENTINI (NESSUN TREMOLIO O JITTER)
+          // 1. FORME INCASTRATE NELLA RETE: DEPERIMENTO CONTINUO NEL TEMPO,
+          //    DARTING DA UN LATO ALL'ALTRO, CAMBI DI DIREZIONE REPENTINI
           // =========================================================================
+          // A) Decadimento biologico continuo nella rete
+          if (this.maxLifeTime > 0) {
+            const decayStep = 1.0 / (this.maxLifeTime * 60);
+            this.vitality = Math.max(0, this.vitality - decayStep);
+            this.color = this.computeDecayedColor();
+          }
+
+          // Se esaurisce tutta la vitalità: muore e inizia l'affondamento sul fondale
+          if (this.vitality <= 0 && !this.isDead) {
+            this.die();
+            return;
+          }
+
           // 1. Rileva se ci sono squarci aperti (mani o cursore) nelle vicinanze
           let inTear = false;
           let bestDist = Infinity;
@@ -3544,13 +3674,15 @@
           } else {
             this.tearContactTimer = 0;
 
-            // Se non è nello squarcio, continua il normale moto sfrecciante nella rete
+            // Se non è nello squarcio, continua il normale moto sfrecciante nella rete (affievolito se deperito)
+            const vitalitySpeedMult = map(this.vitality, 0, 1, 0.28, 1.0);
             this.dashTimer--;
             if (this.dashTimer <= 0) {
               const burstAngle = this.angle + (Math.random() > 0.5 ? 1 : -1) * (0.85 + Math.random() * 1.35);
-              const burstDir = createVector(Math.cos(burstAngle), Math.sin(burstAngle)).multiplyScalar(this.maxspeed * 1.8);
-              this.applyForce(limit(burstDir.subtract(this.velocity), this.maxSteeringforce * 2.8));
-              this.dashBoost = 0.6 + Math.random() * 0.9;
+              const burstSpd = (this.maxspeed * 1.8) * vitalitySpeedMult;
+              const burstDir = createVector(Math.cos(burstAngle), Math.sin(burstAngle)).multiplyScalar(burstSpd);
+              this.applyForce(limit(burstDir.subtract(this.velocity), this.maxSteeringforce * 2.8 * vitalitySpeedMult));
+              this.dashBoost = (0.6 + Math.random() * 0.9) * vitalitySpeedMult;
               this.dashTimer = 14 + Math.floor(Math.random() * 26);
             }
           }
@@ -3570,8 +3702,10 @@
           // Decadimento graduale del boost di scatto
           this.dashBoost += (0.2 - this.dashBoost) * 0.05;
 
-          // Aggiornamento velocità e posizione secondo il modello Boid.js
-          const currentMaxSpeed = this.maxspeed * (1 + this.dashBoost * 0.5);
+          // Aggiornamento velocità e posizione secondo il modello Boid.js (scalato sulla vitalità)
+          const vitalitySpeedMult = map(this.vitality, 0, 1, 0.28, 1.0);
+          const currentMaxSpeed = this.maxspeed * (1 + this.dashBoost * 0.5) * vitalitySpeedMult;
+          this.swimCycle += 0.08 * vitalitySpeedMult;
           this.velocity = this.velocity.add(this.acceleration);
           this.velocity = limit(this.velocity, currentMaxSpeed);
           this.position = this.position.add(this.velocity);
@@ -3804,8 +3938,8 @@
 
         const isLight = AppState.bgMode === 'light';
 
-        // Tonalità di colore costante e identica sia dentro la rete che una volta libera
-        ctx.globalAlpha = 1.0;
+        // Trasparenza normale (1.0) o progressiva se in dissolvenza da inattività sul fondale
+        ctx.globalAlpha = this.isDead ? Math.max(0, this.deadAlpha) : 1.0;
 
         const strokeCol = isLight ? 'rgba(0, 0, 0, 0.28)' : 'rgba(255, 255, 255, 0.4)';
         ctx.fillStyle = this.color;
@@ -3920,7 +4054,13 @@
         this.isInfoModalOpen = false;
         this.isEcoeFishModalOpen = true;
 
+        this.lastInteractionTimestamp = performance.now();
+
         this.init();
+      }
+
+      recordInteraction() {
+        this.lastInteractionTimestamp = performance.now();
       }
 
       init() {
@@ -4106,9 +4246,10 @@
       }
 
       syncHudCounts() {
-        const trapped = this.fauna.filter(f => f.isTrapped).length;
-        const fleeing = this.fauna.filter(f => !f.isTrapped).length;
+        const trapped = this.fauna.filter(f => f.isTrapped && !f.isDead).length;
+        const fleeing = this.fauna.filter(f => f.isFleeing).length;
         const saved = AppState.totalSavedCount || 0;
+        const dead = AppState.deadCount || 0;
         AppState.liberatedCount = fleeing;
 
         const hudTr = document.getElementById('hudTrapped');
@@ -4117,6 +4258,8 @@
         if (hudLib) hudLib.textContent = fleeing;
         const hudSaved = document.getElementById('hudSavedCount');
         if (hudSaved) hudSaved.textContent = saved;
+        const hudDead = document.getElementById('hudDeadCount');
+        if (hudDead) hudDead.textContent = dead;
       }
 
       createSingleTrappedCreature(rng, flockId = null, presetType = null, cx = null, cy = null, cAngle = null) {
@@ -4450,6 +4593,7 @@
         AppState.seed = newSeed !== undefined ? newSeed : Math.floor(Math.random() * 900000) + 100000;
         AppState.liberatedCount = 0;
         AppState.totalSavedCount = 0;
+        AppState.deadCount = 0;
         document.getElementById('seedBadge').textContent = `SEED: ${AppState.seed}`;
         this.syncHudCounts();
 
@@ -4788,6 +4932,22 @@
             showToastDebounced(`🌊 ${creature.getSpeciesName()} ha raggiunto il mare aperto ed è salvo! Totale salvati: ${AppState.totalSavedCount}`);
             this.scheduleRespawn();
             continue;
+          }
+
+          // Dissolvenza morbida dei pesci periti sul fondale se non c'è interazione per più di 30 secondi
+          if (creature.isDead && creature.y >= (creature.restY || 0) - 2) {
+            const isIdle = (now - this.lastInteractionTimestamp) > 30000;
+            if (isIdle) {
+              creature.deadAlpha = Math.max(0, creature.deadAlpha - 0.008);
+              if (creature.deadAlpha <= 0) {
+                this.fauna.splice(i, 1);
+                this.scheduleRespawn();
+                continue;
+              }
+            } else if (creature.deadAlpha < 1.0) {
+              // Se l'utente torna a interagire, la dissolvenza si arresta e ripristina visibilità
+              creature.deadAlpha = Math.min(1.0, creature.deadAlpha + 0.02);
+            }
           }
 
           creature.draw(this.ctx);
@@ -5250,6 +5410,7 @@
         const h = this.canvas.height;
 
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+          this.recordInteraction();
           for (let i = 0; i < results.multiHandLandmarks.length; i++) {
             const raw = results.multiHandLandmarks[i];
 
@@ -5752,6 +5913,14 @@
         document.getElementById('paramFaunaSpeed').value = AppState.fauna.speed;
         document.getElementById('valFaunaSpeed').textContent = AppState.fauna.speed.toFixed(2);
 
+        const faunaDecayEl = document.getElementById('paramFaunaDecay');
+        const valFaunaDecayEl = document.getElementById('valFaunaDecay');
+        if (faunaDecayEl && valFaunaDecayEl) {
+          const decay = AppState.fauna.decayTime !== undefined ? AppState.fauna.decayTime : 35;
+          faunaDecayEl.value = decay;
+          valFaunaDecayEl.textContent = `${decay} s`;
+        }
+
         document.getElementById('paramFaunaFilter').value = AppState.fauna.speciesFilter;
         const faunaColorEl = document.getElementById('paramFaunaColor');
         if (faunaColorEl && AppState.fauna.colorTone) {
@@ -5812,6 +5981,7 @@
         });
 
         const updateMousePosition = (clientX, clientY) => {
+          this.recordInteraction();
           const rect = this.canvas.getBoundingClientRect();
           if (rect.width > 0 && rect.height > 0) {
             AppState.mouse.x = (clientX - rect.left) * (this.canvas.width / rect.width);
@@ -5826,6 +5996,7 @@
         };
 
         const updateTouches = (e) => {
+          this.recordInteraction();
           const rect = this.canvas.getBoundingClientRect();
           if (rect.width > 0 && rect.height > 0) {
             const list = [];
@@ -6131,6 +6302,18 @@
         this.bindSlider('paramFaunaSpeed', 'valFaunaSpeed', (val) => {
           AppState.fauna.speed = parseFloat(val);
           return parseFloat(val).toFixed(2);
+        });
+
+        this.bindSlider('paramFaunaDecay', 'valFaunaDecay', (val) => {
+          AppState.fauna.decayTime = parseInt(val, 10);
+          if (this.fauna) {
+            this.fauna.forEach(f => {
+              if (f.isTrapped && !f.isDead) {
+                f.maxLifeTime = AppState.fauna.decayTime * (0.75 + Math.random() * 0.50);
+              }
+            });
+          }
+          return `${val} s`;
         });
 
         document.getElementById('paramFaunaFilter').addEventListener('change', (e) => {
