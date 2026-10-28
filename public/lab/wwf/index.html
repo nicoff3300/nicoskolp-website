@@ -3354,53 +3354,61 @@
         this.y = this.position.y;
       }
 
-      draw(ctx) {
+      draw(ctx, sprites) {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.angle);
         ctx.scale(this.swimScaleX, this.swimScaleY);
 
-        ctx.fillStyle = this.color;
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 1.6;
-        const s = this.size;
+        const sp = sprites ? sprites[this.type] : null;
+        if (sp) {
+          // Sprite Caching: render ultra-fluido a 60 FPS senza invocare ctx.filter nel loop
+          // s base = 40, spriteSize = 120 -> rapporto 120 / 40 = 3.0
+          const renderSize = this.size * 3.0;
+          ctx.drawImage(sp, -renderSize / 2, -renderSize / 2, renderSize, renderSize);
+        } else {
+          ctx.fillStyle = this.color;
+          ctx.strokeStyle = '#FFFFFF';
+          ctx.lineWidth = 1.6;
+          const s = this.size;
 
-        switch (this.type) {
-          case 'circle':
-            ctx.beginPath();
-            ctx.arc(0, 0, s * 0.45, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
-            break;
+          switch (this.type) {
+            case 'circle':
+              ctx.beginPath();
+              ctx.arc(0, 0, s * 0.45, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.stroke();
+              break;
 
-          case 'triangle':
-            ctx.beginPath();
-            ctx.moveTo(s * 0.55, 0);
-            ctx.lineTo(-s * 0.45, -s * 0.35);
-            ctx.lineTo(-s * 0.45, s * 0.35);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-            break;
+            case 'triangle':
+              ctx.beginPath();
+              ctx.moveTo(s * 0.55, 0);
+              ctx.lineTo(-s * 0.45, -s * 0.35);
+              ctx.lineTo(-s * 0.45, s * 0.35);
+              ctx.closePath();
+              ctx.fill();
+              ctx.stroke();
+              break;
 
-          case 'diamond':
-            ctx.beginPath();
-            ctx.moveTo(s * 0.55, 0);
-            ctx.lineTo(0, -s * 0.38);
-            ctx.lineTo(-s * 0.55, 0);
-            ctx.lineTo(0, s * 0.38);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-            break;
+            case 'diamond':
+              ctx.beginPath();
+              ctx.moveTo(s * 0.55, 0);
+              ctx.lineTo(0, -s * 0.38);
+              ctx.lineTo(-s * 0.55, 0);
+              ctx.lineTo(0, s * 0.38);
+              ctx.closePath();
+              ctx.fill();
+              ctx.stroke();
+              break;
 
-          case 'ellipse':
-          default:
-            ctx.beginPath();
-            ctx.ellipse(0, 0, s * 0.60, s * 0.32, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
-            break;
+            case 'ellipse':
+            default:
+              ctx.beginPath();
+              ctx.ellipse(0, 0, s * 0.60, s * 0.32, 0, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.stroke();
+              break;
+          }
         }
 
         ctx.restore();
@@ -4409,6 +4417,7 @@
         this.net = new IrregularChromaticNet();
         this.fauna = [];
         this.backgroundFauna = [];
+        this.bgFishSprites = null;
         this.respawnTimer = null;
 
         this.lastTime = performance.now();
@@ -4430,6 +4439,75 @@
 
       recordInteraction() {
         this.lastInteractionTimestamp = performance.now();
+      }
+
+      createBackgroundFishSprites() {
+        if (typeof document === 'undefined') return;
+        const types = ['circle', 'triangle', 'diamond', 'ellipse'];
+        const isLight = AppState.bgMode === 'light';
+        const fillColor = isLight ? '#004D40' : '#E0F7FA';
+        const strokeColor = isLight ? '#00251A' : '#FFFFFF';
+        const spriteSize = 120;
+        const center = spriteSize / 2;
+        const s = 40; // Dimensione base normalizzata
+
+        this.bgFishSprites = {};
+        for (const type of types) {
+          const offCanvas = document.createElement('canvas');
+          offCanvas.width = spriteSize;
+          offCanvas.height = spriteSize;
+          const offCtx = offCanvas.getContext('2d');
+
+          // Pre-rendering offscreen UNA SOLA VOLTA con blur hardware
+          offCtx.filter = 'blur(3.5px)';
+          offCtx.fillStyle = fillColor;
+          offCtx.strokeStyle = strokeColor;
+          offCtx.lineWidth = 2.4;
+
+          offCtx.save();
+          offCtx.translate(center, center);
+
+          switch (type) {
+            case 'circle':
+              offCtx.beginPath();
+              offCtx.arc(0, 0, s * 0.45, 0, Math.PI * 2);
+              offCtx.fill();
+              offCtx.stroke();
+              break;
+
+            case 'triangle':
+              offCtx.beginPath();
+              offCtx.moveTo(s * 0.55, 0);
+              offCtx.lineTo(-s * 0.45, -s * 0.35);
+              offCtx.lineTo(-s * 0.45, s * 0.35);
+              offCtx.closePath();
+              offCtx.fill();
+              offCtx.stroke();
+              break;
+
+            case 'diamond':
+              offCtx.beginPath();
+              offCtx.moveTo(s * 0.55, 0);
+              offCtx.lineTo(0, -s * 0.38);
+              offCtx.lineTo(-s * 0.55, 0);
+              offCtx.lineTo(0, s * 0.38);
+              offCtx.closePath();
+              offCtx.fill();
+              offCtx.stroke();
+              break;
+
+            case 'ellipse':
+            default:
+              offCtx.beginPath();
+              offCtx.ellipse(0, 0, s * 0.60, s * 0.32, 0, 0, Math.PI * 2);
+              offCtx.fill();
+              offCtx.stroke();
+              break;
+          }
+
+          offCtx.restore();
+          this.bgFishSprites[type] = offCanvas;
+        }
       }
 
       init() {
@@ -4454,6 +4532,7 @@
         this.bindEvents();
         this.buildPaletteGrid();
         this.syncSliderProgresses();
+        this.createBackgroundFishSprites();
         this.updateCanvasDimensions(AppState.canvasWidth, AppState.canvasHeight, true);
 
         if (urlParams.get('bg') === 'light') {
@@ -4563,6 +4642,7 @@
           for (let i = 0; i < this.backgroundFauna.length; i++) {
             this.backgroundFauna[i].color = bgCol;
           }
+          this.createBackgroundFishSprites();
         }
       }
 
@@ -5041,8 +5121,8 @@
       spawnBackgroundFauna() {
         this.backgroundFauna = [];
         const rng = new PRNG(AppState.seed + 888);
-        const numSchools = 5;
-        const fishPerSchool = 7;
+        const numSchools = 3;
+        const fishPerSchool = 6;
         const types = ['triangle', 'diamond', 'ellipse', 'circle'];
         const isLight = AppState.bgMode === 'light';
         // Tonalità marina chiarissima e luminosa (bianco ghiaccio/madreperla per contrasto netto su fondo scuro)
@@ -5373,15 +5453,18 @@
         // =========================================================================
         // 1b. LIVELLO SCENOGRAFICO DI SFONDO (BANCHI LIBERI & SFOCATI DEPTH OF FIELD)
         // Nuotano liberamente a banchi nello spazio canvas totale senza interazioni di gioco
+        // Performance 60 FPS garantita tramite Sprite Caching offscreen (nessun ctx.filter nel loop)
         // =========================================================================
         if (this.backgroundFauna && this.backgroundFauna.length > 0) {
+          if (!this.bgFishSprites) {
+            this.createBackgroundFishSprites();
+          }
           this.ctx.save();
-          this.ctx.filter = 'blur(4px)';
           this.ctx.globalAlpha = 0.40;
           for (let b = 0; b < this.backgroundFauna.length; b++) {
             const bgFish = this.backgroundFauna[b];
             bgFish.update(this.canvas.width, this.canvas.height, 0.45, this.backgroundFauna);
-            bgFish.draw(this.ctx);
+            bgFish.draw(this.ctx, this.bgFishSprites);
           }
           this.ctx.restore();
         }
