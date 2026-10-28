@@ -2431,7 +2431,7 @@
               <div class="shortcut-keys"><kbd class="key-badge">R</kbd></div>
               <div class="shortcut-info">
                 <span class="shortcut-action">Rigenera Composizione</span>
-                <span class="shortcut-desc">Genera una nuova combinazione di nodi e pesci</span>
+                <span class="shortcut-desc">Randomizza seed, forma organica della rete e palette cromatica</span>
               </div>
             </div>
 
@@ -4730,7 +4730,44 @@
           clearTimeout(this.respawnTimer);
           this.respawnTimer = null;
         }
-        AppState.seed = newSeed !== undefined ? newSeed : Math.floor(Math.random() * 900000) + 100000;
+
+        // Se non viene specificato un seed esplicito (es. da tasto R, reload inattività o pulsanti di rigenerazione),
+        // randomizza seed, forma organica della rete (irregularity, borderDynamics) e palette colori
+        if (newSeed === undefined) {
+          AppState.seed = Math.floor(Math.random() * 900000) + 100000;
+
+          // Selezione casuale palette (preferendo una diversa da quella attuale per feedback cromatico immediato)
+          const otherPalettes = PALETTES.filter(p => p.id !== AppState.net.paletteId);
+          const nextPalette = (otherPalettes.length > 0)
+            ? otherPalettes[Math.floor(Math.random() * otherPalettes.length)]
+            : PALETTES[Math.floor(Math.random() * PALETTES.length)];
+          AppState.net.paletteId = nextPalette.id;
+
+          // Randomizzazione parametri di forma della rete (irregolarità celle e dinamismo organico del bordo)
+          AppState.net.irregularity = Math.round((0.35 + Math.random() * 0.65) * 20) / 20;
+          AppState.net.borderDynamics = Math.round((0.35 + Math.random() * 0.65) * 20) / 20;
+
+          // Sincronizzazione controlli forma rete nella sidebar
+          const paramIrregEl = document.getElementById('paramIrregularity');
+          const valIrregEl = document.getElementById('valIrregularity');
+          if (paramIrregEl) paramIrregEl.value = AppState.net.irregularity;
+          if (valIrregEl) valIrregEl.textContent = AppState.net.irregularity.toFixed(2);
+
+          const paramBorderEl = document.getElementById('paramBorderDynamics');
+          const valBorderEl = document.getElementById('valBorderDynamics');
+          if (paramBorderEl) paramBorderEl.value = AppState.net.borderDynamics;
+          if (valBorderEl) valBorderEl.textContent = AppState.net.borderDynamics.toFixed(2);
+
+          // Sincronizzazione card palette nella sidebar
+          document.querySelectorAll('.palette-card').forEach(c => {
+            c.classList.toggle('active', c.dataset.id === AppState.net.paletteId);
+          });
+
+          this.syncSliderProgresses();
+        } else {
+          AppState.seed = newSeed;
+        }
+
         AppState.liberatedCount = 0;
         AppState.totalSavedCount = 0;
         AppState.deadCount = 0;
@@ -4760,9 +4797,7 @@
             : `${margins.tb} px`;
         }
         if (!silent) {
-          const outsideRatio = AppState.fauna.outsideRatio !== undefined ? AppState.fauna.outsideRatio : 30;
-          const outsideCount = Math.round(AppState.fauna.count * (outsideRatio / 100));
-          showToast(`Nuova composizione: ${AppState.fauna.count} elementi nella rete (rosso mattone) e ${outsideCount} fuori dalla rete (turchese)!`);
+          showToast(`Nuova composizione: Seed ${AppState.seed}, Palette "${palette.name}" e nuova forma della rete!`);
         }
       }
 
@@ -5047,14 +5082,9 @@
         const idleDuration = now - this.lastInteractionTimestamp;
         if (idleDuration >= 120000) {
           this.lastInteractionTimestamp = now;
-          const newSeed = Math.floor(Math.random() * 900000) + 100000;
-          const randomPal = PALETTES[Math.floor(Math.random() * PALETTES.length)];
-          AppState.net.paletteId = randomPal.id;
-          document.querySelectorAll('.palette-card').forEach(c => {
-            c.classList.toggle('active', c.dataset.id === AppState.net.paletteId);
-          });
-          this.regenerate(newSeed, false);
-          showToast(`🌊 Inattività di 2 min: ecosistema ricaricato con nuovo seed (${newSeed})!`);
+          this.regenerate(undefined, true);
+          const pal = this.getActivePalette();
+          showToast(`🌊 Inattività di 2 min: ricaricato seed (${AppState.seed}), forma rete e palette (${pal.name})!`);
           return;
         }
 
@@ -6301,12 +6331,6 @@
               icon.style.transform = 'rotate(360deg)';
               setTimeout(() => { icon.style.transform = ''; }, 450);
             }
-            // Su mobile randomizza anche la palette tra le 4 della GUI ad ogni ricarica
-            const randomPal = PALETTES[Math.floor(Math.random() * PALETTES.length)];
-            AppState.net.paletteId = randomPal.id;
-            document.querySelectorAll('.palette-card').forEach(c => {
-              c.classList.toggle('active', c.dataset.id === AppState.net.paletteId);
-            });
             this.regenerate();
           });
         }
