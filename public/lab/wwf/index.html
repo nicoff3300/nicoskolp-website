@@ -3251,10 +3251,8 @@
         // Variazione naturale individuale (+/- 25%) cosicché non muoiano tutti nello stesso istante
         this.maxLifeTime = baseDecay * (0.75 + Math.random() * 0.50);
         this.isDead = false;
-        this.isSettled = false;       // Stato di arresto / quiete sul fondale o sul cumulo
+        this.isSettled = false;       // Stato di arresto / quiete permanente sul fondale
         this.floorY = null;           // Quota del fondale marino
-        this.deathTimestamp = null;   // Timestamp del decesso (per persistenza 2 minuti sul fondale)
-        this.deadAlpha = 1.0;         // Trasparenza per eventuale dissolvenza dopo inattività
         this.baseTrappedColor = trappedColor;
       }
 
@@ -3469,7 +3467,6 @@
       die() {
         if (this.isDead) return;
         this.isDead = true;
-        this.deathTimestamp = performance.now();
         this.isTrapped = false;
         this.isFleeing = false;
         this.isIncoming = false;
@@ -4062,8 +4059,7 @@
 
         const isLight = AppState.bgMode === 'light';
 
-        // Trasparenza normale (1.0) o progressiva se in dissolvenza da inattività sul fondale
-        ctx.globalAlpha = this.isDead ? Math.max(0, this.deadAlpha) : 1.0;
+        ctx.globalAlpha = 1.0;
 
         const strokeCol = isLight ? 'rgba(0, 0, 0, 0.28)' : 'rgba(255, 255, 255, 0.4)';
         ctx.fillStyle = this.color;
@@ -5076,23 +5072,7 @@
             continue;
           }
 
-          // I pesci periti rimangono sul fondale per 2 minuti (120 secondi = 120.000 ms)
-          if (creature.isDead && (creature.isSettled || creature.y >= (creature.floorY || (this.canvas.height - 100)) - 10)) {
-            const timeSinceDeath = creature.deathTimestamp ? (now - creature.deathTimestamp) : 0;
-            // Se l'organismo è perito da oltre 2 minuti, si dissolve dolcemente nel fondale marino
-            if (timeSinceDeath >= 120000) {
-              creature.deadAlpha = Math.max(0, creature.deadAlpha - 0.008);
-              if (creature.deadAlpha <= 0) {
-                this.fauna.splice(i, 1);
-                this.scheduleRespawn();
-                continue;
-              }
-            } else if (creature.deadAlpha < 1.0) {
-              // Se l'utente interagisce prima dei 2 minuti, ripristina la piena opacità
-              creature.deadAlpha = Math.min(1.0, creature.deadAlpha + 0.02);
-            }
-          }
-
+          // Disegno dell'organismo (i pesci periti rimangono permanentemente visibili sul fondale)
           creature.draw(this.ctx);
         }
 
