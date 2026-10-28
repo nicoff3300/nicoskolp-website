@@ -3201,6 +3201,228 @@
       }
     }
 
+    // --- 4b. Livello Scenografico di Sfondo: Banchi di Pesci Liberi & Sfocati (Boids Craig Reynolds) ---
+    class BackgroundCreature {
+      constructor(type, x, y, angle, size, color, flockId = null) {
+        this.type = type;
+        this.position = createVector(x, y);
+        this.x = x;
+        this.y = y;
+        this.angle = angle;
+        this.size = size;
+        this.color = color;
+        this.flockId = flockId;
+
+        const initSpeed = 1.8 + Math.random() * 0.8;
+        this.velocity = createVector(Math.cos(angle) * initSpeed, Math.sin(angle) * initSpeed);
+        this.acceleration = createVector(0, 0);
+        this.maxspeed = 2.4;
+        this.maxSteeringforce = 0.055;
+        this.r = size * 0.8;
+
+        // Pesi delle forze di sciamatura (Boids Reynolds)
+        this.sepScalar = 2.8;     // Separazione tra compagni di banco
+        this.aliScalar = 2.0;     // Allineamento direzionale
+        this.cohScalar = 1.8;     // Coesione di banco
+        this.neighbordist = 220;  // Raggio di percezione dei vicini
+
+        this.swimCycle = Math.random() * Math.PI * 2;
+        this.swimScaleX = 1.0;
+        this.swimScaleY = 1.0;
+      }
+
+      applyForce(force) {
+        this.acceleration = this.acceleration.add(force);
+      }
+
+      separate(boids) {
+        const desiredseparation = Math.max(32, this.r * 1.8);
+        let steer = createVector(0, 0);
+        let count = 0;
+        for (let i = 0; i < boids.length; i++) {
+          const mate = boids[i];
+          if (mate === this || mate.flockId !== this.flockId) continue;
+          const d = getDistance(this.position, mate.position);
+          if (d > 0 && d < desiredseparation) {
+            let diff = this.position.subtract(mate.position);
+            diff = diff.normalize();
+            diff = diff.multiplyScalar(1 / d);
+            steer = steer.add(diff);
+            count++;
+          }
+        }
+        if (count > 0) steer = steer.multiplyScalar(1 / count);
+        if (steer.magnitude() > 0) {
+          steer = steer.normalize();
+          steer = steer.multiplyScalar(this.maxspeed);
+          steer = steer.subtract(this.velocity);
+          steer = limit(steer, this.maxSteeringforce);
+        }
+        return steer;
+      }
+
+      align(boids) {
+        let sum = createVector(0, 0);
+        let count = 0;
+        for (let i = 0; i < boids.length; i++) {
+          const mate = boids[i];
+          if (mate === this || mate.flockId !== this.flockId) continue;
+          const d = getDistance(this.position, mate.position);
+          if (d > 0 && d < this.neighbordist) {
+            sum = sum.add(mate.velocity);
+            count++;
+          }
+        }
+        if (count > 0) {
+          sum = sum.multiplyScalar(1 / count);
+          sum = sum.normalize();
+          sum = sum.multiplyScalar(this.maxspeed);
+          let steer = sum.subtract(this.velocity);
+          steer = limit(steer, this.maxSteeringforce);
+          return steer;
+        }
+        return createVector(0, 0);
+      }
+
+      cohesion(boids) {
+        let sum = createVector(0, 0);
+        let count = 0;
+        for (let i = 0; i < boids.length; i++) {
+          const mate = boids[i];
+          if (mate === this || mate.flockId !== this.flockId) continue;
+          const d = getDistance(this.position, mate.position);
+          if (d > 0 && d < this.neighbordist) {
+            sum = sum.add(mate.position);
+            count++;
+          }
+        }
+        if (count > 0) {
+          sum = sum.multiplyScalar(1 / count);
+          let desired = sum.subtract(this.position);
+          desired = desired.normalize();
+          desired = desired.multiplyScalar(this.maxspeed);
+          let steer = desired.subtract(this.velocity);
+          steer = limit(steer, this.maxSteeringforce);
+          return steer;
+        }
+        return createVector(0, 0);
+      }
+
+      update(width, height, speedMultiplier, boids) {
+        // Calcolo e applicazione forze di banco coordinate
+        if (boids && boids.length > 1) {
+          const sep = this.separate(boids);
+          const ali = this.align(boids);
+          const coh = this.cohesion(boids);
+
+          this.applyForce(sep.multiplyScalar(this.sepScalar));
+          this.applyForce(ali.multiplyScalar(this.aliScalar));
+          this.applyForce(coh.multiplyScalar(this.cohScalar));
+        }
+
+        // Lieve forza erratica naturale per dare brio al nuoto oceanico
+        if (Math.random() < 0.03) {
+          const wanderAngle = this.angle + (Math.random() - 0.5) * 0.35;
+          const wanderForce = createVector(Math.cos(wanderAngle), Math.sin(wanderAngle)).multiplyScalar(this.maxspeed * 0.35);
+          this.applyForce(wanderForce);
+        }
+
+        // Cinematica
+        const currentMaxSpeed = this.maxspeed * (speedMultiplier || 1.0);
+        this.velocity = this.velocity.add(this.acceleration);
+        this.velocity = limit(this.velocity, currentMaxSpeed);
+        this.position = this.position.add(this.velocity);
+        this.acceleration = this.acceleration.multiplyScalar(0);
+
+        this.x = this.position.x;
+        this.y = this.position.y;
+        this.angle = Math.atan2(this.velocity.y, this.velocity.x);
+
+        // Ondulazione caudale fluida
+        this.swimCycle += 0.10;
+        this.swimScaleX = 1.0 + Math.sin(this.swimCycle) * 0.08;
+        this.swimScaleY = 1.0 - Math.sin(this.swimCycle) * 0.05;
+
+        // Wrap continuo nello spazio canvas totale (0..width, 0..height)
+        const wrapMargin = this.size + 80;
+        if (this.position.x < -wrapMargin) this.position.x = width + wrapMargin;
+        else if (this.position.x > width + wrapMargin) this.position.x = -wrapMargin;
+        if (this.position.y < -wrapMargin) this.position.y = height + wrapMargin;
+        else if (this.position.y > height + wrapMargin) this.position.y = -wrapMargin;
+
+        this.x = this.position.x;
+        this.y = this.position.y;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.scale(this.swimScaleX, this.swimScaleY);
+
+        ctx.fillStyle = this.color;
+        const s = this.size;
+
+        switch (this.type) {
+          case 'circle':
+            ctx.beginPath();
+            ctx.arc(0, 0, s * 0.45, 0, Math.PI * 2);
+            ctx.fill();
+            break;
+
+          case 'triangle':
+            ctx.beginPath();
+            ctx.moveTo(s * 0.55, 0);
+            ctx.lineTo(-s * 0.45, -s * 0.35);
+            ctx.lineTo(-s * 0.45, s * 0.35);
+            ctx.closePath();
+            ctx.fill();
+            break;
+
+          case 'diamond':
+            ctx.beginPath();
+            ctx.moveTo(s * 0.55, 0);
+            ctx.lineTo(0, -s * 0.38);
+            ctx.lineTo(-s * 0.55, 0);
+            ctx.lineTo(0, s * 0.38);
+            ctx.closePath();
+            ctx.fill();
+            break;
+
+          case 'ellipse':
+          default:
+            ctx.beginPath();
+            ctx.ellipse(0, 0, s * 0.60, s * 0.32, 0, 0, Math.PI * 2);
+            ctx.fill();
+            break;
+        }
+
+        ctx.restore();
+      }
+
+      toSVGString() {
+        const s = this.size;
+        let inner = '';
+        switch (this.type) {
+          case 'circle':
+            inner = `<circle cx="0" cy="0" r="${(s * 0.45).toFixed(1)}" fill="${this.color}" />`;
+            break;
+          case 'triangle':
+            inner = `<polygon points="${(s * 0.55).toFixed(1)},0 ${(-s * 0.45).toFixed(1)},${(-s * 0.35).toFixed(1)} ${(-s * 0.45).toFixed(1)},${(s * 0.35).toFixed(1)}" fill="${this.color}" />`;
+            break;
+          case 'diamond':
+            inner = `<polygon points="${(s * 0.55).toFixed(1)},0 0,${(-s * 0.38).toFixed(1)} ${(-s * 0.55).toFixed(1)},0 0,${(s * 0.38).toFixed(1)}" fill="${this.color}" />`;
+            break;
+          case 'ellipse':
+          default:
+            inner = `<ellipse cx="0" cy="0" rx="${(s * 0.60).toFixed(1)}" ry="${(s * 0.32).toFixed(1)}" fill="${this.color}" />`;
+            break;
+        }
+        const deg = (this.angle * 180 / Math.PI).toFixed(1);
+        return `    <g transform="translate(${this.x.toFixed(1)}, ${this.y.toFixed(1)}) rotate(${deg})">\n      ${inner}\n    </g>\n`;
+      }
+    }
+
     // --- 5. Fauna Marina: Modello Cinematica & Boids (Tool 2022 / Craig Reynolds) ---
     class MarineCreature {
       constructor(type, x, y, angle, size, trappedColor, liberatedColor, flockId = null) {
@@ -4180,6 +4402,7 @@
 
         this.net = new IrregularChromaticNet();
         this.fauna = [];
+        this.backgroundFauna = [];
         this.respawnTimer = null;
 
         this.lastTime = performance.now();
@@ -4327,6 +4550,13 @@
           c.trappedColor = trapped;
           c.liberatedColor = liberated;
           c.color = c.isTrapped ? trapped : liberated;
+        }
+        if (this.backgroundFauna && this.backgroundFauna.length > 0) {
+          const isLight = AppState.bgMode === 'light';
+          const bgCol = isLight ? '#00838F' : '#4DD0E1';
+          for (let i = 0; i < this.backgroundFauna.length; i++) {
+            this.backgroundFauna[i].color = bgCol;
+          }
         }
       }
 
@@ -4787,6 +5017,7 @@
           palette
         );
         this.spawnFauna();
+        this.spawnBackgroundFauna();
 
         const hudMarginEl = document.getElementById('hudMargin');
         if (hudMarginEl) {
@@ -4798,6 +5029,44 @@
         }
         if (!silent) {
           showToast(`Nuova composizione: Seed ${AppState.seed}, Palette "${palette.name}" e nuova forma della rete!`);
+        }
+      }
+
+      spawnBackgroundFauna() {
+        this.backgroundFauna = [];
+        const rng = new PRNG(AppState.seed + 888);
+        const numSchools = 3;
+        const fishPerSchool = 7;
+        const types = ['triangle', 'diamond', 'ellipse', 'circle'];
+        const isLight = AppState.bgMode === 'light';
+        // Tonalità marina desaturata e semi-trasparente
+        const baseColor = isLight ? '#00838F' : '#4DD0E1';
+
+        for (let s = 0; s < numSchools; s++) {
+          const flockId = `bg_school_${s + 1}`;
+          const startX = rng.range(120, this.canvas.width - 120);
+          const startY = rng.range(120, this.canvas.height - 120);
+          const baseAngle = rng.range(0, Math.PI * 2);
+
+          for (let i = 0; i < fishPerSchool; i++) {
+            const type = types[Math.floor(rng.next() * types.length)];
+            const offsetX = rng.range(-130, 130);
+            const offsetY = rng.range(-130, 130);
+            const angle = baseAngle + rng.range(-0.35, 0.35);
+            // Stessa dimensione dei pesci attuali (18 - 24 px)
+            const size = rng.range(18, 24);
+
+            const fish = new BackgroundCreature(
+              type,
+              startX + offsetX,
+              startY + offsetY,
+              angle,
+              size,
+              baseColor,
+              flockId
+            );
+            this.backgroundFauna.push(fish);
+          }
         }
       }
 
@@ -5093,6 +5362,22 @@
         // 1. Sfondo marino (Scuro abissale o Chiaro sabbia/sale)
         this.ctx.fillStyle = this.getBackgroundColor();
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // =========================================================================
+        // 1b. LIVELLO SCENOGRAFICO DI SFONDO (BANCHI LIBERI & SFOCATI DEPTH OF FIELD)
+        // Nuotano liberamente a banchi nello spazio canvas totale senza interazioni di gioco
+        // =========================================================================
+        if (this.backgroundFauna && this.backgroundFauna.length > 0) {
+          this.ctx.save();
+          this.ctx.filter = 'blur(10px)';
+          this.ctx.globalAlpha = 0.40;
+          for (let b = 0; b < this.backgroundFauna.length; b++) {
+            const bgFish = this.backgroundFauna[b];
+            bgFish.update(this.canvas.width, this.canvas.height, 0.45, this.backgroundFauna);
+            bgFish.draw(this.ctx);
+          }
+          this.ctx.restore();
+        }
 
         // 2. Fauna Marina: aggiorna posizioni e disegna nel LIVELLO DIETRO LA RETE
         // (le forme sono visivamente imprigionate dietro i tratti della rete)
@@ -5852,6 +6137,21 @@
         svg += `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">\n`;
         svg += `  <!-- Background (${AppState.bgMode}) -->\n`;
         svg += `  <rect width="${w}" height="${h}" fill="${bgColor}"/>\n\n`;
+
+        // Banchi di sfondo scenografici liberi e sfocati
+        if (this.backgroundFauna && this.backgroundFauna.length > 0) {
+          svg += `  <defs>\n`;
+          svg += `    <filter id="bgFishBlur" x="-30%" y="-30%" width="160%" height="160%">\n`;
+          svg += `      <feGaussianBlur stdDeviation="6" />\n`;
+          svg += `    </filter>\n`;
+          svg += `  </defs>\n`;
+          svg += `  <!-- Livello Scenografico di Sfondo (Banchi Liberi & Sfocati) -->\n`;
+          svg += `  <g id="background-fauna" opacity="0.40" filter="url(#bgFishBlur)">\n`;
+          for (let bf of this.backgroundFauna) {
+            svg += bf.toSVGString();
+          }
+          svg += `  </g>\n\n`;
+        }
 
         // Fauna marina: forme geometriche posizionate nel livello DIETRO la rete
         svg += `  <!-- Fauna Marina (Elementi Intrappolati & Liberati nel livello dietro) -->\n`;
