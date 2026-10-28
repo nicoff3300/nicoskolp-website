@@ -3361,6 +3361,8 @@
         ctx.scale(this.swimScaleX, this.swimScaleY);
 
         ctx.fillStyle = this.color;
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 1.6;
         const s = this.size;
 
         switch (this.type) {
@@ -3368,6 +3370,7 @@
             ctx.beginPath();
             ctx.arc(0, 0, s * 0.45, 0, Math.PI * 2);
             ctx.fill();
+            ctx.stroke();
             break;
 
           case 'triangle':
@@ -3377,6 +3380,7 @@
             ctx.lineTo(-s * 0.45, s * 0.35);
             ctx.closePath();
             ctx.fill();
+            ctx.stroke();
             break;
 
           case 'diamond':
@@ -3387,6 +3391,7 @@
             ctx.lineTo(0, s * 0.38);
             ctx.closePath();
             ctx.fill();
+            ctx.stroke();
             break;
 
           case 'ellipse':
@@ -3394,6 +3399,7 @@
             ctx.beginPath();
             ctx.ellipse(0, 0, s * 0.60, s * 0.32, 0, 0, Math.PI * 2);
             ctx.fill();
+            ctx.stroke();
             break;
         }
 
@@ -4553,7 +4559,7 @@
         }
         if (this.backgroundFauna && this.backgroundFauna.length > 0) {
           const isLight = AppState.bgMode === 'light';
-          const bgCol = isLight ? '#00796B' : '#80DEEA';
+          const bgCol = isLight ? '#004D40' : '#E0F7FA';
           for (let i = 0; i < this.backgroundFauna.length; i++) {
             this.backgroundFauna[i].color = bgCol;
           }
@@ -5035,26 +5041,26 @@
       spawnBackgroundFauna() {
         this.backgroundFauna = [];
         const rng = new PRNG(AppState.seed + 888);
-        const numSchools = 4;
+        const numSchools = 5;
         const fishPerSchool = 7;
         const types = ['triangle', 'diamond', 'ellipse', 'circle'];
         const isLight = AppState.bgMode === 'light';
-        // Tonalità marina molto più chiara, brillante e contrastata
-        const baseColor = isLight ? '#00796B' : '#80DEEA';
+        // Tonalità marina chiarissima e luminosa (bianco ghiaccio/madreperla per contrasto netto su fondo scuro)
+        const baseColor = isLight ? '#004D40' : '#E0F7FA';
 
         for (let s = 0; s < numSchools; s++) {
           const flockId = `bg_school_${s + 1}`;
-          const startX = rng.range(100, this.canvas.width - 100);
-          const startY = rng.range(100, this.canvas.height - 100);
+          const startX = rng.range(80, this.canvas.width - 80);
+          const startY = rng.range(80, this.canvas.height - 80);
           const baseAngle = rng.range(0, Math.PI * 2);
 
           for (let i = 0; i < fishPerSchool; i++) {
             const type = types[Math.floor(rng.next() * types.length)];
-            const offsetX = rng.range(-140, 140);
-            const offsetY = rng.range(-140, 140);
+            const offsetX = rng.range(-150, 150);
+            const offsetY = rng.range(-150, 150);
             const angle = baseAngle + rng.range(-0.35, 0.35);
-            // Taglia corposa e solida (22 - 30 px) che mantiene consistenza con la sfocatura
-            const size = rng.range(22, 30);
+            // Taglia corposa e ben visibile (24 - 34 px)
+            const size = rng.range(24, 34);
 
             const fish = new BackgroundCreature(
               type,
@@ -5370,8 +5376,8 @@
         // =========================================================================
         if (this.backgroundFauna && this.backgroundFauna.length > 0) {
           this.ctx.save();
-          this.ctx.filter = 'blur(5px)';
-          this.ctx.globalAlpha = 0.80;
+          this.ctx.filter = 'blur(4px)';
+          this.ctx.globalAlpha = 0.40;
           for (let b = 0; b < this.backgroundFauna.length; b++) {
             const bgFish = this.backgroundFauna[b];
             bgFish.update(this.canvas.width, this.canvas.height, 0.45, this.backgroundFauna);
@@ -6148,7 +6154,7 @@
           svg += `    </filter>\n`;
           svg += `  </defs>\n`;
           svg += `  <!-- Livello Scenografico di Sfondo (Banchi Liberi & Sfocati) -->\n`;
-          svg += `  <g id="background-fauna" opacity="0.80" filter="url(#bgFishBlur)">\n`;
+          svg += `  <g id="background-fauna" opacity="0.40" filter="url(#bgFishBlur)">\n`;
           for (let bf of this.backgroundFauna) {
             svg += bf.toSVGString();
           }
