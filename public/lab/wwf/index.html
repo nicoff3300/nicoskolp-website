@@ -3251,7 +3251,8 @@
         // Variazione naturale individuale (+/- 25%) cosicché non muoiano tutti nello stesso istante
         this.maxLifeTime = baseDecay * (0.75 + Math.random() * 0.50);
         this.isDead = false;
-        this.restY = null;            // Quota di arresto finale sul fondale (stacking)
+        this.isSettled = false;       // Stato di arresto / quiete sul fondale o sul cumulo
+        this.floorY = null;           // Quota del fondale marino
         this.deadAlpha = 1.0;         // Trasparenza per eventuale dissolvenza dopo inattività
         this.baseTrappedColor = trappedColor;
       }
@@ -3475,9 +3476,161 @@
         this.dashBoost = 0;
         this.acceleration = createVector(0, 0);
 
+        // Blocco completo e immediato di ogni deformazione elastica/bounce
+        this.swimScaleX = 1.0;
+        this.swimScaleY = 1.0;
+        this.thrust = 0.0;
+        this.swimCycle = 0;
+        this.angularVelocity = 0;
+        this.targetSize = this.baseSize;
+        this.size = this.baseSize;
+
+        // Inerzia residua e discesa idrodinamica iniziale
+        this.velocity.x *= 0.25;
+        this.velocity.y = Math.max(0.25, Math.abs(this.velocity.y * 0.35));
+        this.isSettled = false;
+
         AppState.deadCount = (AppState.deadCount || 0) + 1;
         this.syncHudCounts();
         showToastDebounced(`⚠️ ${this.getSpeciesName()} ha esaurito le forze nella rete ed è perita.`);
+      }
+
+      updateDeadPhysics(width, height, netMargin, allFauna) {
+        // Blocco garantito di ogni deformazione bounce e spinta da vivo
+        this.swimScaleX = 1.0;
+        this.swimScaleY = 1.0;
+        this.thrust = 0.0;
+
+        // Dimensioni corporee ellissoidali differenziate per specie
+        const hw = this.size * 0.48;
+        const hh = (this.type === 'circle' || this.type === 'jellyfish') ? this.size * 0.38 : this.size * 0.24;
+
+        // Quota del fondale marino (seabed)
+        const padBottom = (typeof netMargin === 'object' && netMargin !== null)
+          ? (netMargin.tb ?? netMargin.marginTB ?? 70)
+          : (netMargin || 70);
+        const marginLR = (typeof netMargin === 'object' && netMargin !== null)
+          ? (netMargin.lr ?? netMargin.marginLR ?? 70)
+          : (netMargin || 70);
+
+        this.floorY = height - padBottom * 0.45 - hh;
+
+        // 1. Gravità idrodinamica e smorzamento viscoso dell'acqua marina
+        const gravity = 0.048;
+        const terminalSinkSpeed = 1.25;
+
+        this.velocity.y = Math.min(terminalSinkSpeed, this.velocity.y + gravity);
+        this.velocity.x *= 0.94;
+        this.velocity.y *= 0.98;
+
+        // Lieve moto di oscillazione / deriva naturale impressa dalle correnti sottomarine
+        this.phase += 0.025;
+        this.velocity.x += Math.sin(this.phase) * 0.016;
+
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
+
+        // 2. Interazione fisica volumetrica continua tra corpi periti (Anti-Tetris Accumulation)
+        if (Array.isArray(allFauna)) {
+          // Due passaggi di rilassamento per garantire naturalezza, stabilità e assenza di compenetrazioni
+          for (let iter = 0; iter < 2; iter++) {
+            for (let i = 0; i < allFauna.length; i++) {
+              const other = allFauna[i];
+              if (other === this || !other.isDead) continue;
+
+              const otherHw = other.size * 0.48;
+              const otherHh = (other.type === 'circle' || other.type === 'jellyfish') ? other.size * 0.38 : other.size * 0.24;
+
+              let dx = this.x - other.x;
+              const dy = this.y - other.y;
+
+              // Ellisse di contatto fisico (i pesci sono più estesi orizzontalmente che verticalmente)
+              const aspectY = 1.65;
+              const scaledDy = dy * aspectY;
+              const dist = Math.hypot(dx, scaledDy);
+              const minReqDist = (hw + otherHw) * 0.88;
+
+              if (dist < minReqDist) {
+                // Instabilità dell'apice: se un pesce cade esattamente al centro sopra un altro,
+                // non può rimanere impilato verticalmente a colonna (Tetris), ma scivola via dai fianchi
+                if (Math.abs(dx) < 3.0) {
+                  const nudge = (this.x >= other.x ? 1 : -1) || (Math.random() < 0.5 ? 1 : -1);
+                  dx += nudge * (3.5 + Math.random() * 2.0);
+                }
+
+                const effDist = Math.max(0.001, Math.hypot(dx, scaledDy));
+                const overlap = minReqDist - effDist;
+                const nx = dx / effDist;
+                const ny = scaledDy / effDist;
+
+                // Separazione volumetrica proporzionale al vincolo al suolo
+                const otherGrounded = other.y >= (other.floorY || (height - padBottom * 0.45 - otherHh)) - 3;
+                const pushRatioThis = otherGrounded ? 0.82 : 0.55;
+                const pushRatioOther = 1.0 - pushRatioThis;
+
+                this.x += nx * overlap * pushRatioThis;
+                this.y += (ny / aspectY) * overlap * pushRatioThis;
+
+                if (!otherGrounded) {
+                  other.x -= nx * overlap * pushRatioOther;
+                  other.y -= (ny / aspectY) * overlap * pushRatioOther;
+                }
+
+                // Fisica dello scivolamento lungo i fianchi curvi (Rolling / Sliding down slopes)
+                // Se 'this' si trova sopra 'other' (dy < 0), la gravità lo fa rotolare giù dal dorso
+                if (dy < 0) {
+                  const rollDir = nx >= 0 ? 1 : -1;
+                  const slopeSteepness = 1.0 - Math.min(1.0, Math.abs(ny)); // Massima accelerazione dove la pendenza è ripida
+                  const rollSlip = rollDir * (0.16 + slopeSteepness * 0.22);
+                  this.velocity.x += rollSlip;
+                  this.velocity.y *= 0.82; // Attrito idrodinamico lungo il corpo dell'altro pesce
+
+                  // Inclinazione organica adagiata sulla sagoma curva
+                  const slopeAngle = Math.atan2(dy, dx * 1.5);
+                  const tiltAngle = Math.max(-0.55, Math.min(0.55, slopeAngle * 0.35));
+                  this.angle += (tiltAngle - this.angle) * 0.08;
+                }
+              }
+            }
+          }
+        }
+
+        // 3. Collisione e adagiamento sul fondale sabbioso
+        if (this.y >= this.floorY) {
+          this.y = this.floorY;
+          if (this.velocity.y > 0) this.velocity.y = 0;
+          this.velocity.x *= 0.82; // Attrito col fondale marino
+
+          // Se è a contatto col fondale e non è inclinato su un altro pesce, si allinea orizzontalmente
+          this.angle += (0 - this.angle) * 0.07;
+        }
+
+        // 4. Confinamento laterale nello spazio visibile
+        const minX = marginLR + hw;
+        const maxX = width - marginLR - hw;
+        if (this.x < minX) {
+          this.x = minX;
+          this.velocity.x = Math.abs(this.velocity.x) * 0.3;
+        } else if (this.x > maxX) {
+          this.x = maxX;
+          this.velocity.x = -Math.abs(this.velocity.x) * 0.3;
+        }
+
+        // 5. Verifica stato di quiete (settled)
+        const isNearFloorOrBody = this.y >= this.floorY - 12;
+        const isSpeedNearZero = Math.abs(this.velocity.x) < 0.04 && Math.abs(this.velocity.y) < 0.04;
+        if (isNearFloorOrBody && isSpeedNearZero) {
+          this.isSettled = true;
+          this.velocity.x = 0;
+          this.velocity.y = 0;
+        } else {
+          this.isSettled = false;
+        }
+
+        this.position.x = this.x;
+        this.position.y = this.y;
+        this.vx = this.velocity.x;
+        this.vy = this.velocity.y;
       }
 
       syncHudCounts() {
@@ -3486,6 +3639,15 @@
       }
 
       update(width, height, speedMultiplier, mouse, openRadius, netMargin, netBox, allFauna, net = null) {
+        // =========================================================================
+        // 0. FORME PERITE / MORTE: FISICA CONTINUA DI ACCUMULO, ROTOLAMENTO E DEPOSITO
+        //    (Arresto totale di ogni deformazione bounce e locomozione viva)
+        // =========================================================================
+        if (this.isDead) {
+          this.updateDeadPhysics(width, height, netMargin, allFauna);
+          return;
+        }
+
         // Transizione fluida della dimensione: si ingrandisce quando è libera e torna normale se acchiappata
         this.size += (this.targetSize - this.size) * 0.12;
         this.r = this.size * 0.8;
@@ -3555,48 +3717,6 @@
         const netMaxX = netBox ? netBox.maxX - 30 : width - marginLR - 30;
         const netMinY = netBox ? netBox.minY + 30 : marginTB + 30;
         const netMaxY = netBox ? netBox.maxY - 30 : height - marginTB - 30;
-
-        // =========================================================================
-        // 0. FORME PERITE / MORTE: AFFONDAMENTO MORBIDO E DEPOSITO SUL FONDALE
-        // =========================================================================
-        if (this.isDead) {
-          const padBottom = (typeof netMargin === 'object' && netMargin !== null) ? (netMargin.tb ?? netMargin.marginTB ?? 70) : (netMargin || 70);
-          const floorY = height - padBottom * 0.45 - this.size * 0.45;
-
-          // Se non ha ancora calcolato la quota finale d'arresto restY, calcola l'accumulo piramidale sopra altri pesci morti
-          if (this.restY === null) {
-            let targetY = floorY;
-            if (Array.isArray(allFauna)) {
-              for (let i = 0; i < allFauna.length; i++) {
-                const other = allFauna[i];
-                if (other === this || !other.isDead || other.restY === null) continue;
-                const distH = Math.abs(this.x - other.x);
-                if (distH < this.size * 1.05 && other.restY <= targetY) {
-                  // Si deposita dolcemente sopra al compagno già adagiato sul fondo
-                  targetY = Math.min(targetY, other.restY - this.size * 0.65);
-                }
-              }
-            }
-            this.restY = targetY;
-          }
-
-          // Discesa gravitazionale morbida verso il fondale
-          if (this.y < this.restY) {
-            this.velocity.y = Math.min(1.15, this.velocity.y + 0.035);
-            this.velocity.x *= 0.94;
-            this.position = this.position.add(this.velocity);
-            this.y = this.position.y;
-            this.x = this.position.x;
-          } else {
-            this.y = this.restY;
-            this.position.y = this.restY;
-            this.velocity = createVector(0, 0);
-          }
-
-          // Raddrizzamento inerte orizzontale a pancia in su
-          this.angle += (0 - this.angle) * 0.05;
-          return;
-        }
 
         if (this.isTrapped) {
           // =========================================================================
@@ -3933,8 +4053,10 @@
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.angle);
-        // Applicazione della deformazione biologica marina (pulsazione elastica e rollio)
-        ctx.scale(this.swimScaleX, this.swimScaleY);
+        // Applicazione della deformazione biologica marina SOLO se l'organismo è vivo (arresto totale bounce)
+        if (!this.isDead) {
+          ctx.scale(this.swimScaleX, this.swimScaleY);
+        }
 
         const isLight = AppState.bgMode === 'light';
 
@@ -4023,8 +4145,8 @@
         }
 
         const deg = (this.angle * 180 / Math.PI).toFixed(1);
-        const sx = this.swimScaleX.toFixed(3);
-        const sy = this.swimScaleY.toFixed(3);
+        const sx = this.isDead ? '1.000' : this.swimScaleX.toFixed(3);
+        const sy = this.isDead ? '1.000' : this.swimScaleY.toFixed(3);
         const op = this.isTrapped ? '0.6' : '0.95';
         return `    <g transform="translate(${this.x.toFixed(1)}, ${this.y.toFixed(1)}) rotate(${deg}) scale(${sx}, ${sy})" opacity="${op}">\n      ${inner}\n    </g>\n`;
       }
@@ -4935,7 +5057,7 @@
           }
 
           // Dissolvenza morbida dei pesci periti sul fondale se non c'è interazione per più di 30 secondi
-          if (creature.isDead && creature.y >= (creature.restY || 0) - 2) {
+          if (creature.isDead && (creature.isSettled || creature.y >= (creature.floorY || (this.canvas.height - 100)) - 10)) {
             const isIdle = (now - this.lastInteractionTimestamp) > 30000;
             if (isIdle) {
               creature.deadAlpha = Math.max(0, creature.deadAlpha - 0.008);
