@@ -3253,6 +3253,7 @@
         this.isDead = false;
         this.isSettled = false;       // Stato di arresto / quiete sul fondale o sul cumulo
         this.floorY = null;           // Quota del fondale marino
+        this.deathTimestamp = null;   // Timestamp del decesso (per persistenza 2 minuti sul fondale)
         this.deadAlpha = 1.0;         // Trasparenza per eventuale dissolvenza dopo inattività
         this.baseTrappedColor = trappedColor;
       }
@@ -3468,6 +3469,7 @@
       die() {
         if (this.isDead) return;
         this.isDead = true;
+        this.deathTimestamp = performance.now();
         this.isTrapped = false;
         this.isFleeing = false;
         this.isIncoming = false;
@@ -5022,6 +5024,24 @@
 
         if (!AppState.isPlaying) return;
 
+        // =========================================================================
+        // VERIFICA INATTIVITÀ GLOBALE (2 MINUTI = 120 SECONDI = 120.000 MS):
+        // Se nei 2 minuti nessuno interagisce, ricarica completamente tutto con un nuovo seed
+        // =========================================================================
+        const idleDuration = now - this.lastInteractionTimestamp;
+        if (idleDuration >= 120000) {
+          this.lastInteractionTimestamp = now;
+          const newSeed = Math.floor(Math.random() * 900000) + 100000;
+          const randomPal = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+          AppState.net.paletteId = randomPal.id;
+          document.querySelectorAll('.palette-card').forEach(c => {
+            c.classList.toggle('active', c.dataset.id === AppState.net.paletteId);
+          });
+          this.regenerate(newSeed, false);
+          showToast(`🌊 Inattività di 2 min: ecosistema ricaricato con nuovo seed (${newSeed})!`);
+          return;
+        }
+
         const interactionPoints = this.getInteractionPoints(now);
 
         // 1. Sfondo marino (Scuro abissale o Chiaro sabbia/sale)
@@ -5056,10 +5076,11 @@
             continue;
           }
 
-          // Dissolvenza morbida dei pesci periti sul fondale se non c'è interazione per più di 30 secondi
+          // I pesci periti rimangono sul fondale per 2 minuti (120 secondi = 120.000 ms)
           if (creature.isDead && (creature.isSettled || creature.y >= (creature.floorY || (this.canvas.height - 100)) - 10)) {
-            const isIdle = (now - this.lastInteractionTimestamp) > 30000;
-            if (isIdle) {
+            const timeSinceDeath = creature.deathTimestamp ? (now - creature.deathTimestamp) : 0;
+            // Se l'organismo è perito da oltre 2 minuti, si dissolve dolcemente nel fondale marino
+            if (timeSinceDeath >= 120000) {
               creature.deadAlpha = Math.max(0, creature.deadAlpha - 0.008);
               if (creature.deadAlpha <= 0) {
                 this.fauna.splice(i, 1);
@@ -5067,7 +5088,7 @@
                 continue;
               }
             } else if (creature.deadAlpha < 1.0) {
-              // Se l'utente torna a interagire, la dissolvenza si arresta e ripristina visibilità
+              // Se l'utente interagisce prima dei 2 minuti, ripristina la piena opacità
               creature.deadAlpha = Math.min(1.0, creature.deadAlpha + 0.02);
             }
           }
@@ -6162,6 +6183,10 @@
           updateTouches(e);
         }, { passive: true });
 
+        window.addEventListener('pointerdown', () => {
+          this.recordInteraction();
+        }, { passive: true });
+
         document.addEventListener('mouseleave', () => {
           AppState.mouse.isOverCanvas = false;
         });
@@ -6522,6 +6547,7 @@
         document.addEventListener('fullscreenchange', () => this.onFullscreenChange());
 
         window.addEventListener('keydown', (e) => {
+          this.recordInteraction();
           const tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
           if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
 
@@ -6578,6 +6604,7 @@
         const label = document.getElementById(labelId);
 
         const update = () => {
+          this.recordInteraction();
           const displayVal = onChange(slider.value);
           label.textContent = displayVal;
 
