@@ -4445,8 +4445,8 @@
         if (typeof document === 'undefined') return;
         const types = ['circle', 'triangle', 'diamond', 'ellipse'];
         const isLight = AppState.bgMode === 'light';
-        const fillColor = isLight ? '#004D40' : '#E0F7FA';
-        const strokeColor = isLight ? '#00251A' : '#FFFFFF';
+        const fillColor = isLight ? '#0A2A6B' : '#1E50C8';
+        const strokeColor = isLight ? '#061A44' : '#5B8CFF';
         const spriteSize = 120;
         const center = spriteSize / 2;
         const s = 40; // Dimensione base normalizzata
@@ -4638,7 +4638,7 @@
         }
         if (this.backgroundFauna && this.backgroundFauna.length > 0) {
           const isLight = AppState.bgMode === 'light';
-          const bgCol = isLight ? '#004D40' : '#E0F7FA';
+          const bgCol = isLight ? '#0A2A6B' : '#1E50C8';
           for (let i = 0; i < this.backgroundFauna.length; i++) {
             this.backgroundFauna[i].color = bgCol;
           }
@@ -5126,7 +5126,7 @@
         const types = ['triangle', 'diamond', 'ellipse', 'circle'];
         const isLight = AppState.bgMode === 'light';
         // Tonalità marina chiarissima e luminosa (bianco ghiaccio/madreperla per contrasto netto su fondo scuro)
-        const baseColor = isLight ? '#004D40' : '#E0F7FA';
+        const baseColor = isLight ? '#0A2A6B' : '#1E50C8';
 
         for (let s = 0; s < numSchools; s++) {
           const flockId = `bg_school_${s + 1}`;
